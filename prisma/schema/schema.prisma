@@ -1,0 +1,35 @@
+generator client {
+  provider               = "prisma-client-js"
+  // output                 = "../generated"
+  moduleFormat           = "esm"
+  generatedFileExtension = "ts"
+  importFileExtension    = "ts"
+  previewFeatures        = ["views", "driverAdapters", "queryCompiler"]
+}
+
+datasource db {
+  provider = "postgres"
+  url      = env("DATABASE_URL")
+}
+
+// generator zod {
+//   provider = "zod-prisma-types"
+//   output   = "../../src/lib/schema"
+
+//   useMultipleFiles                 = true //   # Better modularity
+//   writeBarrelFiles                 = true //   # Easier imports
+//   createInputTypes                 = true //   # Needed for tRPC/Mutations
+//   createModelTypes                 = true //   # Needed for inference/UI
+//   createOptionalDefaultValuesTypes = true //   # Great for forms/edit pages
+//   createRelationValuesTypes        = true //   # Needed for nested DTOs
+//   createPartialTypes               = true //   # Enables `.partial()` (useful in PATCH routes)
+//   //
+//   addInputTypeValidation           = true //   # Strong runtime validation
+//   validateWhereUniqueInput         = true //   # Enforces proper `where` clause structure
+//   useDefaultValidators             = true //   # Adds string/email/date/etc. basic Zod validation
+//   coerceDate                       = true //   # Converts strings to dates automatically
+//   //
+//   writeNullishInModelTypes         = false //   # ❌ Disable to make types cleaner (use `null` instead of `string | null | undefined`)
+//   addIncludeType                   = false //   # Avoid clutter unless you use `.include()` in queries
+//   addSelectType                    = false //   # Same: skip unless you use `.select()`
+// }
