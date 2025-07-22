@@ -19,6 +19,7 @@ export const patientRouter = createTRPCRouter({
 			try {
 				return await getPatientDashboardStatistics(patientId)
 			} catch (error) {
+				console.error(error)
 				throw new TRPCError({
 					code: 'INTERNAL_SERVER_ERROR',
 					message: 'Unable to fetch dashboard statistics',
@@ -30,6 +31,7 @@ export const patientRouter = createTRPCRouter({
 		try {
 			return (await getPatientById(id)).data
 		} catch (error) {
+			console.error(error)
 			throw new TRPCError({
 				code: 'INTERNAL_SERVER_ERROR',
 				message: 'Unable to fetch patient by ID',
@@ -43,6 +45,7 @@ export const patientRouter = createTRPCRouter({
 			try {
 				return await getPatientFullDataById(idOrEmail)
 			} catch (error) {
+				console.error(error)
 				throw new TRPCError({
 					code: 'INTERNAL_SERVER_ERROR',
 					message: 'Unable to fetch full patient data',
@@ -62,6 +65,7 @@ export const patientRouter = createTRPCRouter({
 			try {
 				return await getAllPatients(input)
 			} catch (error) {
+				console.error(error)
 				throw new TRPCError({
 					code: 'INTERNAL_SERVER_ERROR',
 					message: 'Unable to fetch patients',

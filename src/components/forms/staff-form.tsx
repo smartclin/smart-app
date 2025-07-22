@@ -10,8 +10,8 @@ import type { z } from 'zod'
 
 import type { CreateStaffOutputSchema } from '@/lib/schema'
 import { StaffSchema as StaffFormSchema } from '@/lib/schema' // Alias to avoid name conflict with local type
-import type { AppRouter } from '@/server/api/root'
 import { trpc } from '@/trpc/react'
+import type { AppRouter } from '@/trpc/routers/_app'
 
 import { CustomInput } from '../custom-input'
 import { Button } from '../ui/button'

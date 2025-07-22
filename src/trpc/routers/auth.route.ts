@@ -1,6 +1,6 @@
 import z from 'zod'
 
-import { createTRPCRouter, protectedProcedure } from '@/server/api/trpc'
+import { createTRPCRouter, protectedProcedure } from '../init'
 
 const roleSchema = z.enum(['patient', 'doctor', 'admin', 'staff'])
 

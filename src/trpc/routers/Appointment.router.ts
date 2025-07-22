@@ -13,8 +13,6 @@ import { createTRPCRouter, protectedProcedure } from '../init' // or your tRPC i
 
 const AppointmentInputSchema = AppointmentSchema
 
-const AppointmentIdSchema = z.number()
-
 const AppointmentStatusSchema = z.enum([
 	'PENDING',
 	'CONFIRMED',

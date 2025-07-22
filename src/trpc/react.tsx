@@ -7,7 +7,7 @@ import { createTRPCReact } from '@trpc/react-query'
 import { useState } from 'react'
 import superjson from 'superjson' // For proper serialization of dates, etc.
 
-import type { AppRouter } from '@/server/api/root' // Import your AppRouter type from the server
+import type { AppRouter } from'@/trpc/routers/_app' // Import your AppRouter type from the server
 
 import { makeQueryClient } from './query-client'
 

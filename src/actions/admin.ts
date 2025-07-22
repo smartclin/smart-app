@@ -5,7 +5,7 @@ import z, { treeifyError } from 'zod'
 import { auth, getSession } from '@/lib/auth'
 import db from '@/lib/db'
 import { DoctorSchema, ServicesSchema, StaffSchema, workingDaySchema } from '@/lib/schema'
-import type { ServiceInput, StaffInput, WorkScheduleInput } from '@/types/data-types'
+import type { ServiceInput, StaffInput } from '@/types/data-types'
 import { generateRandomColor } from '@/utils'
 import { checkRole } from '@/utils/roles'
 
@@ -56,7 +56,7 @@ export async function createNewStaff(data: StaffInput) {
 	}
 }
 // Extend DoctorSchema to add password field
-export const DoctorAuthSchema = DoctorSchema.extend({
+const DoctorAuthSchema = DoctorSchema.extend({
 	password: z.string().min(6, 'Password should be at least 6 characters long'),
 })
 

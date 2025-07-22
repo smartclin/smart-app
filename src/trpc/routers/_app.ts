@@ -1,3 +1,4 @@
+import db from '@/lib/db'
 import {
 	createCallerFactory,
 	createTRPCContext,
@@ -24,7 +25,14 @@ import { vitalSignsRouter } from './VitalSigns.router'
 export const appRouter = createTRPCRouter({
 	auth: authRouter,
 	healthCheck: publicProcedure.query(async () => {
-		return 'OK'
+		try {
+			// Optional DB ping (replace with a lightweight model)
+			await db.user.findFirst({ select: { id: true } }) // fast + safe query
+			return true
+		} catch (error) {
+			console.error('Health check failed:', error)
+			return false
+		}
 	}),
 	privateData: protectedProcedure.query(({ ctx }) => {
 		return {

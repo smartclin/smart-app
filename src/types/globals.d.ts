@@ -76,6 +76,6 @@ declare global {
 }
 
 // --- Regarding Next.js types (keep them separate or in next-env.d.ts) ---
-// import type { cookies } from 'next/headers'
-// type ReadonlyRequestCookies = ReturnType<typeof cookies> extends Promise<infer T> ? T : never
-// export type { ReadonlyRequestCookies }
+import type { cookies } from 'next/headers'
+type ReadonlyRequestCookies = ReturnType<typeof cookies> extends Promise<infer T> ? T : never
+export type { ReadonlyRequestCookies }

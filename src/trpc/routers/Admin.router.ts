@@ -1,13 +1,16 @@
 import { z } from 'zod'
 
-import { addNewService, createNewDoctor, createNewStaff, DoctorAuthSchema } from '@/actions/admin'
-import { ServicesSchema, StaffSchema, workingDaySchema } from '@/lib/schema'
+import { addNewService, createNewDoctor, createNewStaff } from '@/actions/admin'
+import { DoctorSchema, ServicesSchema, StaffSchema, workingDaySchema } from '@/lib/schema'
 import { getAdminDashboardStats, getServices } from '@/utils/services/admin' // Adjust the path as needed
 
 import { createTRPCRouter, protectedProcedure, publicProcedure } from '../init'
 
 const StaffInputSchema = StaffSchema
 const ServiceInputSchema = ServicesSchema
+const DoctorAuthSchema = DoctorSchema.extend({
+	password: z.string().min(6, 'Password should be at least 6 characters long'),
+})
 
 const CreateNewDoctorInputSchema = DoctorAuthSchema.extend({
 	workSchedule: z.array(workingDaySchema),

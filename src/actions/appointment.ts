@@ -7,29 +7,6 @@ import { db } from '@/lib/db'
 import { AppointmentSchema, VitalSignsSchema } from '@/lib/schema'
 import type { AppointmentInput, VitalSignsInput } from '@/types/data-types'
 
-const AppointmentInputSchema = AppointmentSchema
-
-const AppointmentIdSchema = z.number()
-
-const AppointmentStatusSchema = z.enum([
-	'PENDING',
-	'CONFIRMED',
-	'CANCELLED',
-	'COMPLETED',
-	// add all valid enum values of AppointmentStatus here
-])
-
-const AppointmentActionInputSchema = z.object({
-	id: z.union([z.string(), z.number()]),
-	status: AppointmentStatusSchema,
-	reason: z.string().optional().nullable(),
-})
-
-const AddVitalSignsInputSchema = VitalSignsSchema.extend({
-	appointmentId: z.number(),
-	doctorId: z.string().uuid(), // or string if not UUID
-})
-
 export async function createNewAppointment(data: AppointmentInput) {
 	try {
 		const validatedData = AppointmentSchema.safeParse(data)
