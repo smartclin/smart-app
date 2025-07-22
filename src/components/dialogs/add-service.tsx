@@ -30,7 +30,7 @@ export const AddService = () => {
 		},
 	})
 
-	const addService = trpc.admin.addService.useMutation({
+	const addService = trpc.admin.addNewService.useMutation({
 		onSuccess: data => {
 			toast.success(data.msg)
 			router.refresh()

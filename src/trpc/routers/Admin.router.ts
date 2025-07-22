@@ -1,6 +1,7 @@
 import { z } from 'zod'
 
 import { addNewService, createNewDoctor, createNewStaff } from '@/actions/admin'
+import { deleteDataById } from '@/actions/general'
 import { DoctorSchema, ServicesSchema, StaffSchema, workingDaySchema } from '@/lib/schema'
 import { getAdminDashboardStats, getServices } from '@/utils/services/admin' // Adjust the path as needed
 
@@ -11,7 +12,10 @@ const ServiceInputSchema = ServicesSchema
 const DoctorAuthSchema = DoctorSchema.extend({
 	password: z.string().min(6, 'Password should be at least 6 characters long'),
 })
-
+const deleteInputSchema = z.object({
+	id: z.string(),
+	deleteType: z.enum(['doctor', 'staff', 'patient', 'payment', 'bill']),
+})
 const CreateNewDoctorInputSchema = DoctorAuthSchema.extend({
 	workSchedule: z.array(workingDaySchema),
 })
@@ -48,5 +52,15 @@ export const adminRouter = createTRPCRouter({
 		const result = await addNewService(input)
 		if (!result.success) throw new Error(result.msg || 'Failed to add service')
 		return result
+	}),
+	deleteData: protectedProcedure.input(deleteInputSchema).mutation(async ({ input, ctx }) => {
+		// Check admin role, assuming ctx.user exists:
+		if (ctx.user?.role !== 'ADMIN') {
+			throw new Error('Unauthorized')
+		}
+
+		const { id, deleteType } = input
+
+		return await deleteDataById(id, deleteType)
 	}),
 })

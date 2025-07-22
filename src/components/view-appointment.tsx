@@ -18,7 +18,7 @@ import {
 	DialogHeader,
 	DialogTitle,
 	DialogTrigger,
-} from './ui/dialog'
+ } from './ui/dialog'
 
 interface ViewAppointmentProps {
 	id?: number
@@ -28,7 +28,7 @@ export const ViewAppointment = async ({ id }: ViewAppointmentProps) => {
 	const session = await getSession()
 	if (!session) return null
 	const userId = session?.user.id
-	const data = await api.appointment.getAppointmentById(id)
+	const data = await api.appointment.getAppointmentById({ id })
 	if (!data) return null
 
 	return (

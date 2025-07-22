@@ -3,7 +3,7 @@ import type { Patient } from 'prisma'
 import { db } from '@/lib/db'
 import { processAppointments } from '@/types/helper'
 
-import { daysOfWeek } from '../utils'
+import { daysOfWeek } from '../'
 
 export async function getPatientDashboardStatistics(id: string) {
 	try {

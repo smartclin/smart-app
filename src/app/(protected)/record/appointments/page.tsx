@@ -15,10 +15,6 @@ import { api, HydrateClient } from '@/trpc/server'
 import { checkRole, getRole } from '@/utils/roles'
 import { DATA_LIMIT } from '@/utils/seetings'
 
-// --- Type Definitions ---
-
-// 1. Define the type for a single appointment item returned in the 'data' array.
-// This is what 'DataProps' in your original code seemed to represent.
 type AppointmentItem = {
 	id: number
 	patientId: string | null
@@ -78,40 +74,42 @@ function getQueryId(
 	if (userRole === 'DOCTOR' || userRole === 'STAFF') return id ?? userId
 	return userRole === 'PATIENT' ? userId : undefined
 }
-
-// --- Appointments Server Component ---
 const Appointments = async (props: {
-	searchParams?: { [key: string]: string | string[] | undefined }
+  searchParams?: { [key: string]: string | string[] | undefined }
 }) => {
-	const searchParams = props.searchParams
-	const session = await getSession()
-	const userId = session?.user.id
-	const userRole = await getRole()
+  const searchParams = props.searchParams
+  const session = await getSession()
+  const userId = session?.user.id
+  const userRole = await getRole()
 
-	const isPatient = await checkRole(session, 'PATIENT')
+  const isPatient = await checkRole(session, 'PATIENT')
 
-	const page = typeof searchParams?.p === 'string' ? searchParams.p : '1'
-	const searchQuery = typeof searchParams?.q === 'string' ? searchParams.q : ''
-	const id = typeof searchParams?.id === 'string' ? searchParams.id : undefined
+  // Convert 'page' to number with fallback to 1
+  const pageParam = typeof searchParams?.p === 'string' ? searchParams.p : '1'
+  const page = Number(pageParam)
+  const safePage = Number.isNaN(page) || page < 1 ? 1 : page
 
-	const queryId = getQueryId(userRole, id, userId)
+  const searchQuery = typeof searchParams?.q === 'string' ? searchParams.q : ''
+  const id = typeof searchParams?.id === 'string' ? searchParams.id : undefined
 
-	// Initialize `appointmentsResponse` to undefined, as it might fail
-	let appointmentsResponse: AppointmentsApiSuccess | undefined
-	let error: Error | undefined
+  const queryId = getQueryId(userRole, id, userId)
 
-	try {
-		// `api.appointment.getPatientAppointments` should directly return `AppointmentsApiSuccess` on success
-		appointmentsResponse = (await api.appointment.getPatientAppointments({
-			page,
-			search: searchQuery,
-			id: queryId,
-			limit: DATA_LIMIT,
-		})) as AppointmentsApiSuccess // Cast to ensure TypeScript recognizes the structure
-	} catch (err) {
-		error = err as Error
-		console.error('Error fetching appointments in page.tsx:', error)
-	}
+  // Initialize `appointmentsResponse` to undefined, as it might fail
+  let appointmentsResponse: AppointmentsApiSuccess | undefined
+  let error: Error | undefined
+
+  try {
+    // Pass numeric page
+    appointmentsResponse = (await api.appointment.getPatientAppointments({
+      page: safePage,
+      search: searchQuery,
+      id: queryId,
+      limit: DATA_LIMIT,
+    })) as AppointmentsApiSuccess
+  } catch (err) {
+    error = err as Error
+    console.error('Error fetching appointments in page.tsx:', error)
+  }
 
 	// --- Error and No Data Handling ---
 	if (error) {

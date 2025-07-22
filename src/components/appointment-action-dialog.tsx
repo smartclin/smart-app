@@ -29,7 +29,7 @@ export const AppointmentActionDialog = ({ type, id, disabled }: ActionsProps) =>
 	// 1. Declare the tRPC mutation hook at the top level of the component
 	// Assuming your tRPC procedure is `trpc.appointment.updateAppointmentStatus`
 	const { mutateAsync: updateStatusMutation, isPending: isSubmitting } =
-		trpc.appointment.updateAppointmentStatus.useMutation({
+		trpc.appointment.appointmentAction.useMutation({
 			onSuccess: res => {
 				// Assuming your tRPC mutation returns an object with `success` and `msg`
 				if (res.success) {

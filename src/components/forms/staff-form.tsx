@@ -8,7 +8,6 @@ import { useForm } from 'react-hook-form' // Import useForm
 import { toast } from 'sonner'
 import type { z } from 'zod'
 
-import type { CreateStaffOutputSchema } from '@/lib/schema'
 import { StaffSchema as StaffFormSchema } from '@/lib/schema' // Alias to avoid name conflict with local type
 import { trpc } from '@/trpc/react'
 import type { AppRouter } from '@/trpc/routers/_app'
@@ -43,17 +42,15 @@ export const StaffForm = () => {
 		mode: 'onBlur', // Or 'onChange' or 'onSubmit'
 	})
 
-	// Infer the types for the mutation's success and error callbacks
-	type CreateNewStaffOutput = z.infer<typeof CreateStaffOutputSchema>
 	type CreateNewStaffError = TRPCClientErrorLike<AppRouter>
 
 	const { mutateAsync: createStaffMutation, isPending: isSubmitting } =
 		trpc.admin.createNewStaff.useMutation({
-			onSuccess: (res: CreateNewStaffOutput) => {
+			onSuccess: res => {
 				// Now 'res' will have the correct type, and type guards can be used
 				if (res.success) {
 					// This check should now be type-safe
-					toast.success(res.msg || res.message || 'Staff added successfully!')
+					toast.success('Staff added successfully!')
 					form.reset() // Reset the form after successful submission
 					router.refresh() // Refresh the page to show new staff
 				} else {

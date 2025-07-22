@@ -3,7 +3,7 @@
 import { motion } from 'framer-motion'
 import React from 'react'
 
-import type { Appointment } from '@/lib/schema'
+import type { Appointment } from '@/types/data-types'
 
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card'
 import AppointmentItem from './appointment-item'

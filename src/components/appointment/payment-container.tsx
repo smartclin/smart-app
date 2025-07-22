@@ -2,7 +2,7 @@ import type { Payment } from '@prisma/client'
 import { format } from 'date-fns'
 
 import { getSession } from '@/lib/auth'
-import db from '@/server/db'
+import db from '@/lib/db'
 import { checkRole } from '@/utils/roles'
 
 import { ActionDialog } from '../action-dialog'

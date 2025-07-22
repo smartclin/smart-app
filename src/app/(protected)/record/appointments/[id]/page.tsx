@@ -11,12 +11,7 @@ import { VitalSigns } from '@/components/appointment/vital-signs'
 import { MedicalHistoryContainer } from '@/components/medical-history-container'
 import { api } from '@/trpc/server'
 
-// Removed `format` import as it's not used in this file directly for display now.
-// import { format } from 'date-fns';
-
-// Define the type for the data returned by the tRPC procedure for a single appointment.
-// This type must EXACTLY match the successful output of your server-side tRPC procedure
-// `getAppointmentWithMedicalRecordsById` and include all fields expected by PatientDetailsCard.
+ // `getAppointmentWithMedicalRecordsById` and include all fields expected by PatientDetailsCard.
 type AppointmentDetailsData = {
 	id: number
 	patientId: string | null
@@ -78,36 +73,36 @@ type AppointmentDetailsData = {
 	bills: object[]
 	medical: object[]
 }
-
 const AppointmentDetailsPage = async ({
-	params,
-	searchParams,
+  params,
+  searchParams,
 }: {
-	params: { id: string }
-	searchParams: { [key: string]: string | string[] | undefined }
+  params: { id: string }
+  searchParams: { [key: string]: string | string[] | undefined }
 }) => {
-	const appointmentId = Number(params.id)
-	const cat = (searchParams?.cat as string) || 'charts'
+  const appointmentId = Number(params.id)
+  const cat = (searchParams?.cat as string) || 'charts'
 
-	let appointmentData: AppointmentDetailsData | null = null
-	let error: Error | undefined
+  let appointmentData: AppointmentDetailsData | null = null
+  let error: Error | undefined
 
-	if (Number.isNaN(appointmentId) || appointmentId <= 0) {
-		error = new Error('Invalid appointment ID provided.')
-	} else {
-		try {
-			const result = await api.appointment.getAppointmentWithMedicalRecordsById(appointmentId)
+  if (Number.isNaN(appointmentId) || appointmentId <= 0) {
+    error = new Error('Invalid appointment ID provided.')
+  } else {
+    try {
+      // Pass appointmentId variable correctly here:
+      const result = await api.appointment.getAppointmentWithMedicalRecordsById({ id: appointmentId })
 
-			if (result) {
-				appointmentData = result as unknown as AppointmentDetailsData
-			} else {
-				error = new Error('Appointment not found.')
-			}
-		} catch (err) {
-			error = err as Error
-			console.error('Error fetching appointment details via tRPC:', error)
-		}
-	}
+      if (result) {
+        appointmentData = result as unknown as AppointmentDetailsData
+      } else {
+        error = new Error('Appointment not found.')
+      }
+    } catch (err) {
+      error = err as Error
+      console.error('Error fetching appointment details via tRPC:', error)
+    }
+  }
 
 	if (error) {
 		let errorMessage = 'An unexpected error occurred.'
@@ -145,7 +140,7 @@ const AppointmentDetailsPage = async ({
 						/>
 						<VitalSigns
 							doctorId={data.doctorId as string}
-							id={String(data.id)}
+							id={Number(data.id)}
 							patientId={data.patientId as string}
 						/>
 					</>

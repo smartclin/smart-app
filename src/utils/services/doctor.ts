@@ -2,7 +2,7 @@ import { getSession } from '@/lib/auth' // your BetterAuth instance
 import { db } from '@/lib/db'
 import { processAppointments } from '@/types/helper'
 
-import { daysOfWeek } from '../utils'
+import { daysOfWeek } from '../'
 
 export async function getDoctors() {
 	try {

@@ -45,7 +45,7 @@ export const ActionDialog = ({ id, data, type, deleteType }: ActionDialogProps) 
 					setLoading(false)
 					return
 				}
-				const res = await api.admin.deleteDataById({ id, deleteType })
+				const res = await api.admin.deleteData({ id, deleteType })
 
 				if (res.success) {
 					toast.success('Record deleted successfully')

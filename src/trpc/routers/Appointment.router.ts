@@ -15,7 +15,7 @@ const AppointmentInputSchema = AppointmentSchema
 
 const AppointmentStatusSchema = z.enum([
 	'PENDING',
-	'CONFIRMED',
+	'SCHEDULED',
 	'CANCELLED',
 	'COMPLETED',
 	// add all valid enum values of AppointmentStatus here

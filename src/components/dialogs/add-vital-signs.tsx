@@ -91,26 +91,14 @@ export const AddVitalSigns = ({
 
 			// Create a new object with fallback values for optional fields
 			// that your TRPC mutation might expect as non-optional.
-			const dataToSend = {
-				...data,
-				// Provide default values for optional fields if they are undefined
-				// and your backend expects them to be present (e.g., 0 for numbers, "" for strings).
-				// Adjust these defaults based on your VitalSignsSchema and TRPC input schema.
-				medicalId: data.medicalId ?? 0, // Assuming 0 is a valid default for medicalId if optional
-				bodyTemperature: data.bodyTemperature ?? 0,
-				heartRate: data.heartRate ?? '',
-				systolic: data.systolic ?? 0,
-				diastolic: data.diastolic ?? 0,
-				respiratoryRate: data.respiratoryRate ?? 0,
-				oxygenSaturation: data.oxygenSaturation ?? 0,
-				weight: data.weight ?? 0,
-				height: data.height ?? 0,
-			}
 
 			await addVitalSignsMutation({
-				data: dataToSend, // Send the transformed data
+				...data,
 				appointmentId: appointmentId,
 				doctorId: doctorId,
+				patientId: '',
+				medicalId: 0,
+				weight: 0,
 			})
 		} catch (error) {
 			console.error('Unexpected error during vital signs submission:', error)

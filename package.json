@@ -1,26 +1,4 @@
 {
-	"name": "smart-app",
-	"version": "0.1.0",
-	"private": true,
-	"scripts": {
-		"dev": "next dev --turbopack",
-		"build": "next build",
-		"start": "next start",
-		"lint": "next lint",
-		"auth:gen": "bunx @better-auth/cli generate --config src/lib/auth --output prisma/schema/auth.prisma",
-		"db:push": "prisma db push --schema ./prisma/schema",
-		"db:studio": "prisma studio",
-		"db:admin": "bunx tsx src/server/db/admin.ts",
-		"db:reset": "prisma migrate reset --force --schema ./prisma/schema --skip-seed",
-		"check": "bunx biome check --write ",
-		"check:unsafe": " biome check --write --unsafe src",
-		"db:generate": "prisma generate --schema ./prisma/schema",
-		"db:migrate": "prisma migrate dev"
-	},
-	"prisma": {
-		"schema": "prisma/schema",
-		"seed": "tsx src/server/db/seed.ts"
-	},
 	"dependencies": {
 		"@ariakit/react": "0.4.17",
 		"@faker-js/faker": "^9.9.0",
@@ -111,11 +89,34 @@
 		"@tailwindcss/postcss": "^4.1.11",
 		"@types/bun": "1.2.19",
 		"@types/node": "^24.0.15",
-		"prisma": "^6.12.0",
 		"@types/react": "^19.1.8",
 		"@types/react-dom": "^19.1.6",
 		"postcss": "^8.5.6",
+		"prisma": "^6.12.0",
 		"tailwindcss": "^4.1.11",
 		"typescript": "^5.8.3"
-	}
+	},
+	"name": "smart-app",
+	"prisma": {
+		"schema": "prisma/schema",
+		"seed": "tsx src/server/db/seed.ts"
+	},
+	"private": true,
+	"scripts": {
+		"auth:gen": "bunx @better-auth/cli generate --config src/lib/auth --output prisma/schema/auth.prisma",
+		"build": "next build",
+		"check": "bunx biome check --write ",
+		"check:unsafe": " biome check --write --unsafe src",
+		"db:admin": "bunx tsx src/server/db/admin.ts",
+		"db:generate": "prisma generate --schema ./prisma/schema",
+		"db:migrate": "prisma migrate dev",
+		"db:push": "prisma db push --schema ./prisma/schema",
+		"db:reset": "prisma migrate reset --force --schema ./prisma/schema --skip-seed",
+		"db:studio": "prisma studio",
+		"dev": "next dev --turbopack",
+		"lint": "next lint",
+		"start": "next start",
+		"type": "tsc --noEmit"
+	},
+	"version": "0.1.0"
 }

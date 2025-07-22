@@ -1,7 +1,7 @@
 import { format } from 'date-fns'
 
 import { getSession } from '@/lib/auth'
-import db from '@/server/db'
+import db from '@/lib/db'
 import { calculateBMI } from '@/utils'
 import { checkRole } from '@/utils/roles'
 

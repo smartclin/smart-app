@@ -8,8 +8,9 @@ import { useForm } from 'react-hook-form'
 import { toast } from 'sonner'
 import type { z } from 'zod'
 
-import { DoctorSchema, type WorkingDaysSchema } from '@/lib/schema'
+import { DoctorSchema, type workingDaySchema } from '@/lib/schema'
 import { trpc } from '@/trpc/react'
+import type { Weekday } from '@/types/data-types'
 import { SPECIALIZATION } from '@/utils/seetings'
 
 import { CustomInput, SwitchInput } from '../custom-input'
@@ -23,7 +24,7 @@ const TYPES = [
 	{ label: 'Part-Time', value: 'PART' },
 ]
 
-const WORKINGDAYS = [
+const WORKINGDAYS: { label: string; value: Weekday }[] = [
 	{ label: 'Sunday', value: 'sunday' },
 	{ label: 'Monday', value: 'monday' },
 	{ label: 'Tuesday', value: 'tuesday' },
@@ -33,10 +34,11 @@ const WORKINGDAYS = [
 	{ label: 'Saturday', value: 'saturday' },
 ]
 
-type Day = z.infer<typeof WorkingDaysSchema>
+type Day = z.infer<typeof workingDaySchema>
 
 export const DoctorForm = () => {
 	const router = useRouter()
+
 	const [workSchedule, setWorkSchedule] = useState<Day[]>([])
 
 	const form = useForm<z.infer<typeof DoctorSchema>>({
@@ -55,21 +57,21 @@ export const DoctorForm = () => {
 		},
 	})
 
-	const createDoctorMutation = trpc.admin.createDoctor.useMutation({
+	const createDoctorMutation = trpc.admin.createNewDoctor.useMutation({
 		onSuccess: resp => {
 			if (resp.success) {
 				toast.success('Doctor added successfully!')
 				setWorkSchedule([])
-
 				form.reset()
 				router.refresh()
 			} else if (resp.error) {
 				toast.error(resp.message)
 			}
 		},
-		onError: error => {
-			console.error('Error creating doctor:', error)
-			toast.error(error.message || 'Something went wrong')
+		onError: (error: unknown) => {
+			const e = error as Error
+			console.error('Error creating doctor:', e)
+			toast.error(e.message || 'Something went wrong')
 		},
 	})
 
@@ -84,7 +86,8 @@ export const DoctorForm = () => {
 		try {
 			await createDoctorMutation.mutateAsync({
 				...values,
-				workSchedule: workSchedule, // Pass the Day[] directly
+				password: values.password ?? '',
+				workSchedule,
 			})
 		} catch (error) {
 			console.error('Unhandled error in handleSubmit:', error)
@@ -92,11 +95,9 @@ export const DoctorForm = () => {
 	}
 
 	const selectedSpecialization = form.watch('specialization')
-
 	useEffect(() => {
 		if (selectedSpecialization) {
 			const department = SPECIALIZATION.find(el => el.value === selectedSpecialization)
-
 			if (department) {
 				form.setValue('department', department.department)
 			}
@@ -107,8 +108,7 @@ export const DoctorForm = () => {
 		<Sheet>
 			<SheetTrigger asChild>
 				<Button>
-					<Plus size={20} />
-					Add Doctor
+					<Plus size={20} /> Add Doctor
 				</Button>
 			</SheetTrigger>
 
@@ -170,11 +170,11 @@ export const DoctorForm = () => {
 
 							<div className="mt-6">
 								<Label>Working Days</Label>
-
 								<SwitchInput
-									data={WORKINGDAYS}
+									data={WORKINGDAYS} // this should be compatible with Day['day']
+									selectedDays={workSchedule}
 									setWorkSchedule={setWorkSchedule}
-								/>
+								/>{' '}
 							</div>
 
 							<Button

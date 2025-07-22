@@ -2,7 +2,7 @@
 
 import { auth } from '@/lib/auth'
 import { PatientFormSchema } from '@/lib/schema'
-import db from '@/server/db'
+import db from '@/lib/db'
 import type { PatientInput } from '@/types/data-types'
 
 export async function updatePatient(data: PatientInput, pid: string) {

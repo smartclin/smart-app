@@ -19,10 +19,9 @@ export default async function HomePage() {
 		redirect(`/${role.toLowerCase()}`)
 	}
 
-	let _apiHealthy = false
+	let apiHealthy = false
 	try {
-		const status = await api.healthCheck()
-		_apiHealthy = status === 'OK'
+		apiHealthy = await api.healthCheck()
 	} catch (e) {
 		console.error('API health check failed:', e)
 	}
@@ -32,6 +31,11 @@ export default async function HomePage() {
 			<Hero siteMetadata={{ name: '', description: '' }} />
 			<Features />
 			<CallToAction />
+			{!apiHealthy && (
+				<div className='mx-auto mt-4 max-w-md rounded-md border border-red-400 p-4 text-center text-red-600'>
+					Warning: API is currently unreachable. Some features may not work.
+				</div>
+			)}
 		</div>
 	)
 }

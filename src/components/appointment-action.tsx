@@ -27,7 +27,7 @@ export const AppointmentAction = ({ id, status }: ActionProps) => {
 	// `mutate` is the function to call to trigger the mutation
 	// `isLoading` (aliased to `isMutating`) from the hook tracks the mutation's pending state.
 	// This is the correct way to destructure the loading state.
-	const { mutate, isPending: isMutating } = trpc.appointment.updateAppointmentStatus.useMutation({
+	const { mutate, isPending: isMutating } = trpc.appointment.appointmentAction.useMutation({
 		onSuccess: data => {
 			if (data.success) {
 				toast.success(data.success || 'Appointment status updated successfully!')

@@ -3,7 +3,7 @@ import { format } from 'date-fns'
 import { ReceiptText } from 'lucide-react'
 
 import { getSession } from '@/lib/auth'
-import db from '@/server/db'
+import db from '@/lib/db'
 import { calculateDiscount } from '@/utils'
 import { checkRole } from '@/utils/roles'
 
@@ -78,9 +78,9 @@ export const BillsContainer = async ({ id }: { id: number }) => {
 	const billData = data?.bills || []
 	const discount = data
 		? calculateDiscount({
-				amount: data?.totalAmount,
-				discount: data?.discount,
-			})
+			amount: data?.totalAmount,
+			discount: data?.discount,
+		})
 		: null
 
 	if (billData) {

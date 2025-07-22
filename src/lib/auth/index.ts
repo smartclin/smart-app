@@ -5,7 +5,7 @@ import { admin } from 'better-auth/plugins'
 import { headers } from 'next/headers'
 import { cache } from 'react'
 
-import db from '@/server/db'
+import db from '@/lib/db'
 
 import { ac, allRoles } from './roles'
 

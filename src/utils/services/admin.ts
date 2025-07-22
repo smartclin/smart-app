@@ -1,7 +1,7 @@
 import { db } from '@/lib/db'
 import { processAppointments } from '@/types/helper'
 
-import { daysOfWeek } from '../utils'
+import { daysOfWeek } from '../'
 
 export async function getAdminDashboardStats() {
 	try {

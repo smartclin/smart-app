@@ -86,3 +86,5 @@ export type ServicesInput = z.infer<typeof ServicesSchema>
 
 // Resulting input type
 export type DoctorAuthInput = z.infer<typeof DoctorAuthSchema>
+
+export type Weekday = 'sunday' | 'monday' | 'tuesday' | 'wednesday' | 'thursday' | 'friday' | 'saturday'

@@ -5,7 +5,7 @@ import { createHydrationHelpers } from '@trpc/react-query/rsc'
 import { cookies, headers } from 'next/headers'
 import { cache } from 'react'
 
-import { createTRPCContext } from '@/server/api/trpc'
+import { createTRPCContext } from '@/trpc/init'
 import { type AppRouter, createCaller as createTRPCAppCaller } from '@/trpc/routers/_app'
 
 import { makeQueryClient } from './query-client' // Your shared QueryClient factory

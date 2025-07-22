@@ -1,4 +1,4 @@
-import db from '@/server/db'
+import db from '@/lib/db'
 
 import { MedicalHistory } from './medical-history'
 

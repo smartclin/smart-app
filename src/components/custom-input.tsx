@@ -1,6 +1,8 @@
 import type React from 'react'
 import type { Control, ControllerRenderProps, FieldValues } from 'react-hook-form'
 
+import type { Day } from '@/lib/schema'
+
 import { Checkbox } from './ui/checkbox'
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from './ui/form'
 import { Input } from './ui/input'
@@ -155,20 +157,16 @@ export const CustomInput = <T extends FieldValues>(props: InputProps<T>) => {
 		/>
 	)
 }
-type Day = {
-	day: string
-	startTime?: string
-	closeTime?: string
-}
 
 interface SwitchProps {
-	data: { label: string; value: string }[]
+	data: { label: string; value: Day['day'] }[]
+	selectedDays: Day[]
 	setWorkSchedule: React.Dispatch<React.SetStateAction<Day[]>>
 }
 
 export const SwitchInput = ({ data, setWorkSchedule }: SwitchProps) => {
 	// field is keyof Day or boolean true for toggle on/off
-	const handleChange = (day: string, field: keyof Day | true, value?: string) => {
+	const handleChange = (day: Day['day'], field: keyof Day | true, value?: string) => {
 		setWorkSchedule(prevDays => {
 			const dayExist = prevDays.find(d => d.day === day)
 
@@ -187,7 +185,14 @@ export const SwitchInput = ({ data, setWorkSchedule }: SwitchProps) => {
 			}
 
 			// Add new day with specific field update
-			return [...prevDays, { day, [field]: value }]
+			return [
+				...prevDays,
+				{
+					day,
+					startTime: field === 'startTime' ? (value ?? '09:00') : '09:00',
+					closeTime: field === 'closeTime' ? (value ?? '17:00') : '17:00',
+				},
+			]
 		})
 	}
 

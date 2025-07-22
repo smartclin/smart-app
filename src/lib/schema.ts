@@ -95,12 +95,12 @@ export const DoctorSchema = z.object({
 })
 
 export const workingDaySchema = z.object({
-	day: z.enum(['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday']),
-	startTime: z.string(),
-	closeTime: z.string(),
+  day: z.enum(['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday']),
+  startTime: z.string(),
+  closeTime: z.string(),
 })
 export const WorkingDaysSchema = z.array(workingDaySchema).optional()
-
+export type Day = z.infer<typeof workingDaySchema>; 
 export const StaffSchema = z.object({
 	name: z
 		.string()
