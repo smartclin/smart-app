@@ -111,6 +111,7 @@ export const siteMetadata = {
 	googleMapsLink: 'https://maps.app.goo.gl/YOUR_CLINIC_LOCATION_LINK', // Replace with your actual Google Maps link
 }
 
+export * from "./constants";
 // --- 2. External Services Configuration ---
 // Public keys and IDs for third-party services.
 export const externalServices = {

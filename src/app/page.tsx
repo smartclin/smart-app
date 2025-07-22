@@ -5,7 +5,7 @@ import { api } from '@/trpc/server'
 import { getUserRole } from '@/utils/roles'
 
 import CallToAction from './_components/CTA'
-import Features from './_components/Features'
+import { FeaturesSection } from './_components/Features'
 import Hero from './_components/Hero'
 
 export const dynamic = 'force-dynamic'
@@ -29,7 +29,7 @@ export default async function HomePage() {
 	return (
 		<div className="flex min-h-screen flex-col">
 			<Hero siteMetadata={{ name: '', description: '' }} />
-			<Features />
+			<FeaturesSection />
 			<CallToAction />
 			{!apiHealthy && (
 				<div className='mx-auto mt-4 max-w-md rounded-md border border-red-400 p-4 text-center text-red-600'>

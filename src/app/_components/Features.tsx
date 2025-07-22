@@ -1,12 +1,22 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { Baby, CalendarDays, Shield, Syringe, UserPlus, Wallet } from 'lucide-react'
+import {
+	Baby,
+	CalendarDays,
+	ClipboardCheck,
+	HeartHandshake,
+	Salad,
+	Shield,
+	Stethoscope,
+	Syringe,
+	UserPlus,
+	Wallet,
+} from 'lucide-react'
 import Image from 'next/image'
-
 import FloatingAnimation from '@/components/floating-animation'
 
-export const clinicFeatures = [
+const clinicFeatures = [
 	{
 		title: 'Secure Patient Records',
 		description:
@@ -37,15 +47,47 @@ export const clinicFeatures = [
 		icon: Wallet,
 	},
 	{
-		title: 'Pediatric Growth Tracking',
-		description: 'Monitor child development with intuitive growth charts and milestones tracking.',
+		title: 'Routine Checkup',
+		description:
+			'Comprehensive well-baby and child exams to monitor growth, health, and early signs of illness.',
+		icon: Stethoscope,
+	},
+	{
+		title: 'Medical Examination',
+		description:
+			'Focused evaluations for acute concerns, sick visits, and follow-ups with thorough documentation.',
+		icon: ClipboardCheck,
+	},
+	{
+		title: 'Vaccination Services',
+		description:
+			'Administering essential and elective vaccines according to international and local immunization schedules.',
+		icon: Syringe,
+	},
+	{
+		title: 'Nutritional Assessment',
+		description:
+			'Dietary evaluation and tailored advice to support healthy weight, growth, and nutritional needs.',
+		icon: Salad,
+	},
+	{
+		title: 'Developmental Tracking',
+		description:
+			'Monitoring milestones in motor, cognitive, language, and social-emotional development.',
 		icon: Baby,
 	},
+	{
+		title: 'Health Counseling',
+		description:
+			'Guidance for parents on sleep, behavior, safety, and preventive pediatric care.',
+		icon: HeartHandshake,
+	},
 ]
-export default function ClinicImageAndFeatures() {
+
+export function FeaturesSection() {
 	return (
 		<>
-			{/* Clinic Image Section */}
+			{/* Image preview section */}
 			<section className="flex justify-center px-4 pt-20">
 				<motion.div
 					className="w-full max-w-5xl overflow-hidden rounded-xl border border-border shadow-lg"
@@ -79,7 +121,6 @@ export default function ClinicImageAndFeatures() {
 
 			{/* Features Section */}
 			<section className="relative bg-gray-50 px-4 py-20 md:px-6 lg:px-8 dark:bg-gray-900">
-				{/* Floating background blob */}
 				<div className="absolute inset-0 overflow-hidden">
 					<FloatingAnimation
 						className="-translate-x-1/2 absolute bottom-1/4 left-1/3 transform"
@@ -108,8 +149,7 @@ export default function ClinicImageAndFeatures() {
 							viewport={{ once: true }}
 							whileInView={{ opacity: 1, y: 0 }}
 						>
-							Everything your family needs for a healthier future—streamlined by smart clinic
-							technology.
+							Everything your family needs for a healthier future—streamlined by smart clinic technology.
 						</motion.p>
 					</div>
 
@@ -117,8 +157,8 @@ export default function ClinicImageAndFeatures() {
 						{clinicFeatures.map((feature, index) => (
 							<motion.div
 								className="flex flex-col rounded-xl border border-border bg-card p-6 shadow-sm"
-								initial={{ opacity: 0, y: 20 }}
 								key={feature.title}
+								initial={{ opacity: 0, y: 20 }}
 								transition={{ duration: 0.4, delay: 0.1 * index }}
 								viewport={{ once: true }}
 								whileHover={{
