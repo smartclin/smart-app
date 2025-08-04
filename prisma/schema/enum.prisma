@@ -1,0 +1,60 @@
+enum Role {
+    ADMIN
+    STAFF
+    DOCTOR
+    PATIENT
+}
+
+enum Status {
+    ACTIVE
+    INACTIVE
+    DORMANT
+}
+
+enum JOBTYPE {
+    FULL
+    PART
+}
+
+enum Gender {
+    MALE
+    FEMALE
+}
+
+enum AppointmentStatus {
+    PENDING
+    SCHEDULED
+    CANCELLED
+    COMPLETED
+}
+
+enum PaymentMethod {
+    CASH
+    CARD
+    MOBILE
+}
+
+enum PaymentStatus {
+    PAID
+    UNPAID
+    PARTIAL
+    REFUNDED
+}
+
+
+enum ServiceCategory {
+    CONSULTATION
+    LAB_TEST
+    VACCINATION
+    PROCEDURE
+    PHARMACY
+    DIAGNOSIS
+    OTHER
+}
+
+
+enum MeasurementType {
+    WFA
+    HFA
+    HcFA
+}

@@ -105,7 +105,7 @@
 		"analyze": "BUNDLE_ANALYZER_ENABLED=true next build",
 		"auth:gen": "bunx @better-auth/cli generate --config src/lib/auth/index.ts --output prisma/schema/auth.prisma",
 		"build": "next build",
-		"seed": "tsx src/lib/db/seed.ts",
+		"seed": "tsx prisma/seed.ts",
 		"check": "bunx biome check --write ",
 		"check:unsafe": " biome check --write --unsafe src",
 		"db:admin": "bunx tsx src/lib/db/admin.ts",

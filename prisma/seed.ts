@@ -1,3 +1,5 @@
+import 'dotenv/config'
+
 import { faker } from '@faker-js/faker'
 import {
 	AppointmentStatus,
@@ -10,10 +12,9 @@ import {
 	Role, // Make sure Role is imported if used
 	ServiceCategory,
 	Status, // Make sure Status is imported if used
-} from '@prisma/client/index'
-import { PrismaClient } from '@prisma/client/client'
+} from '@prisma/client'
 
-const db = new PrismaClient()
+import db from '@/lib/db'
 
 // Helper function to get random enum value
 function getRandomEnumValue<T extends Record<string, string>>(enumObject: T): T[keyof T] {

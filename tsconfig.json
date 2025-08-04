@@ -16,7 +16,8 @@
 			"ES2022"
 		],
 		"module": "ESNext",
-		"moduleDetection": "force",
+		 "allowImportingTsExtensions": true,
+   	"moduleDetection": "force",
 		"moduleResolution": "Bundler",
 		"noEmit": true,
 		"noUncheckedIndexedAccess": true,
@@ -24,9 +25,7 @@
 			"@/*": [
 				"./src/*"
 			],
-			"@prisma/client/*": [
-				"./prisma/generated/client"
-			]
+			"@prisma/client": ["generated/client/client"]
 		},
 		"plugins": [
 			{

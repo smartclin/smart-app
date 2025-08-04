@@ -1,29 +1,34 @@
-// Re-export Prisma types and generated modules
-export { Prisma, PrismaClient } from '@prisma/client'
-export * from '@prisma/client/enums'
-export * from '@prisma/client/models'
+// db.ts
 
-import { PrismaClient } from '@prisma/client'
 import { withAccelerate } from '@prisma/extension-accelerate'
+import { PrismaClient } from 'generated/client/client'
 
 import { env } from '@/env'
 
-// Factory function to create and extend PrismaClient
-const createPrismaClient = () =>
+// Factory function to create the extended PrismaClient
+const createClient = () =>
 	new PrismaClient({
+		transactionOptions: {
+			isolationLevel: 'ReadCommitted',
+			timeout: 10000,
+			maxWait: 10000,
+		},
+		errorFormat: 'pretty',
 		log: env.NODE_ENV === 'development' ? ['query', 'warn', 'error'] : ['error'],
 	}).$extends(withAccelerate())
 
-// Ensure a single PrismaClient instance during development (for hot-reloading)
+// Global singleton pattern (for dev hot-reloading)
 const globalForPrisma = globalThis as unknown as {
-	prisma?: ReturnType<typeof createPrismaClient>
+	__PRISMA__: ReturnType<typeof createClient> | undefined
 }
 
-// Singleton client instance
-export const db = globalForPrisma.prisma ?? createPrismaClient()
+// Only create a new client if not already present
+const client = globalForPrisma.__PRISMA__ ?? createClient()
 
 if (env.NODE_ENV !== 'production') {
-	globalForPrisma.prisma = db
+	globalForPrisma.__PRISMA__ = client
 }
 
+// Export single instance
+export const db = client
 export default db
