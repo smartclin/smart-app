@@ -10,7 +10,7 @@ interface Props {
 	autoResume: boolean
 	initialMessages: UIMessage[]
 	experimental_resume: UseChatHelpers<UIMessage>['resumeStream']
-data: DataPart[] 
+	data: DataPart[]
 	setMessages: UseChatHelpers<UIMessage>['setMessages']
 }
 

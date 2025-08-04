@@ -1,5 +1,6 @@
 // src/config.ts
 export * from './chat'
+export * from './constants'
 
 import type { Role } from '@prisma/client'
 import { Baby, CalendarDays, Shield, Syringe, UserPlus, Wallet } from 'lucide-react'

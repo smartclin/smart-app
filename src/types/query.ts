@@ -1,4 +1,4 @@
-import type { Prisma } from "@prisma/client"
+import type { Prisma } from '@prisma/client'
 
 /**
  * Defines options for building Prisma queries.
@@ -36,4 +36,3 @@ export type PrescriptionQueryOptions = QueryBuilderOpts<
 	Prisma.PrescriptionWhereInput,
 	Prisma.PrescriptionOrderByWithRelationInput
 >
-

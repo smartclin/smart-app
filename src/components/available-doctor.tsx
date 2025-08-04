@@ -55,7 +55,7 @@ export const AvailableDoctors = async ({ data }: DataProps) => {
 			<div className="flex w-full flex-col space-y-5 md:flex-row md:flex-wrap md:gap-6 md:space-y-0">
 				{data?.map(doc => (
 					<Card
-						className=" flex min-h-28 w-full gap-4 border-none p-4 odd:bg-emerald-600/5 even:bg-yellow-600/5 md:w-[300px] xl:w-full"
+						className="flex min-h-28 w-full gap-4 border-none p-4 odd:bg-emerald-600/5 even:bg-yellow-600/5 md:w-[300px] xl:w-full"
 						key={doc.name}
 					>
 						<ProfileImage

@@ -86,7 +86,7 @@ type PaymentRecord = Payment & {
 
 const BillingPage = async (props: SearchParamsProps) => {
 	const searchParams = await props.searchParams
-  const pageParam = typeof searchParams?.p === 'string' ? searchParams.p : '1'
+	const pageParam = typeof searchParams?.p === 'string' ? searchParams.p : '1'
 
 	const page = Number(pageParam)
 	const searchQuery = (searchParams?.q || '') as string

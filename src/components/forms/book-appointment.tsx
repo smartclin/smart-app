@@ -150,7 +150,7 @@ export const BookAppointment = ({ data, doctors }: { data: Patient; doctors: Doc
 																	url={i?.img ?? undefined}
 																/>
 																<div>
-																	<p className="text-start font-medium ">{i.name}</p>
+																	<p className="text-start font-medium">{i.name}</p>
 																	<span className="text-gray-600 text-sm">{i?.specialization}</span>
 																</div>
 															</div>

@@ -8,7 +8,7 @@ function InfiniteScroll({
 	isFetchingNextPage,
 	fetchNextPage,
 }: {
-	targetRef: React.RefObject<HTMLDivElement>
+	targetRef: React.RefObject<HTMLDivElement | null>
 	hasNextPage: boolean
 	isFetchingNextPage: boolean
 	fetchNextPage: () => void
@@ -32,7 +32,7 @@ function InfiniteScroll({
 					)}
 				</Button>
 			) : (
-				<p className='text-muted-foreground text-sm'>No more items</p>
+				<p className="text-muted-foreground text-sm">No more items</p>
 			)}
 		</div>
 	)

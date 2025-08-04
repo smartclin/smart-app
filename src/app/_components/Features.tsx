@@ -14,6 +14,7 @@ import {
 	Wallet,
 } from 'lucide-react'
 import Image from 'next/image'
+
 import FloatingAnimation from '@/components/floating-animation'
 
 const clinicFeatures = [
@@ -78,8 +79,7 @@ const clinicFeatures = [
 	},
 	{
 		title: 'Health Counseling',
-		description:
-			'Guidance for parents on sleep, behavior, safety, and preventive pediatric care.',
+		description: 'Guidance for parents on sleep, behavior, safety, and preventive pediatric care.',
 		icon: HeartHandshake,
 	},
 ]
@@ -149,7 +149,8 @@ export function FeaturesSection() {
 							viewport={{ once: true }}
 							whileInView={{ opacity: 1, y: 0 }}
 						>
-							Everything your family needs for a healthier future—streamlined by smart clinic technology.
+							Everything your family needs for a healthier future—streamlined by smart clinic
+							technology.
 						</motion.p>
 					</div>
 
@@ -157,8 +158,8 @@ export function FeaturesSection() {
 						{clinicFeatures.map((feature, index) => (
 							<motion.div
 								className="flex flex-col rounded-xl border border-border bg-card p-6 shadow-sm"
-								key={feature.title}
 								initial={{ opacity: 0, y: 20 }}
+								key={feature.title}
 								transition={{ duration: 0.4, delay: 0.1 * index }}
 								viewport={{ once: true }}
 								whileHover={{

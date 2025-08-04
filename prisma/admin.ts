@@ -4,8 +4,8 @@ import 'dotenv/config'
 import { faker } from '@faker-js/faker' // Import faker for generating dummy data
 import { JOBTYPE, Role } from 'generated/client/enums'
 
-import { auth } from '@/lib/auth' // Your authentication library
 import db from '@/db'
+import { auth } from '@/lib/auth' // Your authentication library
 
 async function seed() {
 	console.log('Starting seed process...')

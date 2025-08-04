@@ -1,4 +1,4 @@
- import type { Message as DBMessage } from '@prisma/client'
+import type { Message as DBMessage } from '@prisma/client'
 import type { UIMessage } from 'ai'
 import { type ClassValue, clsx } from 'clsx'
 /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -235,20 +235,17 @@ export function convertToAISDKMessages(messages: Array<DBMessage>): UIMessage[] 
 			id: msg.id,
 			role: msg.role === 'USER' ? 'user' : 'assistant',
 			parts: msg.parts as UIMessage['parts'],
- 		}
+		}
 		return message
 	})
 }
-
 
 export function filterMessageHistory(messages: UIMessage[], activeTool: Tool) {
 	if (activeTool === 'none') {
 		return messages
 			.map(message => {
 				if (message.role === 'assistant' && message.parts) {
-					const filteredParts = message.parts.filter(
-						(part) => part.type !== 'tool-invocation'
-					)
+					const filteredParts = message.parts.filter(part => part.type !== 'tool-invocation')
 
 					return {
 						...message,
@@ -265,7 +262,6 @@ export function filterMessageHistory(messages: UIMessage[], activeTool: Tool) {
 
 	return messages
 }
-
 
 export function getActiveToolNames(tool: Tool): string[] {
 	switch (tool) {

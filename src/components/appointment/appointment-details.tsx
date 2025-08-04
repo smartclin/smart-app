@@ -23,7 +23,7 @@ export const AppointmentDetails = ({
 			</CardHeader>
 
 			<CardContent className="space-y-4">
-				<div className="flex ">
+				<div className="flex">
 					<SmallCard
 						label="Appointment #"
 						value={`# ${id}`}

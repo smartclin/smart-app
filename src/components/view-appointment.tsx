@@ -18,7 +18,7 @@ import {
 	DialogHeader,
 	DialogTitle,
 	DialogTrigger,
- } from './ui/dialog'
+} from './ui/dialog'
 
 interface ViewAppointmentProps {
 	id?: number

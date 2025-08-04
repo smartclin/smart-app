@@ -1,277 +1,263 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { GlobeIcon, Image, Lightbulb, Zap } from "lucide-react";
-import { UTApi, UTFile } from "uploadthing/server";
-import { v4 as uuid } from "@lukeed/uuid";
-import { google } from "@ai-sdk/google";
-import { generateText, tool } from "ai";
-import { z } from "zod";
 
-import { ModelId } from "../model/model";
-import { getExaClient } from "./exa";
+import { experimental_generateImage, type FileUIPart, tool } from 'ai'
+import OpenAI, { toFile } from 'openai'
+import { z } from 'zod'
 
-export const generateImageTool = tool({
-  description: "Generate an image based on a text prompt",
-  parameters: z.object({
-    prompt: z.string().describe("The prompt to generate the image from"),
-  }),
-  execute: async ({ prompt }) => {
-    try {
-      // const { image } = await experimental_generateImage({
-      //   model: fireworks.image("accounts/fireworks/models/flux-1-dev-fp8"),
-      //   prompt,
-      //   aspectRatio: "1:1",
-      //   n: 1,
-      // });
+import { uploadFile } from '@/lib/blob'
+import { DEFAULT_IMAGE_MODEL } from '@/lib/chat/all-models'
+import { getImageModel } from '@/lib/chat/providers'
 
-      // if (!image.base64) {
-      //   throw new Error("Generated image is empty or invalid.");
-      //       }
+import { getExaClient } from './exa'
 
-      // const base64Data = image.base64.replace(/^data:image\/\w+;base64,/, "");
+interface GenerateImageProps {
+	attachments?: Array<FileUIPart>
+	lastGeneratedImage?: { imageUrl: string; name: string } | null
+}
 
-      const result = await generateText({
-        model: google("gemini-2.0-flash-preview-image-generation"),
-        providerOptions: {
-          google: { responseModalities: ["TEXT", "IMAGE"] },
-        },
-        prompt: prompt,
-      });
+const openaiClient = new OpenAI({
+	apiKey: process.env.OPENAI_API_KEY,
+})
 
-      let base64Image = "";
+export const generateImage = ({
+	attachments = [],
+	lastGeneratedImage = null,
+}: GenerateImageProps = {}) =>
+	tool({
+		description: `Generate images from text descriptions. Can optionally use attached images as reference.
 
-      for (const file of result.files) {
-        if (file.mimeType.startsWith("image/")) {
-          base64Image = file.base64;
-        }
-      }
+Usage:
+- Create images, artwork, illustrations from descriptive prompts
+- Generate visual content based on user requests
+- Support various art styles and subjects
+- Be as detailed as possible in the description
+- Use attached images as visual reference when available`,
+		inputSchema: z.object({
+			prompt: z
+				.string()
+				.describe(
+					'Detailed description of the image to generate. Include style, composition, colors, mood, and any other relevant details.',
+				),
+		}),
+		execute: async ({ prompt }) => {
+			// Filter only image file parts for reference
+			const imageParts = attachments.filter(
+				part => part.type === 'file' && part.mediaType?.startsWith('image/'),
+			)
 
-      if (!base64Image) {
-        throw new Error("Generated image is empty or invalid.");
-      }
+			const hasLastGeneratedImage = lastGeneratedImage !== null
+			const isEdit = imageParts.length > 0 || hasLastGeneratedImage
+			console.log('CAlling generateImageTool with isEdit', isEdit)
+			if (isEdit) {
+				console.log(
+					'Using OpenAI edit mode with images:',
+					`lastGenerated: ${hasLastGeneratedImage ? 1 : 0}, attachments: ${imageParts.length}`,
+				)
 
-      const base64Data = base64Image.replace(/^data:image\/\w+;base64,/, "");
-      const buffer = Buffer.from(base64Data, "base64");
+				// Convert parts and lastGeneratedImage to the format expected by OpenAI
+				const inputImages = []
 
-      const uniqueId = uuid();
+				// Add lastGeneratedImage first if it exists
+				if (lastGeneratedImage) {
+					const response = await fetch(lastGeneratedImage.imageUrl)
+					const arrayBuffer = await response.arrayBuffer()
+					const buffer = Buffer.from(arrayBuffer)
+					const lastGenImage = await toFile(buffer, lastGeneratedImage.name, {
+						type: 'image/png',
+					})
+					inputImages.push(lastGenImage)
+				}
 
-      const file = new UTFile([buffer], "generated-image.png", {
-        customId: `ai-generated-image-${uniqueId}`,
-        type: "image/png",
-      });
+				// Add user file parts
+				const partImages = await Promise.all(
+					imageParts.map(async part => {
+						const response = await fetch(part.url)
+						const arrayBuffer = await response.arrayBuffer()
+						const buffer = Buffer.from(arrayBuffer)
 
-      const utapi = new UTApi();
-      const uploadedImage = await utapi.uploadFiles([file]);
+						// Use toFile to create the proper format for OpenAI
+						return await toFile(buffer, part.filename || 'image.png', {
+							type: part.mediaType || 'image/png',
+						})
+					}),
+				)
 
-      if (!uploadedImage || !uploadedImage[0]) {
-        throw new Error("Failed to upload image to UploadThing.");
-      }
+				inputImages.push(...partImages)
 
-      if (uploadedImage[0]) console.log("Upload complete");
+				const rsp = await openaiClient.images.edit({
+					model: 'gpt-image-1',
+					image: inputImages, // Pass all images to OpenAI
+					prompt,
+				})
 
-      const imageKey = uploadedImage[0].data?.key;
-      const imageUrl = uploadedImage[0].data?.ufsUrl;
+				// Convert base64 to buffer and upload to blob storage
+				const buffer = Buffer.from(rsp.data?.[0]?.b64_json || '', 'base64')
+				const timestamp = Date.now()
+				const filename = `generated-image-${timestamp}.png`
 
-      return {
-        imageUrl,
-        imageKey,
-        prompt,
-      };
-    } catch (error) {
-      console.error("Image generation error:", error);
-      throw new Error("Failed to generate image");
-    }
-  },
-});
+				const result = await uploadFile(filename, buffer)
+
+				return {
+					imageUrl: result.url,
+					prompt,
+				}
+			}
+
+			// Non-edit case: use experimental_generateImage
+			const res = await experimental_generateImage({
+				model: getImageModel(DEFAULT_IMAGE_MODEL),
+				prompt,
+				n: 1,
+				providerOptions: {
+					telemetry: { isEnabled: true },
+				},
+			})
+
+			console.log('res', res)
+
+			// Convert base64 to buffer and upload to blob storage
+			const base64Image = res.images?.[0]
+
+			if (typeof base64Image !== 'string') {
+				throw new Error('Image data is missing or not a string.')
+			}
+
+			const buffer = Buffer.from(base64Image, 'base64')
+			const timestamp = Date.now()
+			const filename = `generated-image-${timestamp}.png`
+
+			const result = await uploadFile(filename, buffer)
+
+			return {
+				imageUrl: result.url,
+				prompt,
+			}
+		},
+	}) // Define types explicitly to help TS match the overload
+
+// Define schema properly
+const webSearchInputSchema = z.object({
+	query: z.string().min(1).max(400).describe('The search query'),
+})
 
 export const webSearchTool = tool({
-  description: "Search the live web and return up-to-date information.",
-  parameters: z.object({
-    query: z.string().min(1).max(400).describe("The search query"),
-  }),
-  execute: async ({ query }) => {
-    console.log("Searching the web...");
-    const exa = getExaClient();
+	name: 'webSearchTool',
+	description: 'Search the live web and return up-to-date information.',
+	inputSchema: webSearchInputSchema,
+	execute: async ({ query }) => {
+		const exa = getExaClient()
 
-    try {
-      console.log("Query:", query);
+		const { results } = await exa.searchAndContents(query, {
+			livecrawl: 'always',
+			numResults: 2,
+			summary: true,
+		})
 
-      const { results } = await exa.searchAndContents(query, {
-        livecrawl: "always",
-        numResults: 2,
-        summary: true,
-      });
+		if (!results || results.length === 0) {
+			return [
+				{
+					title: 'No results found',
+					url: '',
+					content:
+						'No recent information was found for this search query. This might be due to the search service being temporarily unavailable or the query being too specific.',
+					publishedDate: null,
+				},
+			]
+		}
 
-      if (!results || results.length === 0) {
-        return [
-          {
-            title: "No results found",
-            url: "",
-            content:
-              "No recent information was found for this search query. This might be due to the search service being temporarily unavailable or the query being too specific.",
-            publishedDate: null,
-          },
-        ];
-      }
+		// Replace `any` with a strict type
+		type SearchResult = {
+			title: string
+			url: string
+			content: string
+			publishedDate?: string | null
+		}
 
-      return results.map((result) => ({
-        title: result.title || "Untitled",
-        url: result.url || "",
-        content: result.summary.slice(0, 500) || "No content available.",
-        publishedDate: result.publishedDate || null,
-      }));
-    } catch (err) {
-      console.error("Web search error:", err);
-      return [
-        {
-          title: "Search temporarily unavailable",
-          url: "",
-          content:
-            "The web search service is currently experiencing issues. Please try again in a few moments.",
-          publishedDate: null,
-        },
-      ];
-    }
-  },
-});
+		return results.map(
+			(result): SearchResult => ({
+				title: result.title ?? '',
+				url: result.url,
+				content: result.summary,
+				publishedDate: result.publishedDate ?? null,
+			}),
+		)
+	},
+})
 
-export const getWeatherTool = tool({
-  description: "Get current weather and 5-day forecast for a location",
-  parameters: z.object({
-    location: z
-      .string()
-      .min(1)
-      .max(100)
-      .describe("The location to get weather for"),
-  }),
-  execute: async ({ location }) => {
-    console.log("Fetching weather data...");
+// export const getWeatherTool = tool({
+// 	description: 'Get current weather and 5-day forecast for a location',
+// 	parameters: z.object({
+// 		location: z.string().min(1).max(100).describe('The location to get weather for'),
+// 	}),
+// 	// 👇 fix: explicitly type the input to match zod schema
+// 	execute: async ({ location }: { location: string }) => {
+// 		const API_KEY = process.env.WEATHER_API_KEY
+// 		if (!API_KEY) {
+// 			throw new Error('OpenWeather API key not configured')
+// 		}
+// 		try {
+// 			const response = await fetch(
+// 				`https://api.openweathermap.org/data/2.5/forecast?q=${encodeURIComponent(
+// 					location,
+// 				)}&appid=${API_KEY}&units=metric`,
+// 			)
 
-    const API_KEY = process.env.WEATHER_API_KEY;
+// 			if (!response.ok) {
+// 				const message =
+// 					response.status === 404
+// 						? `Location "${location}" not found. Please check the spelling and try again.`
+// 						: `Weather API error: ${response.status}`
+// 				return {
+// 					location,
+// 					error: true,
+// 					message,
+// 					country: null,
+// 					current: null,
+// 					forecast: [],
+// 				}
+// 			}
 
-    if (!API_KEY) {
-      throw new Error("OpenWeather API key not configured");
-    }
+// 			const data = await response.json()
+// 			const current = data.list[0]
 
-    try {
-      // Get current weather and 5-day forecast
-      const response = await fetch(
-        `https://api.openweathermap.org/data/2.5/forecast?q=${encodeURIComponent(
-          location
-        )}&appid=${API_KEY}&units=metric`
-      );
+// 			const dailyForecast = data.list
+// 				.filter((_: unknown, index: number) => index % 8 === 0)
+// 				.slice(0, 5)
+// 				.map((day: any) => {
+// 					const date = new Date(day.dt * 1000)
+// 					const dayName = date.toLocaleDateString('en-US', { weekday: 'short' })
+// 					return {
+// 						name: dayName,
+// 						temp: Math.round(day.main.temp),
+// 						condition: day.weather[0]?.main ?? 'Unknown',
+// 						dayIndex: date.getDay(),
+// 					}
+// 				})
 
-      if (!response.ok) {
-        if (response.status === 404) {
-          return {
-            error: true,
-            message: `Location "${location}" not found. Please check the spelling and try again.`,
-            location,
-          };
-        }
-        throw new Error(`Weather API error: ${response.status}`);
-      }
-
-      const data = await response.json();
-
-      const current = data.list[0];
-
-      const dailyForecast = data.list
-        .filter((_: any, index: number) => index % 8 === 0)
-        .slice(0, 5)
-        .map((day: any) => {
-          const date = new Date(day.dt * 1000);
-          const dayName = date.toLocaleDateString("en-US", {
-            weekday: "short",
-          });
-          return {
-            name: dayName,
-            temp: Math.round(day.main.temp),
-            condition: day.weather[0].main,
-            dayIndex: date.getDay(),
-          };
-        });
-
-      return {
-        location: data.city.name,
-        country: data.city.country,
-        current: {
-          temp: Math.round(current.main.temp),
-          condition: current.weather[0].main,
-          description: current.weather[0].description,
-          humidity: current.main.humidity,
-          windSpeed: current.wind.speed,
-        },
-        forecast: dailyForecast,
-        error: false,
-      };
-    } catch (error) {
-      console.error("Weather fetch error:", error);
-      return {
-        error: true,
-        message: "Unable to fetch weather data. Please try again later.",
-        location,
-      };
-    }
-  },
-});
-
-export type Tool =
-  | "none"
-  | "image-gen"
-  | "web-search"
-  | "get-weather"
-  | "reasoning";
-
-export const TOOL_REGISTRY = {
-  "get-weather": {
-    name: "Get weather",
-    tool: getWeatherTool,
-    defaultModel: "gemini-2.5-flash" as const,
-    icon: Zap,
-  },
-
-  "web-search": {
-    name: "Search web",
-    tool: webSearchTool,
-    defaultModel: "gemini-2.5-flash" as const,
-    icon: GlobeIcon,
-  },
-  reasoning: {
-    name: "Think longer",
-    tool: {},
-    defaultModel: "qwen/qwen3-32b" as const,
-    icon: Lightbulb,
-  },
-  "image-gen": {
-    name: "Create image",
-    tool: generateImageTool,
-    defaultModel: "gemini-2.5-flash" as const,
-    icon: Image,
-  },
-} as const;
-
-export function isValidTool(tool: string): tool is Tool {
-  return (
-    tool === "none" ||
-    tool === "image-gen" ||
-    tool === "web-search" ||
-    tool === "get-weather" ||
-    tool === "reasoning"
-  );
-}
-
-export function getTool(tool: Tool) {
-  if (tool === "none" || tool === "reasoning") return {};
-
-  const toolConfig = TOOL_REGISTRY[tool];
-  if (!toolConfig) return {};
-
-  return { [toolConfig.name]: toolConfig.tool };
-}
-
-export function getModelForTool(tool: Tool, fallbackModel: ModelId): ModelId {
-  if (tool === "none") return fallbackModel;
-
-  const toolConfig = TOOL_REGISTRY[tool];
-  return toolConfig?.defaultModel || fallbackModel;
-}
+// 			return {
+// 				location: data.city.name,
+// 				country: data.city.country,
+// 				current: {
+// 					temp: Math.round(current.main.temp),
+// 					condition: current.weather[0].main,
+// 					description: current.weather[0].description,
+// 					humidity: current.main.humidity,
+// 					windSpeed: current.wind.speed,
+// 				},
+// 				forecast: dailyForecast,
+// 				error: false,
+// 				message: null,
+// 			}
+// 		} catch (error) {
+// 			console.error('Weather fetch error:', error)
+// 			return {
+// 				location,
+// 				error: true,
+// 				message: 'Unable to fetch weather data. Please try again later.',
+// 				country: null,
+// 				current: null,
+// 				forecast: [],
+// 			}
+// 		}
+// 	},
+// })

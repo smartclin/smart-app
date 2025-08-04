@@ -1,6 +1,5 @@
 import { v4 as uuid } from '@lukeed/uuid'
 import {
-	appendClientMessage,
 	extractReasoningMiddleware,
 	StreamingTextResponse,
 	smoothStream,
@@ -28,7 +27,7 @@ import {
 	type ModelId,
 } from '@/lib/model/model'
 import {
-	generateImageTool,
+	generateImage,
 	getModelForTool,
 	getWeatherTool,
 	isValidTool,
@@ -77,7 +76,7 @@ export async function GET(req: Request) {
 		execute: () => {},
 	})
 
-	let resumable
+	let resumable: ReadableStream | null = null
 	try {
 		resumable = await streamContext.resumableStream(latestStreamId, () => emptyStream)
 	} catch (error) {
@@ -101,7 +100,7 @@ export async function GET(req: Request) {
 
 	const mostRecentDBMessage = dbMessages.at(-1)
 
-	const messageCreatedAt = new Date(mostRecentDBMessage!.createdAt)
+	const messageCreatedAt = new Date(mostRecentDBMessage?.createdAt)
 
 	if (differenceInSeconds(resumeRequestedAt, messageCreatedAt) > 15) {
 		return new Response(emptyStream, { status: 200 })
@@ -229,9 +228,9 @@ export async function POST(req: Request) {
 				experimental_activeTools:
 					tool === 'reasoning' || tool === 'none'
 						? []
-						: ['webSearchTool', 'generateImageTool', 'getWeatherTool'],
+						: ['webSearchTool', 'generateImage', 'getWeatherTool'],
 				tools: {
-					generateImageTool,
+					generateImage,
 					getWeatherTool,
 					webSearchTool,
 				},
@@ -270,7 +269,7 @@ export async function POST(req: Request) {
 							for (const part of lastAssistantMessage.parts ?? []) {
 								if (
 									part.type === 'tool-invocation' &&
-									part.toolInvocation.toolName === 'generateImageTool' &&
+									part.toolInvocation.toolName === 'generateImage' &&
 									part.toolInvocation.state === 'result'
 								) {
 									const result = part.toolInvocation.result

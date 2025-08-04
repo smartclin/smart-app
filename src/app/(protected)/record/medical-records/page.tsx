@@ -64,8 +64,8 @@ interface ExtendedProps extends MedicalRecords {
 
 const MedicalRecordsPage = async (props: SearchParamsProps) => {
 	const searchParams = await props.searchParams
-  const pageParam = typeof searchParams?.p === 'string' ? searchParams.p : '1'
-  const page = Number(pageParam)
+	const pageParam = typeof searchParams?.p === 'string' ? searchParams.p : '1'
+	const page = Number(pageParam)
 	const searchQuery = (searchParams?.q || '') as string
 	const { data, totalPages, totalRecords, currentPage } =
 		await api.medicalRecords.getMedicalRecords({

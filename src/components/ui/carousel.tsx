@@ -1,3 +1,4 @@
+/** biome-ignore-all lint/a11y/useSemanticElements: <ui> */
 'use client'
 
 import useEmblaCarousel, { type UseEmblaCarouselType } from 'embla-carousel-react'
@@ -174,6 +175,7 @@ const CarouselItem = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLD
 
 		return (
 			<div
+				aria-label="Carousel Slide"
 				aria-roledescription="slide"
 				className={cn(
 					'min-w-0 shrink-0 grow-0 basis-full',

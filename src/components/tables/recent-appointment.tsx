@@ -63,7 +63,7 @@ export const RecentAppointments = ({ data }: DataProps) => {
 				<td className="hidden md:table-cell">{format(item?.appointmentDate, 'yyyy-MM-dd')}</td>
 				<td className="hidden md:table-cell">{item?.time}</td>
 				<td className="hidden items-center py-2 md:table-cell">
-					<div className="flex items-center 2x:gap-4 gap-2 ">
+					<div className="flex items-center 2x:gap-4 gap-2">
 						<ProfileImage
 							bgColor={item?.doctor?.colorCode ?? '0000'}
 							className="bg-blue-600"

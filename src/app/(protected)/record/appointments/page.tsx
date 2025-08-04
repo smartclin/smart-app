@@ -75,41 +75,41 @@ function getQueryId(
 	return userRole === 'PATIENT' ? userId : undefined
 }
 const Appointments = async (props: {
-  searchParams?: { [key: string]: string | string[] | undefined }
+	searchParams?: { [key: string]: string | string[] | undefined }
 }) => {
-  const searchParams = props.searchParams
-  const session = await getSession()
-  const userId = session?.user.id
-  const userRole = await getRole()
+	const searchParams = props.searchParams
+	const session = await getSession()
+	const userId = session?.user.id
+	const userRole = await getRole()
 
-  const isPatient = await checkRole(session, 'PATIENT')
+	const isPatient = await checkRole(session, 'PATIENT')
 
-  // Convert 'page' to number with fallback to 1
-  const pageParam = typeof searchParams?.p === 'string' ? searchParams.p : '1'
-  const page = Number(pageParam)
-  const safePage = Number.isNaN(page) || page < 1 ? 1 : page
+	// Convert 'page' to number with fallback to 1
+	const pageParam = typeof searchParams?.p === 'string' ? searchParams.p : '1'
+	const page = Number(pageParam)
+	const safePage = Number.isNaN(page) || page < 1 ? 1 : page
 
-  const searchQuery = typeof searchParams?.q === 'string' ? searchParams.q : ''
-  const id = typeof searchParams?.id === 'string' ? searchParams.id : undefined
+	const searchQuery = typeof searchParams?.q === 'string' ? searchParams.q : ''
+	const id = typeof searchParams?.id === 'string' ? searchParams.id : undefined
 
-  const queryId = getQueryId(userRole, id, userId)
+	const queryId = getQueryId(userRole, id, userId)
 
-  // Initialize `appointmentsResponse` to undefined, as it might fail
-  let appointmentsResponse: AppointmentsApiSuccess | undefined
-  let error: Error | undefined
+	// Initialize `appointmentsResponse` to undefined, as it might fail
+	let appointmentsResponse: AppointmentsApiSuccess | undefined
+	let error: Error | undefined
 
-  try {
-    // Pass numeric page
-    appointmentsResponse = (await api.appointment.getPatientAppointments({
-      page: safePage,
-      search: searchQuery,
-      id: queryId,
-      limit: DATA_LIMIT,
-    })) as AppointmentsApiSuccess
-  } catch (err) {
-    error = err as Error
-    console.error('Error fetching appointments in page.tsx:', error)
-  }
+	try {
+		// Pass numeric page
+		appointmentsResponse = (await api.appointment.getPatientAppointments({
+			page: safePage,
+			search: searchQuery,
+			id: queryId,
+			limit: DATA_LIMIT,
+		})) as AppointmentsApiSuccess
+	} catch (err) {
+		error = err as Error
+		console.error('Error fetching appointments in page.tsx:', error)
+	}
 
 	// --- Error and No Data Handling ---
 	if (error) {

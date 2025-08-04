@@ -357,33 +357,33 @@ export const chatsRouter = createTRPCRouter({
 			}
 		}),
 	createOne: publicProcedure
-		  .input(
-    z.object({
-      id: z.uuid(),
-    }),
-  )
-  .mutation(async ({ input, ctx }) => {
-    if (!ctx.user?.id) {
-      throw new TRPCError({ code: "UNAUTHORIZED", message: "User not authenticated" });
-    }
+		.input(
+			z.object({
+				id: z.uuid(),
+			}),
+		)
+		.mutation(async ({ input, ctx }) => {
+			if (!ctx.user?.id) {
+				throw new TRPCError({ code: 'UNAUTHORIZED', message: 'User not authenticated' })
+			}
 
-    const existingChat = await db.chat.findUnique({
-      where: { id: input.id },
-    });
+			const existingChat = await db.chat.findUnique({
+				where: { id: input.id },
+			})
 
-    if (existingChat) {
-      return existingChat;
-    }
+			if (existingChat) {
+				return existingChat
+			}
 
-    const data: Prisma.ChatUncheckedCreateInput = {
-      id: input.id,
-      title: "New Chat",
-      archived: false,
-      userId: ctx.user.id,
-    };
+			const data: Prisma.ChatUncheckedCreateInput = {
+				id: input.id,
+				title: 'New Chat',
+				archived: false,
+				userId: ctx.user.id,
+			}
 
-    const chat = await db.chat.create({ data });
+			const chat = await db.chat.create({ data })
 
-    return chat;
-  })
+			return chat
+		}),
 })

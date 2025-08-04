@@ -1,93 +1,89 @@
-"use client";
+'use client'
 
-import { ChevronUpIcon } from "lucide-react";
+import { ChevronUpIcon } from 'lucide-react'
+import Image from 'next/image'
+import { startTransition, useOptimistic } from 'react'
+
+import { saveChatModelAsCookie } from '@/lib/model'
+import { MODEL_REGISTRY, type ModelId } from '@/lib/model/model'
+import type { Tool } from '@/lib/tools/tool'
+
+import { Button } from '../ui/button'
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "../ui/dropdown-menu";
-import { Button } from "../ui/button";
-import { startTransition, useOptimistic } from "react";
-import { MODEL_REGISTRY, type ModelId } from "@/lib/model/model";
-import { saveChatModelAsCookie } from "@/lib/model";
-import { Tool } from "@/lib/tools/tool";
-import Image from "next/image";
+	DropdownMenu,
+	DropdownMenuContent,
+	DropdownMenuItem,
+	DropdownMenuTrigger,
+} from '../ui/dropdown-menu'
 
 interface ModelDropDownProps {
-  initialModel: ModelId;
-  currentTool: Tool;
-  disabled?: boolean;
+	initialModel: ModelId
+	currentTool: Tool
+	disabled?: boolean
 }
 
-const ModelDropDown = ({
-  initialModel,
-  disabled = false,
-  currentTool,
-}: ModelDropDownProps) => {
-  const [optimisticModel, setOptimisticModel] = useOptimistic(
-    initialModel || "gemini-2.5-flash-lite-preview-06-17"
-  );
+const ModelDropDown = ({ initialModel, disabled = false, currentTool }: ModelDropDownProps) => {
+	const [optimisticModel, setOptimisticModel] = useOptimistic(
+		initialModel || 'gemini-2.5-flash-lite-preview-06-17',
+	)
 
-  const handleModelChange = (modelId: ModelId) => {
-    if (disabled) return;
+	const handleModelChange = (modelId: ModelId) => {
+		if (disabled) return
 
-    startTransition(async () => {
-      setOptimisticModel(modelId);
-      await saveChatModelAsCookie(modelId);
-    });
-  };
+		startTransition(async () => {
+			setOptimisticModel(modelId)
+			await saveChatModelAsCookie(modelId)
+		})
+	}
 
-  const currentModel = MODEL_REGISTRY[optimisticModel];
+	const currentModel = MODEL_REGISTRY[optimisticModel]
 
-  return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild className="text-sm">
-        <Button
-          variant="ghost"
-          size="sm"
-          className={`rounded-lg max-md:text-xs ${
-            disabled ? "opacity-50 cursor-not-allowed" : ""
-          }`}
-          disabled={disabled}
-        >
-          {currentModel.name}
-          <ChevronUpIcon className="h-4 w-4 ml-1" />
-        </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent
-        className="w-[--radix-dropdown-menu-trigger-width] min-w-56 rounded-lg px-2 pt-2.5"
-        side="top"
-        align="start"
-        sideOffset={4}
-      >
-        {Object.entries(MODEL_REGISTRY).map(([modelId, config]) => (
-          <DropdownMenuItem
-            key={modelId}
-            className={`mb-2 max-md:text-xs cursor-pointer ${
-              modelId === optimisticModel ? "bg-muted font-semibold" : ""
-            } ${disabled ? "opacity-50 cursor-not-allowed" : ""}`}
-            onClick={() => !disabled && handleModelChange(modelId as ModelId)}
-            disabled={
-              disabled ||
-              (modelId === "qwen/qwen3-32b" && currentTool !== "reasoning")
-            }
-          >
-            <div className="flex items-center gap-1.5">
-              <Image
-                src={config.logo}
-                alt={`${config.name}`}
-                width={20}
-                height={20}
-                className="size-4"
-              />
-              <span className="max-sm:text-xs">{config.name}</span>
-            </div>
-          </DropdownMenuItem>
-        ))}
-      </DropdownMenuContent>
-    </DropdownMenu>
-  );
-};
+	return (
+		<DropdownMenu>
+			<DropdownMenuTrigger
+				asChild
+				className="text-sm"
+			>
+				<Button
+					className={`rounded-lg max-md:text-xs ${disabled ? 'cursor-not-allowed opacity-50' : ''}`}
+					disabled={disabled}
+					size="sm"
+					variant="ghost"
+				>
+					{currentModel.name}
+					<ChevronUpIcon className="ml-1 h-4 w-4" />
+				</Button>
+			</DropdownMenuTrigger>
+			<DropdownMenuContent
+				align="start"
+				className="w-[--radix-dropdown-menu-trigger-width] min-w-56 rounded-lg px-2 pt-2.5"
+				side="top"
+				sideOffset={4}
+			>
+				{Object.entries(MODEL_REGISTRY).map(([modelId, config]) => (
+					<DropdownMenuItem
+						className={`mb-2 cursor-pointer max-md:text-xs ${
+							modelId === optimisticModel ? 'bg-muted font-semibold' : ''
+						} ${disabled ? 'cursor-not-allowed opacity-50' : ''}`}
+						disabled={disabled || (modelId === 'qwen/qwen3-32b' && currentTool !== 'reasoning')}
+						key={modelId}
+						onClick={() => !disabled && handleModelChange(modelId as ModelId)}
+					>
+						<div className="flex items-center gap-1.5">
+							<Image
+								alt={`${config.name}`}
+								className="size-4"
+								height={20}
+								src={config.logo}
+								width={20}
+							/>
+							<span className="max-sm:text-xs">{config.name}</span>
+						</div>
+					</DropdownMenuItem>
+				))}
+			</DropdownMenuContent>
+		</DropdownMenu>
+	)
+}
 
-export default ModelDropDown;
+export default ModelDropDown

@@ -32,7 +32,7 @@ export default async function HomePage() {
 			<FeaturesSection />
 			<CallToAction />
 			{!apiHealthy && (
-				<div className='mx-auto mt-4 max-w-md rounded-md border border-red-400 p-4 text-center text-red-600'>
+				<div className="mx-auto mt-4 max-w-md rounded-md border border-red-400 p-4 text-center text-red-600">
 					Warning: API is currently unreachable. Some features may not work.
 				</div>
 			)}

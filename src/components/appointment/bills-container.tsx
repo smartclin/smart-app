@@ -170,7 +170,7 @@ export const BillsContainer = async ({ id }: { id: number }) => {
 				</div>
 				<div className="w-[120px]">
 					<span className="text-gray-500">Payable</span>
-					<p className='font-semibold text-xl'>{(discount?.finalAmount || 0.0).toFixed(2)}</p>
+					<p className="font-semibold text-xl">{(discount?.finalAmount || 0.0).toFixed(2)}</p>
 				</div>
 				<div className="w-[120px]">
 					<span className="text-gray-500">Amount Paid</span>

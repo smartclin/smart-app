@@ -1,5 +1,5 @@
 {
-	"$schema": "https://biomejs.dev/schemas/2.1.2/schema.json",
+	"$schema": "https://biomejs.dev/schemas/2.1.3/schema.json",
 	"vcs": {
 		"enabled": true,
 		"clientKind": "git",
@@ -25,7 +25,8 @@
 		"enabled": true,
 		"rules": {
 			"a11y": {
-				"recommended": true
+				"recommended": true,
+				"noStaticElementInteractions": "off"
 			},
 			"complexity": {
 				"recommended": true
@@ -51,7 +52,7 @@
 			},
 			"recommended": true,
 			"style": {
-				"noParameterAssign": "error",
+				"noParameterAssign": "off",
 				"useAsConstAssertion": "error",
 				"useDefaultParameterLast": "error",
 				"useEnumInitializers": "error",
