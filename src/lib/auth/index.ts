@@ -1,11 +1,11 @@
 import { betterAuth } from 'better-auth'
 import { prismaAdapter } from 'better-auth/adapters/prisma'
 import { nextCookies } from 'better-auth/next-js'
-import { admin } from 'better-auth/plugins'
+import { admin, anonymous } from 'better-auth/plugins'
 import { headers } from 'next/headers'
 import { cache } from 'react'
 
-import db from '@/lib/db'
+import db from '@/db'
 
 import { ac, allRoles } from './roles'
 
@@ -13,6 +13,12 @@ export const auth = betterAuth({
 	database: prismaAdapter(db, {
 		provider: 'postgresql',
 	}),
+	 socialProviders: {
+    google: {
+      clientId: process.env.GOOGLE_CLIENT_ID as string,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
+    },
+  },
 	trustedOrigins: [process.env.CORS_ORIGIN || ''],
 	emailAndPassword: {
 		enabled: true,
@@ -21,6 +27,25 @@ export const auth = betterAuth({
 
 	user: {
 		additionalFields: {
+			isAnonymous: {
+				type: 'boolean',
+				required: false,
+				defaultValue: true,
+			},
+			messageCount: {
+				type: 'number',
+				required: false,
+				defaultValue: 0,
+			},
+			imageCount: {
+				type: 'number',
+				required: false,
+				defaultValue: 0,
+			},
+			lastReset: {
+				type: 'date',
+				required: false,
+			},
 			role: {
 				type: 'string',
 				input: false,
@@ -49,6 +74,18 @@ export const auth = betterAuth({
 	},
 	appName: 'Smart Clinic App',
 	plugins: [
+		anonymous({
+			onLinkAccount: async ({ newUser }) => {
+				await db.user.update({
+					where: {
+						id: newUser.user.id,
+					},
+					data: {
+						isAnonymous: false,
+					},
+				})
+			},
+		}),
 		admin({
 			ac,
 			roles: allRoles,

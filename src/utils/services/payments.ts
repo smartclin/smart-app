@@ -1,6 +1,6 @@
 import type { Prisma } from 'prisma'
 
-import { db } from '@/lib/db'
+import { db } from '@/db'
 
 export async function getPaymentRecords({
 	page,

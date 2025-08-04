@@ -2,8 +2,8 @@ import type { PatientBills } from '@prisma/client'
 import { format } from 'date-fns'
 import { ReceiptText } from 'lucide-react'
 
+import db from '@/db'
 import { getSession } from '@/lib/auth'
-import db from '@/lib/db'
 import { calculateDiscount } from '@/utils'
 import { checkRole } from '@/utils/roles'
 
@@ -78,9 +78,9 @@ export const BillsContainer = async ({ id }: { id: number }) => {
 	const billData = data?.bills || []
 	const discount = data
 		? calculateDiscount({
-			amount: data?.totalAmount,
-			discount: data?.discount,
-		})
+				amount: data?.totalAmount,
+				discount: data?.discount,
+			})
 		: null
 
 	if (billData) {
@@ -170,7 +170,7 @@ export const BillsContainer = async ({ id }: { id: number }) => {
 				</div>
 				<div className="w-[120px]">
 					<span className="text-gray-500">Payable</span>
-					<p className="font-semibold text-xl ">{(discount?.finalAmount || 0.0).toFixed(2)}</p>
+					<p className='font-semibold text-xl'>{(discount?.finalAmount || 0.0).toFixed(2)}</p>
 				</div>
 				<div className="w-[120px]">
 					<span className="text-gray-500">Amount Paid</span>

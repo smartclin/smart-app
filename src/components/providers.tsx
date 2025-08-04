@@ -5,7 +5,7 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 
 import { makeQueryClient } from '@/trpc/query-client'
 
-import { ThemeProvider } from './theme-provider'
+import { ThemeProvider } from './theme/theme-provider'
 import { Toaster } from './ui/sonner'
 
 let browserQueryClient: QueryClient | undefined

@@ -2,8 +2,8 @@
 
 import type { AppointmentStatus } from 'prisma'
 
+import { db } from '@/db'
 import { getSession } from '@/lib/auth'
-import { db } from '@/lib/db'
 import { AppointmentSchema, VitalSignsSchema } from '@/lib/schema'
 import type { AppointmentInput, VitalSignsInput } from '@/types/data-types'
 

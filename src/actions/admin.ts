@@ -2,8 +2,8 @@
 
 import z, { treeifyError } from 'zod'
 
+import db from '@/db'
 import { auth, getSession } from '@/lib/auth'
-import db from '@/lib/db'
 import { DoctorSchema, ServicesSchema, StaffSchema, workingDaySchema } from '@/lib/schema'
 import type { ServiceInput, StaffInput } from '@/types/data-types'
 import { generateRandomColor } from '@/utils'

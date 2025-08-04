@@ -58,3 +58,7 @@ enum MeasurementType {
     HFA
     HcFA
 }
+enum ChatRole  {
+    USER
+    AI
+}

@@ -1,4 +1,6 @@
-import db from '@/lib/db'
+import db from '@/db'
+import { chatsRouter } from '@/server/procedures/chats'
+import { userRouter } from '@/server/procedures/user'
 import {
 	createCallerFactory,
 	createTRPCContext,
@@ -24,6 +26,8 @@ import { vitalSignsRouter } from './VitalSigns.router'
  */
 export const appRouter = createTRPCRouter({
 	auth: authRouter,
+	chats: chatsRouter,
+	user: userRouter,
 	healthCheck: publicProcedure.query(async () => {
 		try {
 			// Optional DB ping (replace with a lightweight model)

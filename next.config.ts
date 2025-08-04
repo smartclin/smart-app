@@ -22,6 +22,26 @@ const nextConfig: NextConfig = {
 				hostname: 'localhost',
 				port: '3000',
 			},
+			 {
+        protocol: "https",
+        hostname: "lh3.googleusercontent.com",
+      },
+      {
+        protocol: "https",
+        hostname: "avatar.vercel.sh",
+      },
+      {
+        protocol: "https",
+        hostname: "ufs.sh",
+      },
+      {
+        protocol: "https",
+        hostname: "ufs.sh",
+      },
+      {
+        protocol: "https",
+        hostname: "*.ufs.sh",
+      },
 			{
 				protocol: 'https',
 				hostname: 'avatars.githubusercontent.com',

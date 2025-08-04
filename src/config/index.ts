@@ -1,4 +1,5 @@
 // src/config.ts
+export * from './chat'
 
 import type { Role } from '@prisma/client'
 import { Baby, CalendarDays, Shield, Syringe, UserPlus, Wallet } from 'lucide-react'
@@ -111,7 +112,7 @@ export const siteMetadata = {
 	googleMapsLink: 'https://maps.app.goo.gl/YOUR_CLINIC_LOCATION_LINK', // Replace with your actual Google Maps link
 }
 
-export * from "./constants";
+export * from './constants'
 // --- 2. External Services Configuration ---
 // Public keys and IDs for third-party services.
 export const externalServices = {

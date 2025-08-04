@@ -1,6 +1,6 @@
 import type { Patient } from 'prisma'
 
-import { db } from '@/lib/db'
+import { db } from '@/db'
 import { processAppointments } from '@/types/helper'
 
 import { daysOfWeek } from '../'

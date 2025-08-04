@@ -1,5 +1,5 @@
-import { db } from '@/lib/db'
-import type { Prisma } from '@/lib/db/client'
+import { db } from '@/db'
+import type { Prisma } from '@/db/client'
 
 export async function getAppointmentById(id: number) {
 	try {

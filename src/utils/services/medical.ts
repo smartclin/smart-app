@@ -1,6 +1,6 @@
 import { format } from 'date-fns'
 
-import { db } from '@/lib/db'
+import { db } from '@/db'
 
 // Define an interface for the VitalSign record to ensure type safety
 interface VitalSignRecord {

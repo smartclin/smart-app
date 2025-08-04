@@ -1,9 +1,14 @@
+ import type { Message as DBMessage } from '@prisma/client'
+import type { UIMessage } from 'ai'
 import { type ClassValue, clsx } from 'clsx'
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { format, toZonedTime } from 'date-fns-tz'
 import hljs from 'highlight.js'
 import { twMerge } from 'tailwind-merge'
 import type { Node } from 'unist' // FIX: Import Node type from unist
 import { visit } from 'unist-util-visit'
 
+import type { Tool } from './tools/tool'
 export function cn(...inputs: ClassValue[]) {
 	return twMerge(clsx(inputs))
 }
@@ -192,4 +197,97 @@ export const thinkPlugin = (messageId: string) => {
 			}
 		})
 	}
+}
+
+export function injectCurrentDate(prompt: string, timezone = 'Asia/Kolkata') {
+	const now = new Date()
+	const zoned = toZonedTime(now, timezone)
+
+	const formatted = format(zoned, "EEEE, MMMM d, yyyy 'at' h:mm a zzz", {
+		timeZone: timezone,
+	})
+
+	return prompt.replace('{{CURRENT_DATE}}', `${formatted} (${timezone})`)
+}
+
+export function extractText(content: unknown): string {
+	if (typeof content === 'string') return content
+
+	if (Array.isArray(content)) {
+		return content
+			.map(block => {
+				if (typeof block === 'string') return block
+				if (block?.text) return block.text
+				if (block?.code) return `\`\`\`\n${block.code}\n\`\`\``
+				if (block?.url) return `[Link](${block.url})`
+				return ''
+			})
+			.join('\n\n')
+			.trim()
+	}
+
+	return ''
+}
+
+export function convertToAISDKMessages(messages: Array<DBMessage>): UIMessage[] {
+	return messages.map(msg => {
+		const message: UIMessage = {
+			id: msg.id,
+			role: msg.role === 'USER' ? 'user' : 'assistant',
+			parts: msg.parts as UIMessage['parts'],
+ 		}
+		return message
+	})
+}
+
+
+export function filterMessageHistory(messages: UIMessage[], activeTool: Tool) {
+	if (activeTool === 'none') {
+		return messages
+			.map(message => {
+				if (message.role === 'assistant' && message.parts) {
+					const filteredParts = message.parts.filter(
+						(part) => part.type !== 'tool-invocation'
+					)
+
+					return {
+						...message,
+						parts: filteredParts,
+					}
+				}
+				return message
+			})
+			.filter(
+				message =>
+					(message.parts?.length && message.parts.length > 0) || message.role !== 'assistant',
+			)
+	}
+
+	return messages
+}
+
+
+export function getActiveToolNames(tool: Tool): string[] {
+	switch (tool) {
+		case 'image-gen':
+			return ['generateImageTool']
+		case 'web-search':
+			return ['webSearchTool']
+		case 'get-weather':
+			return ['getWeatherTool']
+		default:
+			return []
+	}
+}
+
+export function sanitizeText(text: string) {
+	return text.replace('<has_function_call>', '')
+}
+
+export function cleanText(text = ''): string {
+	return text
+		.replace(/\n+/g, ' ') // Remove excessive newlines
+		.replace(/\s+/g, ' ') // Collapse spaces
+		.replace(/https?:\/\/\S+/g, '') // Strip URLs
+		.trim()
 }

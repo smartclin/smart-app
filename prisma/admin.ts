@@ -1,11 +1,11 @@
 // prisma/seed.ts or scripts/seed.ts
 import 'dotenv/config'
-import { faker } from '@faker-js/faker' // Import faker for generating dummy data
 
-import { auth } from '@/lib/auth' // Your authentication library
-import db from '@/lib/db'
+import { faker } from '@faker-js/faker' // Import faker for generating dummy data
 import { JOBTYPE, Role } from 'generated/client/enums'
 
+import { auth } from '@/lib/auth' // Your authentication library
+import db from '@/db'
 
 async function seed() {
 	console.log('Starting seed process...')

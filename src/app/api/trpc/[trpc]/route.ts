@@ -1,17 +1,26 @@
 // src/app/api/trpc/[trpc]/route.ts
-
 import { fetchRequestHandler } from '@trpc/server/adapters/fetch'
-import type { NextRequest } from 'next/server'
+import { cookies as getCookies, headers as getHeaders } from 'next/headers'
 
-import { appRouter } from'@/trpc/routers/_app'
-import { createContext } from '@/trpc/server' // Import createContext from trpc/server
+import { createTRPCContext } from '@/trpc/init'
+import { appRouter } from '@/trpc/routers/_app'
 
-async function handler(req: NextRequest) {
+const handler = async (req: Request) => {
+	const rawHeaders = await getHeaders() // ⛳️ required
+	const rawCookies = await getCookies() // ⛳️ required
+
 	return fetchRequestHandler({
 		endpoint: '/api/trpc',
 		req,
 		router: appRouter,
-		createContext: () => createContext(), // Use the imported createContext
+		createContext: () =>
+			createTRPCContext({
+				req,
+				opts: {
+					headers: rawHeaders,
+					cookies: rawCookies,
+				},
+			}),
 	})
 }
 

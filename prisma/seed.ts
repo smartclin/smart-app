@@ -14,7 +14,7 @@ import {
 	Status, // Make sure Status is imported if used
 } from '@prisma/client'
 
-import db from '@/lib/db'
+import db from '@/db'
 
 // Helper function to get random enum value
 function getRandomEnumValue<T extends Record<string, string>>(enumObject: T): T[keyof T] {
