@@ -11,8 +11,9 @@ import {
 	ServiceCategory,
 	Status, // Make sure Status is imported if used
 } from '@prisma/client/index'
+import { PrismaClient } from '@prisma/client/client'
 
-import db from '.'
+const db = new PrismaClient()
 
 // Helper function to get random enum value
 function getRandomEnumValue<T extends Record<string, string>>(enumObject: T): T[keyof T] {

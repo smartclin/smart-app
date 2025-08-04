@@ -7,8 +7,6 @@ export const env = createEnv({
 	 * These are **never** exposed to the client.
 	 */
 	server: {
-		WEAVIATE_DB_HOST: z.string(),
-		WEAVIATE_DB_SCHEME: z.string(),
 		NODE_ENV: z.enum(['development', 'production', 'test']).default('development'),
 		DATABASE_URL: z.url({ message: 'Invalid DATABASE_URL format.' }),
 		BETTER_AUTH_SECRET: z.string().min(1, 'BETTER_AUTH_SECRET cannot be empty.'),
@@ -52,9 +50,6 @@ export const env = createEnv({
 		ADMIN_EMAIL: process.env.ADMIN_EMAIL,
 		ADMIN_PASSWORD: process.env.ADMIN_PASSWORD,
 		ADMIN_NAME: process.env.ADMIN_NAME,
-		WEAVIATE_DB_HOST: process.env.WEAVIATE_DB_HOST,
-		WEAVIATE_DB_SCHEME: process.env.WEAVIATE_DB_SCHEME,
-
 		NEXT_PUBLIC_APP_URL: process.env.NEXT_PUBLIC_APP_URL,
 		NEXT_PUBLIC_VERCEL_URL: process.env.NEXT_PUBLIC_VERCEL_URL,
 		NEXT_PUBLIC_BETTER_AUTH_URL: process.env.NEXT_PUBLIC_BETTER_AUTH_URL,
