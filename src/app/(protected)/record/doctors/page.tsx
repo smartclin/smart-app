@@ -10,7 +10,7 @@ import { ProfileImage } from '@/components/profile-image'
 import SearchInput from '@/components/search-input'
 import { Table } from '@/components/tables/table'
 import { getSession } from '@/lib/auth'
-import { api } from '@/trpc/server' // Import the tRPC server client
+import { trpc } from '@/trpc/server' // Import the tRPC server client
 import type { SearchParamsProps } from '@/types'
 import { checkRole } from '@/utils/roles'
 import { DATA_LIMIT } from '@/utils/seetings'
@@ -53,8 +53,8 @@ const DoctorsList = async (props: SearchParamsProps) => {
 	const searchQuery = (searchParams?.q || '') as string
 
 	// Fetch data using the tRPC server client
-	// Assuming api.doctor.getAllDoctors expects { page: number, search: string }
-	const { data, totalPages, totalRecords, currentPage } = await api.doctor.getAllDoctors({
+	// Assuming trpc.doctor.getAllDoctors expects { page: number, search: string }
+	const { data, totalPages, totalRecords, currentPage } = await trpc.doctor.getAllDoctors({
 		page,
 		search: searchQuery,
 	})

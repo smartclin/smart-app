@@ -9,7 +9,7 @@ import { ProfileImage } from '@/components/profile-image'
 import SearchInput from '@/components/search-input'
 import { Table } from '@/components/tables/table'
 import { getSession } from '@/lib/auth'
-import { api } from '@/trpc/server' // API for server fetch
+import { trpc } from '@/trpc/server' // API for server fetch
 import { checkRole } from '@/utils/roles'
 import { DATA_LIMIT } from '@/utils/seetings'
 
@@ -31,7 +31,7 @@ const StaffList = async ({ searchParams = {} }: StaffListProps) => {
 	const searchQuery = searchParams.q ?? ''
 
 	// Fetch staff data via server-side call (not useQuery hook)
-	const response = await api.staff.getAllStaff({
+	const response = await trpc.staff.getAllStaff({
 		page,
 		limit: DATA_LIMIT,
 		search: searchQuery,

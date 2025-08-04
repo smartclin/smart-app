@@ -1,7 +1,7 @@
 'use server'
 
 // Import Prisma's Payment type. Ensure this path is correct for your project.
-import type { Payment as PaymentPrismaType } from 'prisma'
+import type { Payment as PaymentPrismaType } from '@prisma/client'
 import type { z } from 'zod'
 
 import db from '@/db'

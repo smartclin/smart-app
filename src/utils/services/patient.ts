@@ -1,4 +1,4 @@
-import type { Patient } from 'prisma'
+import type { Patient } from '@prisma/client'
 
 import { db } from '@/db'
 import { processAppointments } from '@/types/helper'

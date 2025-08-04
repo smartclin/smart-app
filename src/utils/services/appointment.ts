@@ -1,5 +1,6 @@
+import type { Prisma } from '@prisma/client'
+
 import { db } from '@/db'
-import type { Prisma } from '@/db/client'
 
 export async function getAppointmentById(id: number) {
 	try {

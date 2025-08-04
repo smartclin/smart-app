@@ -11,7 +11,7 @@ import { Table } from '@/components/tables/table'
 import { getSession } from '@/lib/auth'
 import { cn } from '@/lib/utils'
 // import { getPaymentRecords } from '@/utils/services/payments'; // REMOVE this import
-import { api } from '@/trpc/server' // Import the tRPC server client
+import { trpc } from '@/trpc/server' // Import the tRPC server client
 import type { SearchParamsProps } from '@/types'
 import { checkRole } from '@/utils/roles'
 import { DATA_LIMIT } from '@/utils/seetings'
@@ -97,7 +97,7 @@ const BillingPage = async (props: SearchParamsProps) => {
 		totalPages,
 		totalRecords,
 		currentPage,
-	} = await api.payment.getPaymentRecords({
+	} = await trpc.payment.getPaymentRecords({
 		page,
 		search: searchQuery,
 	})

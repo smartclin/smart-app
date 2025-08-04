@@ -9,7 +9,7 @@ import { PatientDetailsCard } from '@/components/appointment/patient-details-car
 import { PaymentsContainer } from '@/components/appointment/payment-container'
 import { VitalSigns } from '@/components/appointment/vital-signs'
 import { MedicalHistoryContainer } from '@/components/medical-history-container'
-import { api } from '@/trpc/server'
+import { trpc } from '@/trpc/server'
 
 // `getAppointmentWithMedicalRecordsById` and include all fields expected by PatientDetailsCard.
 type AppointmentDetailsData = {
@@ -91,7 +91,7 @@ const AppointmentDetailsPage = async ({
 	} else {
 		try {
 			// Pass appointmentId variable correctly here:
-			const result = await api.appointment.getAppointmentWithMedicalRecordsById({
+			const result = await trpc.appointment.getAppointmentWithMedicalRecordsById({
 				id: appointmentId,
 			})
 

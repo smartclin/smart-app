@@ -6,7 +6,7 @@ import { PatientRatingContainer } from '@/components/patient-rating-container'
 import { ProfileImage } from '@/components/profile-image'
 import { Card } from '@/components/ui/card'
 import { getSession } from '@/lib/auth'
-import { api } from '@/trpc/server'
+import { trpc } from '@/trpc/server'
 
 interface ParamsProps {
 	params: Promise<{ patientId: string }>
@@ -89,7 +89,7 @@ const PatientProfile = async (props: ParamsProps) => {
 	const patientId = (await params).patientId
 	const cat = searchParams?.cat || 'medical-history'
 
-	const { data } = await api.patient.getPatientFullDataById(id)
+	const { data } = await trpc.patient.getPatientFullDataById(id)
 
 	return (
 		<div className="flex h-full flex-col gap-6 rounded-xl bg-gray-100/60 px-3 py-6 lg:flex-row 2xl:p-6">

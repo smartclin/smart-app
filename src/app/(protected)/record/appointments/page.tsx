@@ -11,7 +11,7 @@ import SearchInput from '@/components/search-input'
 import { Table } from '@/components/tables/table'
 import { ViewAppointment } from '@/components/view-appointment'
 import { getSession } from '@/lib/auth'
-import { api, HydrateClient } from '@/trpc/server'
+import { HydrateClient, trpc } from '@/trpc/server'
 import { checkRole, getRole } from '@/utils/roles'
 import { DATA_LIMIT } from '@/utils/seetings'
 
@@ -100,7 +100,7 @@ const Appointments = async (props: {
 
 	try {
 		// Pass numeric page
-		appointmentsResponse = (await api.appointment.getPatientAppointments({
+		appointmentsResponse = (await trpc.appointment.getPatientAppointments({
 			page: safePage,
 			search: searchQuery,
 			id: queryId,

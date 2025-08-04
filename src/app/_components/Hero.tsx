@@ -6,7 +6,7 @@ import { useEffect } from 'react'
 import { MotionDiv, MotionSpan } from '@/components/motionDev'
 import { Button } from '@/components/ui/button'
 import { useSession } from '@/lib/auth/auth-client'
-import { trpc } from '@/trpc/react'
+import { trpc } from '@/trpc/client'
 
 export default function Hero({
 	siteMetadata,

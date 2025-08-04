@@ -9,13 +9,13 @@ import { availableDays } from '@/components/available-doctor'
 import { ProfileImage } from '@/components/profile-image'
 import { RatingContainer } from '@/components/rating-container'
 import { RecentAppointments } from '@/components/tables/recent-appointment'
-import { api } from '@/trpc/server'
+import { trpc } from '@/trpc/server'
 
 // import { getDoctorById } from '@/utils/services/doctor'
 
 const DoctorProfile = async (props: { params: Promise<{ id: string }> }) => {
 	const params = await props.params
-	const { data, totalAppointment } = await api.doctor.getDoctorById(params?.id)
+	const { data, totalAppointment } = await trpc.doctor.getDoctorById(params?.id)
 
 	if (!data) return null
 

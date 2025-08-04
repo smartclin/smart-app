@@ -12,7 +12,7 @@ import SearchInput from '@/components/search-input'
 import { Table } from '@/components/tables/table'
 import { Button } from '@/components/ui/button'
 import { getSession } from '@/lib/auth'
-import { api } from '@/trpc/server' // Assuming this is your tRPC server client
+import { trpc } from '@/trpc/server' // Assuming this is your tRPC server client
 import type { SearchParamsProps } from '@/types'
 import { calculateAge } from '@/utils'
 import { checkRole } from '@/utils/roles'
@@ -75,9 +75,9 @@ const PatientList = async (props: SearchParamsProps) => {
 	const searchQuery = (searchParams?.q || '') as string
 	const session = await getSession()
 
-	// Assuming api.patient.getAllPatients returns a structure compatible with PatientProps[]
+	// Assuming trpc.patient.getAllPatients returns a structure compatible with PatientProps[]
 	// The error indicates the returned data's `treatmentPlan` is `string | null`.
-	const { data, totalPages, totalRecords, currentPage } = await api.patient.getAllPatients({
+	const { data, totalPages, totalRecords, currentPage } = await trpc.patient.getAllPatients({
 		page,
 		search: searchQuery,
 	})

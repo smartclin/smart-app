@@ -6,7 +6,7 @@ import { emptyAppointmentCounts, StatSummary } from '@/components/charts/stat-su
 import { StatCard } from '@/components/stat-card'
 import { RecentAppointments } from '@/components/tables/recent-appointment'
 import { Button } from '@/components/ui/button'
-import { api, HydrateClient } from '@/trpc/server' // Import server-side tRPC client and HydrateClient
+import { HydrateClient, trpc } from '@/trpc/server' // Import server-side tRPC client and HydrateClient
 import type { AvailableDoctorProps } from '@/types/data-types'
 
 const AdminDashboard = async () => {
@@ -18,7 +18,7 @@ const AdminDashboard = async () => {
 		totalDoctors,
 		totalPatient,
 		totalAppointments,
-	} = await api.admin.getAdminDashboardStats()
+	} = await trpc.admin.getAdminDashboardStats()
 
 	const cardData = [
 		{

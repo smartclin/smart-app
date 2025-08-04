@@ -1,4 +1,4 @@
-import type { ModelId } from '@/lib/ai/model-id'
+import type { ModelId } from '@/lib/chat/model-id'
 
 // List of unique providers extracted from models data
 export const providers = [

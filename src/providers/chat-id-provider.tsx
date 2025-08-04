@@ -3,7 +3,7 @@
 import { usePathname } from 'next/navigation'
 import { createContext, type ReactNode, useCallback, useContext, useMemo, useRef } from 'react'
 
-import { generateUUID } from '@/lib/utils'
+import { generateId } from '@/lib/id'
 
 interface ChatIdContextType {
 	id: string
@@ -20,7 +20,7 @@ type ChatId = {
 
 export function ChatIdProvider({ children }: { children: ReactNode }) {
 	const pathname = usePathname()
-	const provisionalChatIdRef = useRef<string>(generateUUID())
+	const provisionalChatIdRef = useRef<string>(generateId())
 
 	// Compute final id and type directly from pathname and state
 	const { id, type } = useMemo<ChatId>(() => {
@@ -47,7 +47,7 @@ export function ChatIdProvider({ children }: { children: ReactNode }) {
 			// Id was provisional and now the url has been updated
 
 			// Generate a new provisional id for a potential new chat
-			provisionalChatIdRef.current = generateUUID()
+			provisionalChatIdRef.current = generateId()
 
 			return {
 				id: urlChatId,
@@ -61,7 +61,7 @@ export function ChatIdProvider({ children }: { children: ReactNode }) {
 	}, [pathname])
 
 	const refreshChatID = useCallback(() => {
-		provisionalChatIdRef.current = generateUUID()
+		provisionalChatIdRef.current = generateId()
 	}, [])
 
 	const value = useMemo(

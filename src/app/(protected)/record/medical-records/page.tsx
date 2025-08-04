@@ -7,7 +7,7 @@ import { Pagination } from '@/components/pagination'
 import { ProfileImage } from '@/components/profile-image'
 import SearchInput from '@/components/search-input'
 import { Table } from '@/components/tables/table'
-import { api } from '@/trpc/server'
+import { trpc } from '@/trpc/server'
 import type { SearchParamsProps } from '@/types'
 import { DATA_LIMIT } from '@/utils/seetings'
 
@@ -68,7 +68,7 @@ const MedicalRecordsPage = async (props: SearchParamsProps) => {
 	const page = Number(pageParam)
 	const searchQuery = (searchParams?.q || '') as string
 	const { data, totalPages, totalRecords, currentPage } =
-		await api.medicalRecords.getMedicalRecords({
+		await trpc.medicalRecords.getMedicalRecords({
 			page,
 			search: searchQuery,
 		})

@@ -1,6 +1,6 @@
 'use server'
 
-import type { AppointmentStatus } from 'prisma'
+import type { AppointmentStatus } from '@prisma/client'
 
 import { db } from '@/db'
 import { getSession } from '@/lib/auth'
