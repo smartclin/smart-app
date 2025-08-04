@@ -1,81 +1,116 @@
-
 model User {
-  id            String    @id @map("_id")
-  name          String
-  email         String
-  emailVerified Boolean
+  id            String         @id @default(uuid())
+  name          String?
+  email         String?        @unique
+  emailVerified Boolean        @default(false)
   image         String?
-  createdAt     DateTime
-  updatedAt     DateTime
-  sessions      Session[]
+  isAnonymous   Boolean?       @default(false)
+  messageCount  Int            @default(0)
+  imageCount    Int            @default(0)
+  lastReset     DateTime?
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
   accounts      Account[]
-  Patient       Patient[]
-  Doctor        Doctor[]
-  Staff         Staff[]
+  chats         Chat[]
+  messages      Message[]
+  sessions      Session[]
+  role          String?
+  banned        Boolean?
+  banReason     String?
+  banExpires    DateTime?
+  firstName     String?
+  lastName      String?
 
-  role       String?
-  banned     Boolean?
-  banReason  String?
-  banExpires DateTime?
-  firstName  String?
-  lastName   String?
-
-  @@unique([email])
   @@map("user")
+  Patient Patient[]
+  Doctor Doctor[]
+  Staff Staff[]
 }
 
 model Session {
-  id        String   @id @map("_id")
-  expiresAt DateTime
-  token     String
-  createdAt DateTime
-  updatedAt DateTime
-  ipAddress String?
-  userAgent String?
-  userId    String
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-
+  id             String   @id @default(uuid())
+  userId         String
+  token          String   @unique
+  expiresAt      DateTime
+  ipAddress      String?
+  userAgent      String?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   impersonatedBy String?
 
-  @@unique([token])
   @@map("session")
 }
 
 model Account {
-  id                    String    @id @map("_id")
+  id                    String    @id @default(uuid())
+  userId                String
   accountId             String
   providerId            String
-  userId                String
-  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   accessToken           String?
   refreshToken          String?
-  idToken               String?
   accessTokenExpiresAt  DateTime?
   refreshTokenExpiresAt DateTime?
   scope                 String?
+  idToken               String?
   password              String?
-  createdAt             DateTime
-  updatedAt             DateTime
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
 
+  @@unique([providerId, accountId])
   @@map("account")
 }
 
 model Verification {
-  id         String    @id @map("_id")
+  id         String   @id @default(uuid())
   identifier String
   value      String
   expiresAt  DateTime
-  createdAt  DateTime?
-  updatedAt  DateTime?
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
 
   @@map("verification")
 }
 
-model RateLimit {
-  id          String  @id
-  key         String?
-  count       Int?
-  lastRequest BigInt?
+model Chat {
+  id        String    @id @default(uuid())
+  title     String    @default("New Chat")
+  archived  Boolean   @default(false)
+  userId    String
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  messages  Message[]
+  streams   Stream[]
+}
 
-  @@map("rateLimit")
+model Message {
+  id        String   @id @default(uuid())
+  role      ChatRole
+  content   String?
+  parts     Json
+  imageKey  String?
+  imageUrl  String?
+  userId    String
+  chatId    String
+  promptId  String?  @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  chat      Chat     @relation(fields: [chatId], references: [id], onDelete: Cascade)
+  prompt    Message? @relation("ResponseMessage", fields: [promptId], references: [id])
+  response  Message? @relation("ResponseMessage")
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Stream {
+  id        String   @id @default(uuid())
+  chatId    String
+  createdAt DateTime @default(now())
+  chat      Chat     @relation(fields: [chatId], references: [id], onDelete: Cascade)
+}
+
+enum ChatRole {
+  USER
+  AI
 }

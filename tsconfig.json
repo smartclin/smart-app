@@ -24,8 +24,8 @@
 			"@/*": [
 				"./src/*"
 			],
-			"prisma": [
-				"./src/lib/db/client"
+			"@prisma/client/*": [
+				"./prisma/generated/client"
 			]
 		},
 		"plugins": [

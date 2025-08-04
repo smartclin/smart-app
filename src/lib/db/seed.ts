@@ -10,7 +10,7 @@ import {
 	Role, // Make sure Role is imported if used
 	ServiceCategory,
 	Status, // Make sure Status is imported if used
-} from '@prisma/client'
+} from '@prisma/client/index'
 
 import db from '.'
 

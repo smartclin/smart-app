@@ -1,16 +1,19 @@
 generator client {
   provider               = "prisma-client-js"
-  output                 = "../../src/lib/db/client"
-  moduleFormat           = "esm"
+  output                 = "../generated/client"
+  previewFeatures        = ["views","driverAdapters", "relationJoins",  "queryCompiler" ]
   generatedFileExtension = "ts"
   importFileExtension    = "ts"
-  previewFeatures        = ["views", "driverAdapters", "queryCompiler"]
+  moduleFormat           = "esm"
+  runtime                = "nodejs"
 }
 
 datasource db {
-  provider = "postgres"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+
 
 // generator zod {
 //   provider = "zod-prisma-types"
