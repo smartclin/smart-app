@@ -1,15 +1,16 @@
+
 model User {
-  id            String         @id @default(uuid())
+  id            String    @id @default(uuid())
   name          String?
-  email         String?        @unique
-  emailVerified Boolean        @default(false)
+  email         String?   @unique
+  emailVerified Boolean   @default(false)
   image         String?
-  isAnonymous   Boolean?       @default(false)
-  messageCount  Int            @default(0)
-  imageCount    Int            @default(0)
+  isAnonymous   Boolean?  @default(false)
+  messageCount  Int       @default(0)
+  imageCount    Int       @default(0)
   lastReset     DateTime?
-  createdAt     DateTime       @default(now())
-  updatedAt     DateTime       @updatedAt
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
   accounts      Account[]
   chats         Chat[]
   messages      Message[]
@@ -21,10 +22,11 @@ model User {
   firstName     String?
   lastName      String?
 
-  @@map("user")
   Patient Patient[]
-  Doctor Doctor[]
-  Staff Staff[]
+  Doctor  Doctor[]
+  Staff   Staff[]
+
+  @@map("user")
 }
 
 model Session {
@@ -71,4 +73,13 @@ model Verification {
   updatedAt  DateTime @updatedAt
 
   @@map("verification")
+}
+
+model RateLimit {
+  id          String  @id
+  key         String?
+  count       Int?
+  lastRequest BigInt?
+
+  @@map("rateLimit")
 }

@@ -9,9 +9,9 @@ import {
 	PaymentMethod,
 	PaymentStatus,
 	type Prisma,
-	Role, // Make sure Role is imported if used
+	Role,  
 	ServiceCategory,
-	Status, // Make sure Status is imported if used
+	Status,  
 } from '@prisma/client'
 
 import db from '@/db'

@@ -157,7 +157,7 @@
 		"check": "bunx biome check --write ",
 		"check:unsafe": " biome check --write --unsafe src",
 		"db:admin": "bunx tsx src/lib/db/admin.ts",
-		"db:generate": "prisma generate --schema ./prisma/schema",
+		"db:generate": "prisma generate",
 		"db:migrate": "prisma migrate dev",
 		"db:push": "prisma db push --schema ./prisma/schema",
 		"db:reset": "prisma migrate reset --force --schema ./prisma/schema --skip-seed",

@@ -5,10 +5,10 @@ import { admin, anonymous } from 'better-auth/plugins'
 import { headers } from 'next/headers'
 import { cache } from 'react'
 
-import db from '@/db'
-
 import { ac, allRoles } from './roles'
+import { db } from '@/db'
 
+// The betterAuth instance is exported as a named constant, as required by the CLI.
 export const auth = betterAuth({
 	database: prismaAdapter(db, {
 		provider: 'postgresql',
@@ -104,6 +104,3 @@ export const getSession = cache(async () => {
 export type Session = typeof auth.$Infer.Session
 export type User = Session['user']
 export type Role = User['role']
-
-const authServer = auth.api
-export default authServer

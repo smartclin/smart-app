@@ -23,7 +23,6 @@ export const env = createEnv({
 	 */
 	client: {
 		NEXT_PUBLIC_APP_URL: z
-			.string()
 			.url({ message: 'Invalid NEXT_PUBLIC_APP_URL format.' })
 			.default('http://localhost:3001'),
 
