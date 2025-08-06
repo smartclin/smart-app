@@ -1,12 +1,12 @@
 'use client'
 
+import type { UIMessage } from '@ai-sdk/react'
 import { useChat } from '@ai-sdk/react'
-import type { Message } from 'ai'
 import { usePathname, useRouter } from 'next/navigation'
+import { useState } from 'react'
 import { toast } from 'sonner'
 import { v4 as uuidv4 } from 'uuid'
 
-import { useAutoResume } from '@/hooks/use-auto-resume'
 import { useScrollMessages } from '@/hooks/use-scroll-messages'
 import type { ModelId } from '@/lib/model/model'
 import type { Tool } from '@/lib/tools/tool'
@@ -18,7 +18,7 @@ import ChatSuggestions from './ChatSuggestions'
 import ScrollToBottom from './ScrollToBottom'
 
 interface Props {
-	initialMessages: Message[]
+	initialMessages: UIMessage[]
 	chatId: string
 	selectedModel: ModelId
 	selectedTool: Tool
@@ -28,42 +28,12 @@ const ChatView = ({ initialMessages, chatId, selectedModel, selectedTool }: Prop
 	const router = useRouter()
 	const pathname = usePathname()
 	const utils = trpc.useUtils()
+	const [input, setInput] = useState('')
+	const [messages, setMessages] = useState<UIMessage[]>(initialMessages)
 
-	const userTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone
-
-	const {
-		input,
-		handleInputChange,
-		handleSubmit,
-		status,
-		setInput,
-		messages,
-		setMessages,
-		data,
-		experimental_resume,
-	} = useChat({
-		key: chatId,
-		api: '/api/chat',
-		id: chatId,
-		initialMessages,
-		experimental_prepareRequestBody({ messages, id }) {
-			return {
-				message: messages[messages.length - 1],
-				id,
-				model: selectedModel,
-				tool: selectedTool,
-				timezone: userTimeZone,
-			}
-		},
+	const { status } = useChat({
 		generateId: () => uuidv4(),
-		sendExtraMessageFields: true,
-		experimental_throttle: 25,
-		onResponse: response => {
-			if (!response.ok) {
-				toast.error('Failed to get response from AI')
-			}
-			utils.chats.getMany.invalidate()
-		},
+		experimental_throttle: 500,
 		onFinish: () => {
 			utils.chats.getOne.invalidate({ chatId })
 		},
@@ -71,14 +41,6 @@ const ChatView = ({ initialMessages, chatId, selectedModel, selectedTool }: Prop
 			console.error(error.message)
 			toast.error('Error generating response')
 		},
-	})
-
-	useAutoResume({
-		autoResume: true,
-		initialMessages: initialMessages,
-		experimental_resume,
-		data,
-		setMessages,
 	})
 
 	const isInitialLoad = pathname === `/chat/${chatId}`
@@ -93,8 +55,27 @@ const ChatView = ({ initialMessages, chatId, selectedModel, selectedTool }: Prop
 			isFirstTimeChat,
 		})
 
+	const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+		setInput(e.target.value)
+	}
+
 	const handleChatSubmit = () => {
-		handleSubmit()
+		if (!input.trim()) return
+
+		const newMessage: UIMessage = {
+			id: uuidv4(),
+			role: 'user',
+			parts: [
+				{
+					type: 'text',
+					text: input,
+				},
+			],
+		}
+
+		setMessages(prev => [...prev, newMessage])
+		setInput('')
+
 		if (messages.length === 0 && pathname === '/') {
 			window.history.replaceState({}, '', `/chat/${chatId}`)
 			router.push(`/chat/${chatId}`)

@@ -24,6 +24,9 @@
 		"paths": {
 			"@/*": [
 				"./src/*"
+			],
+			"@prisma/client": [
+				"generated/client/client"
 			]
 		},
 		"plugins": [
