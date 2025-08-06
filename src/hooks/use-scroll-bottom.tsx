@@ -1,35 +1,29 @@
-import { type RefObject, useEffect, useState } from 'react'
+import { type RefObject, useEffect, useRef } from 'react'
 
-export const useScrollBottom = (elementRef: RefObject<HTMLDivElement | null>) => {
-	const [isScrollBottom, setIsScrollBottom] = useState(true)
+export function useScrollToBottom(): [RefObject<HTMLDivElement>, RefObject<HTMLDivElement>] {
+	const containerRef = useRef<HTMLDivElement>(null)
+	const endRef = useRef<HTMLDivElement>(null)
 
 	useEffect(() => {
-		const isRefAwayFromBottom = (): boolean => {
-			if (!elementRef?.current) return true
-			const bufferHeight = 50
+		const container = containerRef.current
+		const end = endRef.current
 
-			const { scrollTop, scrollHeight, clientHeight } = elementRef.current
-			return Math.ceil(scrollTop + clientHeight) < scrollHeight - bufferHeight
+		if (container && end) {
+			const observer = new MutationObserver(() => {
+				end.scrollIntoView({ behavior: 'instant', block: 'end' })
+			})
+
+			observer.observe(container, {
+				childList: true,
+				subtree: true,
+				attributes: true,
+				characterData: true,
+			})
+
+			return () => observer.disconnect()
 		}
+	}, [])
 
-		const checkScroll = () => {
-			const awayFromBottom = isRefAwayFromBottom()
-			setIsScrollBottom(!awayFromBottom)
-		}
-
-		checkScroll()
-
-		const div = elementRef?.current
-		if (div) {
-			div.addEventListener('scroll', checkScroll)
-		}
-
-		return () => {
-			if (div) {
-				div.removeEventListener('scroll', checkScroll)
-			}
-		}
-	}, [elementRef])
-
-	return { isScrollBottom }
+	// @ts-expect-error error
+	return [containerRef, endRef]
 }

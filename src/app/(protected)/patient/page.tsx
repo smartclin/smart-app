@@ -16,7 +16,7 @@ import type { AvailableDoctorProps } from '@/types/data-types'
 const PatientDashboard = async () => {
 	const session = await getSession()
 	const user = session?.user
-	if (!user?.id) redirect('/sign-in')
+	if (!user?.id) redirect('/signin')
 
 	const { data, appointmentCounts, last5Records, totalAppointments, availableDoctor, monthlyData } =
 		await trpc.patient.getPatientDashboardStatistics(user.id)

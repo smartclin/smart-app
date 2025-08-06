@@ -11,7 +11,7 @@ type RouteAccessProps = {
 export const AFTER_LOGIN = '/profile'
 export const AFTER_REGISTER = '/profile'
 export const PUBLIC_ROUTES = ['/', '/api/uploadthing', '/reset-password']
-export const AUTH_ROUTES = ['/sign-in', '/sign-up', '/reset-password']
+export const AUTH_ROUTES = ['/signin', '/signup', '/reset-password']
 
 export const routeAccess: RouteAccessProps = {
 	'/admin(.*)': ['admin'],
@@ -65,8 +65,8 @@ const PathsSchema = z.object({
 // 4. Typed and validated path config
 const pathsConfig = PathsSchema.parse({
 	auth: {
-		signIn: '/auth/sign-in',
-		signUp: '/auth/sign-up',
+		signIn: '/auth/signin',
+		signUp: '/auth/signup',
 		forgotPassword: '/auth/forgot-password',
 		resetPassword: '/auth/reset-password',
 		twoFactor: '/auth/two-factor',

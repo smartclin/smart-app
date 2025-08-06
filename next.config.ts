@@ -8,7 +8,6 @@ const withBundleAnalyzer = initializeBundleAnalyzer({
 })
 
 const isProd = process.env.NODE_ENV === 'production'
-const internalHost = 'localhost'
 
 const nextConfig: NextConfig = {
 	eslint: {
@@ -64,6 +63,7 @@ const nextConfig: NextConfig = {
 		// Remove console logs in production
 		removeConsole: isProd ? { exclude: ['error'] } : false,
 	},
+
 	poweredByHeader: false,
 	generateEtags: true,
 	compress: true,
@@ -74,12 +74,6 @@ const nextConfig: NextConfig = {
 		optimizeCss: isProd,
 		optimizeServerReact: isProd,
 		// Performance: Enable Turbo for faster builds
-		turbo: {
-			resolveAlias: {
-				'@': './src',
-				'~': './public',
-			},
-		},
 		// Performance: Optimize package imports for better tree shaking
 		optimizePackageImports: [
 			'lucide-react',
@@ -119,11 +113,10 @@ const nextConfig: NextConfig = {
 	typescript: {
 		ignoreBuildErrors: false,
 	},
-	assetPrefix: isProd ? undefined : `http://${internalHost}:3000`,
+	assetPrefix: isProd ? undefined : 'http://localhost:3000',
 	output: 'standalone',
 	reactStrictMode: true,
 	// Performance: Enable swcMinify for faster builds
-	swcMinify: true,
 	webpack(config) {
 		// Grab the existing rule that handles SVG imports
 		// @ts-expect-error any

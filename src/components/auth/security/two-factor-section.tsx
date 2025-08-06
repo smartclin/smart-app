@@ -262,7 +262,7 @@ export const TwoFactorSection = ({ user }: { user: AuthUser }) => {
 							</CardTitle>
 							{twoFactorStage === 2 && (
 								<CardDescription className="text-xs">
-									Set up a new sign-in method in your authenticator app and scan the following QR
+									Set up a new signin method in your authenticator app and scan the following QR
 									code to link it to your account.
 								</CardDescription>
 							)}

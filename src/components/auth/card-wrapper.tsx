@@ -73,7 +73,7 @@ export const CardWrapper = ({
 						Don&apos;t have an account?{' '}
 						<Button
 							className="px-1 font-[400px] text-[14px] text-blue-500 leading-4 after:bg-blue-600 hover:text-blue-600"
-							onClick={() => window.location.replace('/sign-up')}
+							onClick={() => window.location.replace('/signup')}
 							size={'sm'}
 							type="button"
 							variant={'link'}
@@ -88,7 +88,7 @@ export const CardWrapper = ({
 						<Button
 							className="px-1 font-[400px] text-[14px] text-blue-500 leading-4 after:bg-blue-600 hover:text-blue-600"
 							onClick={() =>
-								window.location.replace(`/sign-up?redirect=${encodeURIComponent(param ?? '')}`)
+								window.location.replace(`/signup?redirect=${encodeURIComponent(param ?? '')}`)
 							}
 							size={'sm'}
 							type="button"

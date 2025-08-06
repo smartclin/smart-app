@@ -21,7 +21,7 @@ export const DiagnosisContainer = async ({
 	const session = await getSession()
 	const userId = session?.user.id
 
-	if (!userId) redirect('/sign-in')
+	if (!userId) redirect('/signin')
 
 	const data = await db.medicalRecords.findFirst({
 		where: { appointmentId: Number(id) },
