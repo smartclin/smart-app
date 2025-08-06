@@ -110,7 +110,7 @@ export const UserButton = ({ user }: UserButtonProps) => {
 						className="cursor-pointer px-6 py-4 font-medium text-black/70"
 						disabled={isLoading}
 						onClick={() => {
-							const session = sessions.find(s => s.id === user.session.id)
+							const session = sessions.find(s => s.id === user.session?.session.id) // Corrected here
 							if (!session) return
 
 							setIsLoading(true)
@@ -137,7 +137,7 @@ export const UserButton = ({ user }: UserButtonProps) => {
 
 					{sessions.length > 1 &&
 						sessions
-							.filter(session => session.id !== user.session.id)
+							.filter(session => session.id !== user.session?.session.id) // Corrected here
 							.map(session => (
 								<DropdownMenuItem
 									className="cursor-pointer p-3 px-6"

@@ -1,3 +1,4 @@
+// src/components/chat/ChatView.tsx
 'use client'
 
 import type { UIMessage } from '@ai-sdk/react'
@@ -7,12 +8,12 @@ import { useState } from 'react'
 import { toast } from 'sonner'
 import { v4 as uuidv4 } from 'uuid'
 
-import { useScrollMessages } from '@/hooks/use-scroll-messages'
+import { useScrollMessages } from '@/hooks/use-scroll-messages' // This hook likely provides `messagesContainerRef`
 import type { ModelId } from '@/lib/model/model'
 import type { Tool } from '@/lib/tools/tool'
 import { trpc } from '@/trpc/client'
 
-import Messages from '../messages/Messages'
+import { Messages } from '../messages/messages' // Your Messages component
 import ChatInput from './ChatInput'
 import ChatSuggestions from './ChatSuggestions'
 import ScrollToBottom from './ScrollToBottom'
@@ -32,6 +33,7 @@ const ChatView = ({ initialMessages, chatId, selectedModel, selectedTool }: Prop
 	const [messages, setMessages] = useState<UIMessage[]>(initialMessages)
 
 	const { status } = useChat({
+		// Ensure isLoading is destructured here
 		generateId: () => uuidv4(),
 		experimental_throttle: 500,
 		onFinish: () => {
@@ -47,7 +49,7 @@ const ChatView = ({ initialMessages, chatId, selectedModel, selectedTool }: Prop
 	const isFirstTimeChat =
 		initialMessages.length === 0 && messages.length <= 2 && pathname.startsWith('/chat')
 
-	const { messagesContainerRef, lastMessageRef, showScrollButton, scrollToBottom, handleScroll } =
+	const { messagesContainerRef, showScrollButton, scrollToBottom, handleScroll } =
 		useScrollMessages({
 			messages,
 			status,
@@ -136,9 +138,10 @@ const ChatView = ({ initialMessages, chatId, selectedModel, selectedTool }: Prop
 							ref={messagesContainerRef}
 						>
 							<Messages
-								lastMessageRef={lastMessageRef}
+								isLoading={true}
 								messages={messages}
-								status={status}
+								status={status} // Ensure isLoading is passed
+								// lastMessageRef={lastMessageRef} // <-- REMOVE THIS LINE
 							/>
 						</div>
 						<ScrollToBottom

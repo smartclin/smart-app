@@ -21,7 +21,7 @@ import {
 	FormMessage,
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
-import { UploadButton } from '@/components/uploadthing'
+import { UploadButton } from '@/components/uploadthing' // Ensure this imports from your generated types
 import { authClient } from '@/lib/auth/auth-client'
 import { cn } from '@/lib/utils'
 
@@ -131,7 +131,7 @@ export const ProfileSection = ({ user, className }: { user: User; className?: st
 									<UploadButton
 										className="ut-allowed-content:hidden ut-button:h-8 ut-button:w-20 ut-button:border ut-button:bg-transparent ut-button:text-black/60 ut-button:text-xs ut-label:text-red-500 ut-button:transition-all hover:ut-button:bg-black/5 hover:ut-button:text-black focus-visible:ut-button:ring-[4px] focus-visible:ut-button:ring-ring/20"
 										disabled={true}
-										endpoint="profilePic"
+										endpoint="imageUploader" // <-- Fixed this line
 										onClientUploadComplete={res => {
 											console.log('Files: ', res)
 											setImage(res[0]?.ufsUrl)

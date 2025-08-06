@@ -24,14 +24,6 @@ import { Input } from '@/components/ui/input'
 import { authClient } from '@/lib/auth/auth-client'
 
 // Define the Zod schema once, outside the component to prevent re-declaration
-const newPasswordSchema = z.object({
-	oldPassword: z.string().min(1, 'Old password is required'),
-	newPassword: z.string().min(8, 'New password must be at least 8 characters'),
-	revokeOtherSessions: z.boolean().default(false), // Ensure default is set for consistent type inference
-})
-
-// Infer the type from the Zod schema for strong typing
-type NewPasswordFormValues = z.infer<typeof newPasswordSchema>
 
 export const PasswordSection = () => {
 	// State for auto-animate, password box visibility, error messages,
@@ -47,16 +39,33 @@ export const PasswordSection = () => {
 	const toggleVisibility = () => setIsPasswordVisible(prevState => !prevState)
 	const toggleNewVisibility = () => setIsNewPasswordVisible(prevState => !prevState)
 
-	// Initialize React Hook Form with Zod resolver and default values
-	const form = useForm<NewPasswordFormValues>({
-		resolver: zodResolver(newPasswordSchema),
-		defaultValues: {
-			oldPassword: '',
-			newPassword: '',
-			revokeOtherSessions: false,
-		},
+	// Define your Zod schema (as you already have it)
+	const newPasswordSchema = z.object({
+		oldPassword: z.string().min(1, 'Old password is required'),
+		newPassword: z.string().min(8, 'New password must be at least 8 characters'),
+		revokeOtherSessions: z.boolean().default(false).optional(), // This is correctly defined
 	})
 
+	// Infer the type from the Zod schema for strong typing
+	type NewPasswordFormValues = z.infer<typeof newPasswordSchema>
+
+	// Infer the type from the Zod schema
+
+	// 👇 THE FIX 👇
+	// 1. Create a variable for your default values
+	// 2. Explicitly assign the `NewPasswordFormValues` type to this variable
+	const defaultFormValues: NewPasswordFormValues = {
+		oldPassword: '',
+		newPassword: '',
+		revokeOtherSessions: false, // Ensure this is just `false`
+	}
+
+	// 3. Pass this explicitly typed object to useForm
+	const form = useForm<NewPasswordFormValues>({
+		resolver: zodResolver(newPasswordSchema),
+		defaultValues: defaultFormValues, // Pass the pre-typed object
+	})
+	// --- FIX ENDS HERE ---
 	// Destructure control, handleSubmit, and reset from the form object
 	const { control, handleSubmit, reset } = form
 
@@ -79,10 +88,17 @@ export const PasswordSection = () => {
 			)
 			setIsPasswordBoxOpen(false) // Close the password box on successful submission
 			reset() // Reset the form fields to their default values
-		} catch (err) {
+		} catch (err: unknown) {
+			// <-- FIX: Type 'err' as unknown
 			// Log and set error message if an error occurs
-			console.error(err.message)
-			setError(err.message || 'An unexpected error occurred.')
+			if (err instanceof Error) {
+				// <-- FIX: Narrow type to Error
+				console.error(err.message)
+				setError(err.message)
+			} else {
+				console.error('An unexpected error occurred:', err)
+				setError('An unexpected error occurred.')
+			}
 		} finally {
 			setIsLoading(false) // Always set loading state to false
 		}

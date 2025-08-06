@@ -11,23 +11,15 @@
 		"isolatedModules": true,
 		"jsx": "preserve",
 		/* Bundled projects */
-		"lib": [
-			"dom",
-			"dom.iterable",
-			"ES2022"
-		],
+		"lib": ["dom", "dom.iterable", "ES2022"],
 		"module": "ESNext",
 		"moduleDetection": "force",
 		"moduleResolution": "Bundler",
 		"noEmit": true,
 		"noUncheckedIndexedAccess": true,
 		"paths": {
-			"@/*": [
-				"./src/*"
-			],
-			"@prisma/client": [
-				"generated/client/client"
-			]
+			"@/*": ["./src/*"],
+			"@prisma/client": ["generated/client/client"]
 		},
 		"plugins": [
 			{
@@ -41,10 +33,7 @@
 		"target": "es2022",
 		"verbatimModuleSyntax": true
 	},
-	"exclude": [
-		"node_modules",
-		"prisma/generated"
-	],
+	"exclude": ["node_modules", "prisma/generated"],
 	"include": [
 		"next-env.d.ts",
 		"src/**/*.ts",

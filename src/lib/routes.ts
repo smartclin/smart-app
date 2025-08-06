@@ -26,6 +26,16 @@ export const routeAccess: RouteAccessProps = {
 	'/patient/registrations': ['patient'],
 } as const satisfies RouteAccessProps
 
+export const matchers = Object.entries(routeAccess).map(([pattern, allowedRoles]) => ({
+    pattern: new RegExp(`^${pattern}`), // Ensure patterns are robust regex
+    allowedRoles,
+}));
+
+ 
+// Type guard for user roles
+export function isValidUserRole(role: unknown): role is UserRole {
+    return ['admin', 'doctor', 'nurse', 'patient'].includes(role as string);
+}
 // 3. Define paths schema
 const PathsSchema = z.object({
 	auth: z.object({

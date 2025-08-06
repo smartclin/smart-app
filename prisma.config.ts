@@ -5,7 +5,7 @@ import 'dotenv/config'
 
 export default defineConfig({
 	// Path to your main Prisma schema file (relative to this config file)
-	schema: path.join('prisma', 'schema.prisma'),
+	schema: path.join('prisma', 'schema'),
 
 	// Configuration for migrations (optional)
 	migrations: {
