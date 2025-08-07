@@ -1,0 +1,78 @@
+{
+  // These tasks will run in order when initializing your CodeSandbox project.
+  "setupTasks": [
+    {
+      "command": "pnpm install",
+      "name": "Installing Dependencies"
+    }
+  ],
+
+  // These tasks can be run from CodeSandbox. Running one will open a log in the app.
+  "tasks": {
+    "analyze": {
+      "name": "analyze",
+      "command": "pnpm analyze"
+    },
+    "auth:gen": {
+      "name": "auth:gen",
+      "command": "pnpm auth:gen"
+    },
+    "build": {
+      "name": "build",
+      "command": "pnpm build"
+    },
+    "check": {
+      "name": "check",
+      "command": "pnpm check"
+    },
+    "check:unsafe": {
+      "name": "check:unsafe",
+      "command": "pnpm check:unsafe"
+    },
+    "db:admin": {
+      "name": "db:admin",
+      "command": "pnpm db:admin"
+    },
+    "db:generate": {
+      "name": "db:generate",
+      "command": "pnpm db:generate"
+    },
+    "db:migrate": {
+      "name": "db:migrate",
+      "command": "pnpm db:migrate"
+    },
+    "db:push": {
+      "name": "db:push",
+      "command": "pnpm db:push"
+    },
+    "db:reset": {
+      "name": "db:reset",
+      "command": "pnpm db:reset"
+    },
+    "db:studio": {
+      "name": "db:studio",
+      "command": "pnpm db:studio"
+    },
+    "dev": {
+      "name": "dev",
+      "command": "pnpm dev",
+      "runAtStart": true
+    },
+    "lint": {
+      "name": "lint",
+      "command": "pnpm lint"
+    },
+    "seed": {
+      "name": "seed",
+      "command": "pnpm seed"
+    },
+    "start": {
+      "name": "start",
+      "command": "pnpm start"
+    },
+    "type": {
+      "name": "type",
+      "command": "pnpm type"
+    }
+  }
+}

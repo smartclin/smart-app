@@ -3,22 +3,30 @@ enum Role {
     STAFF
     DOCTOR
     PATIENT
+
+    @@schema("public")
 }
 
 enum Status {
     ACTIVE
     INACTIVE
     DORMANT
+
+    @@schema("public")
 }
 
 enum JOBTYPE {
     FULL
     PART
+
+    @@schema("public")
 }
 
 enum Gender {
     MALE
     FEMALE
+
+    @@schema("public")
 }
 
 enum AppointmentStatus {
@@ -26,12 +34,16 @@ enum AppointmentStatus {
     SCHEDULED
     CANCELLED
     COMPLETED
+
+    @@schema("public")
 }
 
 enum PaymentMethod {
     CASH
     CARD
     MOBILE
+
+    @@schema("public")
 }
 
 enum PaymentStatus {
@@ -39,8 +51,9 @@ enum PaymentStatus {
     UNPAID
     PARTIAL
     REFUNDED
-}
 
+    @@schema("public")
+}
 
 enum ServiceCategory {
     CONSULTATION
@@ -50,15 +63,21 @@ enum ServiceCategory {
     PHARMACY
     DIAGNOSIS
     OTHER
-}
 
+    @@schema("public")
+}
 
 enum MeasurementType {
     WFA
     HFA
     HcFA
+
+    @@schema("public")
 }
-enum ChatRole  {
+
+enum ChatRole {
     USER
     AI
+
+    @@schema("public")
 }

@@ -1,49 +1,51 @@
-
-
 model Chat {
-  id       String   @id @default(uuid())
-  title    String   @default("New Chat")
-  archived Boolean  @default(false)
+  id       String  @id @default(uuid())
+  title    String  @default("New Chat")
+  archived Boolean @default(false)
 
   userId String?
-  user User? @relation(fields: [userId], references: [id], onDelete: Cascade)
-    
+  user   User?   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
   messages Message[]
-  streams Stream[]
+  streams  Stream[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@schema("public")
 }
-
-
 
 model Message {
   id String @id @default(uuid())
 
-  role ChatRole
-  content String? 
-  parts Json 
-  imageKey String? 
+  role     ChatRole
+  content  String?
+  parts    Json
+  imageKey String?
   imageUrl String?
 
   userId String
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   chatId String
-  chat Chat @relation(fields: [chatId], references: [id], onDelete: Cascade)
+  chat   Chat   @relation(fields: [chatId], references: [id], onDelete: Cascade)
 
-  promptId   String?     @unique
-  prompt     Message?    @relation("ResponseMessage", fields: [promptId], references: [id])
-  response   Message?    @relation("ResponseMessage")
-  
+  promptId String?  @unique
+  prompt   Message? @relation("ResponseMessage", fields: [promptId], references: [id])
+  response Message? @relation("ResponseMessage")
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@schema("public")
 }
 
 model Stream {
-  id String @id @default(uuid())
+  id     String @id @default(uuid())
   chatId String
-  chat Chat @relation(fields: [chatId], references: [id], onDelete: Cascade)
+  chat   Chat   @relation(fields: [chatId], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now())
+
+  @@schema("public")
 }

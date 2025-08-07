@@ -1,7 +1,7 @@
 generator client {
   provider               = "prisma-client"
   output                 = "../../generated/client"
-  previewFeatures        = ["views","driverAdapters", "relationJoins",  "queryCompiler" ]
+  previewFeatures        = ["views", "driverAdapters", "relationJoins", "queryCompiler"]
   generatedFileExtension = "ts"
   importFileExtension    = "ts"
   moduleFormat           = "esm"
@@ -11,9 +11,8 @@ generator client {
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
+  schemas  = ["public", "base"]
 }
-
-
 
 // generator zod {
 //   provider = "zod-prisma-types"

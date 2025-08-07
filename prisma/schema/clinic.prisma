@@ -1,5 +1,3 @@
-
-
 model Patient {
     id                     String           @id //clerk userId
     firstName              String
@@ -39,6 +37,8 @@ model Patient {
     Prescription Prescription[]
 
     Vaccination Vaccination[]
+
+    @@schema("base")
 }
 
 model Doctor {
@@ -67,6 +67,8 @@ model Doctor {
     updatedAt    DateTime      @updatedAt
 
     Prescription Prescription[]
+
+    @@schema("base")
 }
 
 model WorkingDays {
@@ -80,6 +82,8 @@ model WorkingDays {
 
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
+
+    @@schema("base")
 }
 
 model Staff {
@@ -105,6 +109,8 @@ model Staff {
     updatedAt DateTime @updatedAt
 
     Vaccination Vaccination[] @relation("AdministeredByStaff")
+
+    @@schema("base")
 }
 
 model Appointment {
@@ -127,6 +133,8 @@ model Appointment {
     reason    String?
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
+
+    @@schema("base")
 }
 
 model Payment {
@@ -150,6 +158,8 @@ model Payment {
 
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
+
+    @@schema("base")
 }
 
 model PatientBills {
@@ -165,6 +175,8 @@ model PatientBills {
 
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
+
+    @@schema("base")
 }
 
 model LabTest {
@@ -181,6 +193,8 @@ model LabTest {
 
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
+
+    @@schema("base")
 }
 
 model MedicalRecords {
@@ -204,6 +218,8 @@ model MedicalRecords {
     updatedAt DateTime @updatedAt
 
     Prescription Prescription[]
+
+    @@schema("base")
 }
 
 model VitalSigns {
@@ -222,6 +238,8 @@ model VitalSigns {
 
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
+
+    @@schema("base")
 }
 
 model Diagnosis {
@@ -240,6 +258,8 @@ model Diagnosis {
 
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
+
+    @@schema("base")
 }
 
 model AuditLog {
@@ -252,6 +272,8 @@ model AuditLog {
 
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
+
+    @@schema("base")
 }
 
 model Rating {
@@ -266,6 +288,8 @@ model Rating {
 
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
+
+    @@schema("base")
 }
 
 model Services {
@@ -283,6 +307,8 @@ model Services {
 
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
+
+    @@schema("base")
 }
 
 model Prescription {
@@ -309,6 +335,7 @@ model Prescription {
     updatedAt DateTime @updatedAt @db.Timestamp(3)
 
     @@map("prescriptions")
+    @@schema("base")
 }
 
 model Vaccination {
@@ -331,6 +358,7 @@ model Vaccination {
     updatedAt DateTime @updatedAt @db.Timestamp(3)
 
     @@map("vaccinations")
+    @@schema("base")
 }
 
 model WHOGrowthStandard {
@@ -355,4 +383,5 @@ model WHOGrowthStandard {
     updatedAt DateTime @updatedAt @db.Timestamp(3)
 
     @@map("who_growth_standards")
+    @@schema("base")
 }
