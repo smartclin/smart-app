@@ -1,0 +1,31 @@
+{
+  "configurations": [
+    {
+      "command": "pnpm run dev",
+      "name": "Next.js: debug server-side",
+      "request": "launch",
+      "type": "node-terminal"
+    },
+    {
+      "name": "Next.js: debug client-side",
+      "request": "launch",
+      "type": "chrome",
+      "url": "http://localhost:3000"
+    },
+    {
+      "command": "pnpm run dev",
+      "env": {
+        "NEXT_PUBLIC_SENTRY_DISABLED": "true"
+      },
+      "name": "Next.js: debug full stack",
+      "request": "launch",
+      "serverReadyAction": {
+        "action": "debugWithChrome",
+        "pattern": "- Local:.+(https?://.+)",
+        "uriFormat": "%s"
+      },
+      "type": "node-terminal"
+    }
+  ],
+  "version": "0.2.0"
+}

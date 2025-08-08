@@ -1,33 +1,33 @@
-import { BookOpen, Code, Lightbulb, WandSparkles } from 'lucide-react'
+import { BookOpen, Code, Lightbulb, WandSparkles } from 'lucide-react';
 
 export const suggestions = [
-	{
-		title: 'Generate 10 saas ideas',
-		description: 'Brainstorm ideas and solutions',
-		icon: Lightbulb,
-		tag: 'Generate',
-	},
-	{
-		title: 'Explain how AI works',
-		description: 'Get clear explanations',
-		icon: BookOpen,
-		tag: 'Explain',
-	},
-	{
-		title: 'Print Hello World in Rust',
-		description: 'Generate code using AI',
-		icon: Code,
-		tag: 'Code',
-	},
-	{
-		title: 'Write a short story',
-		description: 'Create engaging content',
-		icon: WandSparkles,
-		tag: 'Create',
-	},
-]
+  {
+    title: 'Generate 10 saas ideas',
+    description: 'Brainstorm ideas and solutions',
+    icon: Lightbulb,
+    tag: 'Generate'
+  },
+  {
+    title: 'Explain how AI works',
+    description: 'Get clear explanations',
+    icon: BookOpen,
+    tag: 'Explain'
+  },
+  {
+    title: 'Print Hello World in Rust',
+    description: 'Generate code using AI',
+    icon: Code,
+    tag: 'Code'
+  },
+  {
+    title: 'Write a short story',
+    description: 'Create engaging content',
+    icon: WandSparkles,
+    tag: 'Create'
+  }
+];
 
-export const DEFAULT_LIMIT = 20
+export const DEFAULT_LIMIT = 20;
 
 export const SYSTEM_PROMPT = `You are a highly capable, warm, and reliable AI assistant. Communicate clearly, solve problems, and help users efficiently.
 
@@ -200,7 +200,7 @@ Today is **{{CURRENT_DATE}}**. Use this for time-sensitive responses and conside
 - End with appropriate follow-up when natural
 - Maintain consistent, professional formatting throughout
 
-Remember: Proper spacing and formatting are CRITICAL for readability. Every paragraph, list, code block, and section must be properly spaced with blank lines. The goal is natural, helpful conversation.`
+Remember: Proper spacing and formatting are CRITICAL for readability. Every paragraph, list, code block, and section must be properly spaced with blank lines. The goal is natural, helpful conversation.`;
 
 export const REASONING_SYSTEM_PROMPT = `You are an intelligent AI assistant. You approach every question scientifically and logically.
 
@@ -229,4 +229,4 @@ export const REASONING_SYSTEM_PROMPT = `You are an intelligent AI assistant. You
 - End with clear, actionable conclusion
 - Maintain consistent formatting throughout
 
-Remember: Your thinking should be rigorous and systematic, and your final response should be clear, well-formatted, and accessible to the user. You do not have access to external tools in reasoning mode.`
+Remember: Your thinking should be rigorous and systematic, and your final response should be clear, well-formatted, and accessible to the user. You do not have access to external tools in reasoning mode.`;

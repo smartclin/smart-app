@@ -1,17 +1,17 @@
-import { headers } from 'next/headers'
-import { redirect } from 'next/navigation'
-import type { ReactNode } from 'react'
+import { headers } from 'next/headers';
+import { redirect } from 'next/navigation';
+import type { ReactNode } from 'react';
 
-import authServer from '@/lib/auth'
+import authServer from '@/lib/auth';
 
 export default async function AuthenticationLayout({
-	children,
+  children
 }: Readonly<{ children: ReactNode }>) {
-	const session = await authServer.getSession({ headers: await headers() })
+  const session = await authServer.getSession({ headers: await headers() });
 
-	if (session) {
-		redirect('/dashboard')
-	}
+  if (session) {
+    redirect('/dashboard');
+  }
 
-	return children
+  return children;
 }

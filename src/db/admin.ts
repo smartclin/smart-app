@@ -1,98 +1,114 @@
 // prisma/seed.ts or scripts/seed.ts
-import 'dotenv/config'
+import 'dotenv/config';
 
-import { faker } from '@faker-js/faker' // Import faker for generating dummy data
-import { JOBTYPE, Role } from 'generated/client/enums'
+import { faker } from '@faker-js/faker';
+import { JOBTYPE, Role } from 'generated/client/enums';
 
-import db from '@/db'
-import { auth } from '@/lib/auth' // Your authentication library
+import db from '@/db';
+import { auth } from '@/lib/auth';
 
 async function seed() {
-	console.log('Starting seed process...')
+  try {
+    // Clear Doctor table first as it depends on User
+    await db.doctor.deleteMany();
+    await db.user.deleteMany();
 
-	try {
-		// --- Clear Data in Reverse Order of Dependencies (Cascading Deletes if configured) ---
-		// Corrected model names based on typical Prisma singular PascalCase naming
-		console.log('Clearing existing data...')
-		
-		// Clear User table last if Patient, Doctor, Staff depend on it
-        await db.doctor.deleteMany()
-		await db.user.deleteMany()
-		console.log('Existing data cleared.')
+    // --- Define Admin User Data ---
+    const adminEmail = process.env.ADMIN_EMAIL || 'clinysmar@gmail.com';
+    // Updated password for a stronger policy
+    const adminPassword = process.env.ADMIN_PASSWORD || 'Health24!Secure$';
+    const adminName = process.env.ADMIN_NAME || 'Hazem Ali';
+    const adminPhone = '01003497579';
 
-		// --- Create Admin User (Hazem Ali) ---
-		const adminEmail = process.env.ADMIN_EMAIL || 'clinysmar@gmail.com'
-		const adminPassword = process.env.ADMIN_PASSWORD || 'Health24'
-		const adminName = process.env.ADMIN_NAME || 'Hazem Ali'
-		const adminPhone = '01003497579'
-		console.log(`Attempting to create admin user: ${adminName} (${adminEmail})...`)
+    let adminUserId: string;
+    try {
+      const existingUser = await auth.api.getUserByEmail(adminEmail);
+      if (existingUser?.id) {
+        adminUserId = existingUser.id;
+      } else {
+        // This will throw if the user is not found, handled by the outer catch
+        throw new Error('User not found, proceeding with creation.');
+      }
+    } catch (_error) {
+      const adminAuthSignUpResult = await auth.api.signUpEmail({
+        body: {
+          email: adminEmail,
+          password: adminPassword,
+          name: adminName
+        }
+      });
 
-		const adminAuthSignUpResult = await auth.api.signUpEmail({
-			body: {
-				email: adminEmail,
-				password: adminPassword,
-				name: adminName,
-			},
-		})
+      if (!adminAuthSignUpResult || !adminAuthSignUpResult.user || !adminAuthSignUpResult.user.id) {
+        console.error(
+          'Failed to create admin user via authentication service. Result:',
+          adminAuthSignUpResult
+        );
+        throw new Error(
+          'Failed to create admin user. Check auth service configuration and response.'
+        );
+      }
 
-		if (!adminAuthSignUpResult || !adminAuthSignUpResult.user || !adminAuthSignUpResult.user.id) {
-			console.error(
-				'Failed to create admin user via authentication service. Result:',
-				adminAuthSignUpResult,
-			)
-			throw new Error('Failed to create admin user. Check auth service configuration and response.')
-		}
+      adminUserId = adminAuthSignUpResult.user.id;
+    }
 
-		const { id: adminUserId, email: adminUserEmail } = adminAuthSignUpResult.user
-		console.log(
-			`Admin user created successfully via auth service: ID - ${adminUserId}, Email - ${adminUserEmail}`,
-		)
+    // --- Create or Update User in Prisma ---
+    // This step ensures the user exists in your database and has the correct role
+    await db.user.upsert({
+      where: { id: adminUserId },
+      update: { role: Role.ADMIN },
+      create: {
+        id: adminUserId,
+        email: adminEmail,
+        name: adminName,
+        phone: adminPhone,
+        role: Role.ADMIN
+      }
+    });
+    const _hazemDoctor = await db.doctor.upsert({
+      where: { id: adminUserId },
+      update: {
+        email: adminEmail,
+        name: adminName,
+        specialization: 'Pediatrician',
+        licenseNumber: 'HAZEM12345',
+        phone: adminPhone,
+        address: faker.location.streetAddress(),
+        department: 'Pediatrics',
+        img: faker.image.avatar(),
+        colorCode: faker.color.rgb(),
+        availabilityStatus: 'Available',
+        type: JOBTYPE.FULL
+      },
+      create: {
+        id: adminUserId,
+        email: adminEmail,
+        name: adminName,
+        specialization: 'Pediatrician',
+        licenseNumber: 'HAZEM12345',
+        phone: adminPhone,
+        address: faker.location.streetAddress(),
+        department: 'Pediatrics',
+        img: faker.image.avatar(),
+        colorCode: faker.color.rgb(),
+        availabilityStatus: 'Available',
+        type: JOBTYPE.FULL,
+        // Connect to the User profile we just ensured exists
+        user: { connect: { id: adminUserId } }
+      }
+    });
 
-		// Update Prisma User role to ADMIN
-		await db.user.update({
-			where: { id: adminUserId },
-			data: { role: Role.ADMIN },
-		})
-		console.log(`Admin user ${adminUserId} role updated to ADMIN in Prisma.`)
-
-		// --- Create Doctor Profile for Hazem Ali (linked to the admin user) ---
-		console.log(`Creating Doctor profile for ${adminName}...`)
-		const hazemDoctor = await db.doctor.create({
-			data: {
-				id: adminUserId, // Use the same ID as the admin user
-				// Connect to the User profile created by the auth service
-				user: { connect: { id: adminUserId } },
-				email: adminEmail, // Use admin email
-				name: adminName, // Use admin name
-				specialization: 'Pediatrician', // Specific specialization for Hazem
-				licenseNumber: 'HAZEM12345', // Unique license number
-				phone: adminPhone,
-				address: faker.location.streetAddress(),
-				department: 'Pediatrics',
-				img: faker.image.avatar(),
-				colorCode: faker.color.rgb(),
-				availabilityStatus: 'Available',
-				type: JOBTYPE.FULL, // Example specific job type
-			},
-		})
-		console.log(`Created Doctor profile for Hazem Ali (ID: ${hazemDoctor.id}).`)
-
-		// Optionally, update the user role to DOCTOR as well, or you might have a USER_ADMIN_DOCTOR role
-		// If a user can have multiple roles, you'd handle this differently.
-		// For simplicity, if he's primarily an admin who is also a doctor:
-		await db.user.update({
-			where: { id: adminUserId },
-			data: { role: Role.DOCTOR }, // If DOCTOR overrides ADMIN, or you have a combined role
-		})
-		console.log(`Admin user ${adminUserId} role updated to DOCTOR in Prisma (if applicable).`)
-	} catch (error) {
-		console.error('Seed process failed:', error)
-		process.exit(1) // Exit with an error code
-	} finally {
-		await db.$disconnect()
-		console.log('Seed process finished.')
-	}
+    // --- Set the final role to DOCTOR if he is both ---
+    await db.user.update({
+      where: { id: adminUserId },
+      data: { role: Role.DOCTOR }
+    });
+  } catch (error) {
+    console.error('Seed process failed:', error);
+    process.exit(1);
+  } finally {
+    await db.$disconnect();
+  }
 }
 
 // Execute the seed function
-seed()
+seed();
