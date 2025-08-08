@@ -1,51 +1,41 @@
 {
-	"compilerOptions": {
-		"allowImportingTsExtensions": true,
-		"allowJs": true,
-		"baseUrl": ".",
-		"esModuleInterop": true,
-		"forceConsistentCasingInFileNames": true,
-		"incremental": true,
-		"isolatedModules": true,
-		"jsx": "preserve",
-		"lib": [
-			"dom",
-			"dom.iterable",
-			"ES2022"
-		],
-		"module": "ESNext",
-		"moduleResolution": "Bundler",
-		"noEmit": true,
-		"noUncheckedIndexedAccess": true,
-		"paths": {
-			"@/*": [
-				"./src/*"
-			],
-			"@prisma/client": [
-				"generated/client/client"
-			]
-		},
-		"plugins": [
-			{
-				"name": "next"
-			}
-		],
-		"resolveJsonModule": true,
-		"skipLibCheck": true,
-		"strict": true,
-		"target": "es2022",
-		"verbatimModuleSyntax": true
-	},
-	"exclude": [
-		"node_modules",
-		"generated"
-	],
-	"include": [
-		"next-env.d.ts",
-		"**/*.ts",
-		"**/*.tsx",
-		"**/*.cjs",
-		"**/*.js",
-		".next/types/**/*.ts"
-	]
+  "compilerOptions": {
+    "allowImportingTsExtensions": true,
+    "allowJs": true,
+    "baseUrl": ".",
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "incremental": true,
+    "isolatedModules": true,
+    "jsx": "preserve",
+    "lib": ["dom", "dom.iterable", "ES2022"],
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "noEmit": true,
+    "noUncheckedIndexedAccess": true,
+    "paths": {
+      "@/*": ["./src/*"],
+      "@/trpc/server": ["src/app/_lib/server"],
+      "@prisma/client": ["generated/client/client"]
+    },
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ],
+    "resolveJsonModule": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "target": "es2022",
+    "verbatimModuleSyntax": true
+  },
+  "exclude": ["node_modules", "generated"],
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    "**/*.cjs",
+    "**/*.js",
+    ".next/types/**/*.ts"
+  ]
 }

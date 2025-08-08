@@ -1,4 +1,7 @@
-import { generateUploadButton, generateUploadDropzone } from '@uploadthing/react'
+import {
+  generateUploadButton,
+  generateUploadDropzone,
+} from '@uploadthing/react'
 
 // Import the UploadthingFileRouter value from your core.ts
 // and then use 'typeof' to get its type.

@@ -1,97 +1,98 @@
 // prisma/seed.ts or scripts/seed.ts
 import 'dotenv/config'
 
-import { faker } from '@faker-js/faker' // Import faker for generating dummy data
-import { JOBTYPE, Role } from 'generated/client/enums'
+import { Role } from '@prisma/client'
 
 import db from '@/db'
-import { auth } from '@/lib/auth' // Your authentication library
+import { auth } from '@/lib/auth'
 
 async function seed() {
-	console.log('Starting seed process...')
+  try {
+    // Clear Doctor table first as it depends on User
+    await db.doctor.deleteMany()
+    await db.user.deleteMany()
 
-	try {
-		// --- Clear Data in Reverse Order of Dependencies (Cascading Deletes if configured) ---
-		// Corrected model names based on typical Prisma singular PascalCase naming
-		console.log('Clearing existing data...')
-		
-		// Clear User table last if Patient, Doctor, Staff depend on it
-        await db.doctor.deleteMany()
-		await db.user.deleteMany()
-		console.log('Existing data cleared.')
+    // --- Define Admin User Data ---
+    const adminEmail = process.env.ADMIN_EMAIL || 'clinysmar@gmail.com'
+    // Updated password for a stronger policy
+    const adminPassword = process.env.ADMIN_PASSWORD || 'Health24!Secure$'
+    const adminName = process.env.ADMIN_NAME || 'Hazem Ali'
 
-		// --- Create Admin User (Hazem Ali) ---
-		const adminEmail = process.env.ADMIN_EMAIL || 'clinysmar@gmail.com'
-		const adminPassword = process.env.ADMIN_PASSWORD || 'Health24'
-		const adminName = process.env.ADMIN_NAME || 'Hazem Ali'
-		const adminPhone = '01003497579'
-		console.log(`Attempting to create admin user: ${adminName} (${adminEmail})...`)
+    let adminUserId: string // adminUserId must always be a string
 
-		const adminAuthSignUpResult = await auth.api.signUpEmail({
-			body: {
-				email: adminEmail,
-				password: adminPassword,
-				name: adminName,
-			},
-		})
+    try {
+      const existingUserResult = await auth.api.listUsers({
+        query: {
+          searchField: 'email',
+          searchValue: adminEmail,
+        },
+      })
 
-		if (!adminAuthSignUpResult || !adminAuthSignUpResult.user || !adminAuthSignUpResult.user.id) {
-			console.error(
-				'Failed to create admin user via authentication service. Result:',
-				adminAuthSignUpResult,
-			)
-			throw new Error('Failed to create admin user. Check auth service configuration and response.')
-		}
+      // Check if a user was found and its ID is a valid string
+      if (
+        existingUserResult?.users.length > 0 &&
+        existingUserResult.users[0]?.id
+      ) {
+        adminUserId = existingUserResult.users[0].id // Type is now guaranteed to be string within this block
+      } else {
+        // If no user is found, or the user's ID is missing/undefined,
+        // throw an error to proceed with user creation in the catch block.
+        throw new Error(
+          'User not found or ID missing, proceeding with creation.',
+        )
+      }
+    } catch (_error) {
+      // If the user wasn't found (or an error occurred during lookup), attempt to sign them up.
+      const adminAuthSignUpResult = await auth.api.signUpEmail({
+        body: {
+          email: adminEmail,
+          password: adminPassword,
+          name: adminName,
+        },
+      })
 
-		const { id: adminUserId, email: adminUserEmail } = adminAuthSignUpResult.user
-		console.log(
-			`Admin user created successfully via auth service: ID - ${adminUserId}, Email - ${adminUserEmail}`,
-		)
+      // Ensure the sign-up was successful and a user with an ID was returned
+      if (
+        !adminAuthSignUpResult ||
+        !adminAuthSignUpResult.user ||
+        !adminAuthSignUpResult.user.id
+      ) {
+        console.error(
+          'Failed to create admin user via authentication service. Result:',
+          adminAuthSignUpResult,
+        )
+        throw new Error(
+          'Failed to create admin user. Check auth service configuration and response.',
+        )
+      }
 
-		// Update Prisma User role to ADMIN
-		await db.user.update({
-			where: { id: adminUserId },
-			data: { role: Role.ADMIN },
-		})
-		console.log(`Admin user ${adminUserId} role updated to ADMIN in Prisma.`)
+      adminUserId = adminAuthSignUpResult.user.id // This assignment is safe because of the checks above
+    }
 
-		// --- Create Doctor Profile for Hazem Ali (linked to the admin user) ---
-		console.log(`Creating Doctor profile for ${adminName}...`)
-		const hazemDoctor = await db.doctor.create({
-			data: {
-				id: adminUserId, // Use the same ID as the admin user
-				// Connect to the User profile created by the auth service
-				user: { connect: { id: adminUserId } },
-				email: adminEmail, // Use admin email
-				name: adminName, // Use admin name
-				specialization: 'Pediatrician', // Specific specialization for Hazem
-				licenseNumber: 'HAZEM12345', // Unique license number
-				phone: adminPhone,
-				address: faker.location.streetAddress(),
-				department: 'Pediatrics',
-				img: faker.image.avatar(),
-				colorCode: faker.color.rgb(),
-				availabilityStatus: 'Available',
-				type: JOBTYPE.FULL, // Example specific job type
-			},
-		})
-		console.log(`Created Doctor profile for Hazem Ali (ID: ${hazemDoctor.id}).`)
+    // --- Create or Update User in Prisma ---
+    // This step ensures the user exists in your database and has the correct role
+    await db.user.upsert({
+      where: { id: adminUserId },
+      update: { role: Role.ADMIN },
+      create: {
+        id: adminUserId,
+        email: adminEmail,
+        name: adminName,
+        role: Role.ADMIN,
+      },
+    })
 
-		// Optionally, update the user role to DOCTOR as well, or you might have a USER_ADMIN_DOCTOR role
-		// If a user can have multiple roles, you'd handle this differently.
-		// For simplicity, if he's primarily an admin who is also a doctor:
-		await db.user.update({
-			where: { id: adminUserId },
-			data: { role: Role.DOCTOR }, // If DOCTOR overrides ADMIN, or you have a combined role
-		})
-		console.log(`Admin user ${adminUserId} role updated to DOCTOR in Prisma (if applicable).`)
-	} catch (error) {
-		console.error('Seed process failed:', error)
-		process.exit(1) // Exit with an error code
-	} finally {
-		await db.$disconnect()
-		console.log('Seed process finished.')
-	}
+    // --- Set the final role to DOCTOR if he is both ---
+    await db.user.update({
+      where: { id: adminUserId },
+      data: { role: Role.DOCTOR },
+    })
+  } catch (error) {
+    console.error('Seed process failed:', error)
+    process.exit(1)
+  } finally {
+    await db.$disconnect()
+  }
 }
 
 // Execute the seed function

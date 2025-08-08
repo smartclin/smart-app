@@ -12,7 +12,8 @@ export type AddNewServiceInput = AdminRouterInput['addNewService']
 export type DeleteDataInput = AdminRouterInput['deleteData']
 
 // Output types
-export type GetAdminDashboardStatsOutput = AdminRouterOutput['getAdminDashboardStats']
+export type GetAdminDashboardStatsOutput =
+  AdminRouterOutput['getAdminDashboardStats']
 export type GetServicesOutput = AdminRouterOutput['getServices']
 export type CreateNewStaffOutput = AdminRouterOutput['createNewStaff']
 export type CreateNewDoctorOutput = AdminRouterOutput['createNewDoctor']

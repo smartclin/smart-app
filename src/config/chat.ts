@@ -1,30 +1,30 @@
 import { BookOpen, Code, Lightbulb, WandSparkles } from 'lucide-react'
 
 export const suggestions = [
-	{
-		title: 'Generate 10 saas ideas',
-		description: 'Brainstorm ideas and solutions',
-		icon: Lightbulb,
-		tag: 'Generate',
-	},
-	{
-		title: 'Explain how AI works',
-		description: 'Get clear explanations',
-		icon: BookOpen,
-		tag: 'Explain',
-	},
-	{
-		title: 'Print Hello World in Rust',
-		description: 'Generate code using AI',
-		icon: Code,
-		tag: 'Code',
-	},
-	{
-		title: 'Write a short story',
-		description: 'Create engaging content',
-		icon: WandSparkles,
-		tag: 'Create',
-	},
+  {
+    title: 'Generate 10 saas ideas',
+    description: 'Brainstorm ideas and solutions',
+    icon: Lightbulb,
+    tag: 'Generate',
+  },
+  {
+    title: 'Explain how AI works',
+    description: 'Get clear explanations',
+    icon: BookOpen,
+    tag: 'Explain',
+  },
+  {
+    title: 'Print Hello World in Rust',
+    description: 'Generate code using AI',
+    icon: Code,
+    tag: 'Code',
+  },
+  {
+    title: 'Write a short story',
+    description: 'Create engaging content',
+    icon: WandSparkles,
+    tag: 'Create',
+  },
 ]
 
 export const DEFAULT_LIMIT = 20

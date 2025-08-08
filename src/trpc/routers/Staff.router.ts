@@ -8,18 +8,23 @@ import { createTRPCRouter, protectedProcedure } from '../init' // adjust import 
 
 // Input schema for pagination + search
 const GetAllStaffInputSchema = z.object({
-	page: z.number().int().min(1),
-	limit: z.number().int().min(1).optional(),
-	search: z.string().optional(),
+  page: z.number().int().min(1),
+  limit: z.number().int().min(1).optional(),
+  search: z.string().optional(),
 })
 
 export const staffRouter = createTRPCRouter({
-	getAllStaff: protectedProcedure.input(GetAllStaffInputSchema).query(async ({ input }) => {
-		return await getAllStaff(input)
-	}),
-	createReview: protectedProcedure.input(reviewSchema).mutation(async ({ input }) => {
-		const result = await createReview(input)
-		if (!result.success) throw new Error(result.message || 'Failed to create review')
-		return result
-	}),
+  getAllStaff: protectedProcedure
+    .input(GetAllStaffInputSchema)
+    .query(async ({ input }) => {
+      return await getAllStaff(input)
+    }),
+  createReview: protectedProcedure
+    .input(reviewSchema)
+    .mutation(async ({ input }) => {
+      const result = await createReview(input)
+      if (!result.success)
+        throw new Error(result.message || 'Failed to create review')
+      return result
+    }),
 })

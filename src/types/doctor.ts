@@ -8,10 +8,12 @@ type DoctorRouterInput = inferRouterInputs<AppRouter>['doctor']
 // ✅ Output Types
 export type GetDoctorsOutput = DoctorRouterOutput['getDoctors']
 export type GetAllDoctorsOutput = DoctorRouterOutput['getAllDoctors']
-export type GetDoctorDashboardStatsOutput = DoctorRouterOutput['getDoctorDashboardStats']
+export type GetDoctorDashboardStatsOutput =
+  DoctorRouterOutput['getDoctorDashboardStats']
 export type GetDoctorByIdOutput = DoctorRouterOutput['getDoctorById']
 export type GetRatingByIdOutput = DoctorRouterOutput['getRatingById']
-export type GetAvailableDoctorsOutput = DoctorRouterOutput['getAvailableDoctors']
+export type GetAvailableDoctorsOutput =
+  DoctorRouterOutput['getAvailableDoctors']
 
 // ✅ Optional: Input Types
 export type GetAllDoctorsInput = DoctorRouterInput['getAllDoctors']

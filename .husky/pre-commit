@@ -1,0 +1,4 @@
+#!/bin/sh
+
+echo "🔍 Running Biome on staged files..."
+pnpx lint-staged

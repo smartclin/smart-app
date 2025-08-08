@@ -2,74 +2,74 @@ import type { AppointmentStatus, Doctor, Patient } from '@prisma/client'
 import type z from 'zod'
 
 import type {
-	AppointmentSchema,
-	DiagnosisSchema,
-	DoctorAuthSchema,
-	DoctorSchema,
-	PatientBillSchema,
-	PatientFormSchema,
-	PaymentSchema,
-	ServicesSchema,
-	StaffSchema,
-	VitalSignsSchema,
-	WorkingDaysSchema,
+  AppointmentSchema,
+  DiagnosisSchema,
+  DoctorAuthSchema,
+  DoctorSchema,
+  PatientBillSchema,
+  PatientFormSchema,
+  PaymentSchema,
+  ServicesSchema,
+  StaffSchema,
+  VitalSignsSchema,
+  WorkingDaysSchema,
 } from '@/lib/schema'
 
 export type AppointmentsChartProps = {
-	name: string
-	appointment: number
-	completed: number
+  name: string
+  appointment: number
+  completed: number
 }[]
 
 export type Appointment = {
-	id: number
-	patientId: string
-	doctorId: string
-	type: string
-	appointmentDate: Date
-	time: string
-	status: AppointmentStatus
+  id: number
+  patientId: string
+  doctorId: string
+  type: string
+  appointmentDate: Date
+  time: string
+  status: AppointmentStatus
 
-	patient: Patient
-	doctor: Doctor
+  patient: Patient
+  doctor: Doctor
 }
 
 export type AvailableDoctorProps = {
-	id: string
-	name: string
-	specialization: string
-	img?: string
-	colorCode?: string
-	workingDays: {
-		day: string
-		startTime: string
-		closeTime: string
-	}[]
+  id: string
+  name: string
+  specialization: string
+  img?: string
+  colorCode?: string
+  workingDays: {
+    day: string
+    startTime: string
+    closeTime: string
+  }[]
 }[]
 
 export type PartialPatient = {
-	firstName: string
-	lastName: string
-	gender: string
-	img: string | null
-	colorCode: string | null
+  firstName: string
+  lastName: string
+  gender: string
+  img: string | null
+  colorCode: string | null
 }
 
 export type PartialDoctor = {
-	name: string
-	img: string | null
-	colorCode: string | null
-	specialization: string
+  name: string
+  img: string | null
+  colorCode: string | null
+  specialization: string
 }
 
 export type PartialAppointment = {
-	id: number
-	appointmentDate: Date
-	time: string
-	status: AppointmentStatus | null
+  id: number
+  appointmentDate: Date
+  time: string
+  status: AppointmentStatus | null
 
-	patient: PartialPatient
-	doctor: PartialDoctor
+  patient: PartialPatient
+  doctor: PartialDoctor
 }
 
 export type PatientInput = z.infer<typeof PatientFormSchema>
@@ -88,10 +88,10 @@ export type ServicesInput = z.infer<typeof ServicesSchema>
 export type DoctorAuthInput = z.infer<typeof DoctorAuthSchema>
 
 export type Weekday =
-	| 'sunday'
-	| 'monday'
-	| 'tuesday'
-	| 'wednesday'
-	| 'thursday'
-	| 'friday'
-	| 'saturday'
+  | 'sunday'
+  | 'monday'
+  | 'tuesday'
+  | 'wednesday'
+  | 'thursday'
+  | 'friday'
+  | 'saturday'

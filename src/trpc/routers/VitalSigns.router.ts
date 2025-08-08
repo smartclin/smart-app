@@ -8,8 +8,10 @@ import { createTRPCRouter, protectedProcedure } from '../init' // adjust your im
 const PatientIdSchema = z.string().nonempty()
 
 export const vitalSignsRouter = createTRPCRouter({
-	getVitalSignData: protectedProcedure.input(PatientIdSchema).query(async ({ input }) => {
-		// input is patientId string
-		return await getVitalSignData(input)
-	}),
+  getVitalSignData: protectedProcedure
+    .input(PatientIdSchema)
+    .query(async ({ input }) => {
+      // input is patientId string
+      return await getVitalSignData(input)
+    }),
 })

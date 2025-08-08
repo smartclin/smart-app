@@ -1,3 +1,4 @@
+
 model User {
   id            String    @id @default(uuid())
   name          String?
@@ -24,6 +25,10 @@ model User {
   Patient Patient[]
   Doctor  Doctor[]
   Staff   Staff[]
+
+  twoFactorEnabled Boolean?
+  twofactors       TwoFactor[]
+  passkeys         Passkey[]
 
   @@map("user")
   @@schema("public")
@@ -86,4 +91,31 @@ model RateLimit {
 
   @@map("rateLimit")
   @@schema("public")
+}
+
+model TwoFactor {
+  id          String @id
+  secret      String
+  backupCodes String
+  userId      String
+  user        User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+ @@schema("public")
+  @@map("twoFactor")
+}
+
+model Passkey {
+  id           String    @id
+  name         String?
+  publicKey    String
+  userId       String
+  user         User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  credentialID String
+  counter      Int
+  deviceType   String
+  backedUp     Boolean
+  transports   String?
+  createdAt    DateTime?
+  aaguid       String?
+ @@schema("public")
+  @@map("passkey")
 }
