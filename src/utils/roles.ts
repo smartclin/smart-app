@@ -1,6 +1,7 @@
 // lib/auth-role.ts
 
-import { getServerSession, type Session } from '@/lib/auth' // Assuming Session type is also exported from '@/lib/auth'
+import type { Session } from '@/lib/auth' // Assuming Session type is also exported from '@/lib/auth'
+import { getServerSession } from '@/lib/auth/server'
 // This ensures that only valid role strings are used.
 export type UserRoles = 'ADMIN' | 'PATIENT' | 'STAFF' | 'DOCTOR'
 

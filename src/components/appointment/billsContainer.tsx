@@ -3,7 +3,7 @@ import { format } from 'date-fns'
 import { ReceiptText } from 'lucide-react'
 
 import db from '@/db'
-import { getSession } from '@/lib/auth'
+import { getSession } from '@/lib/auth/server'
 import { calculateDiscount } from '@/utils'
 import { checkRole } from '@/utils/roles'
 

@@ -1,7 +1,7 @@
 import { redirect } from 'next/navigation'
 
 import db from '@/db'
-import { getSession } from '@/lib/auth'
+import { getSession } from '@/lib/auth/server'
 import { checkRole } from '@/utils/roles'
 
 import { AddDiagnosis } from '../dialogs/add-diagnosis'

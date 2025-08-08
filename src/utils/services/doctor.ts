@@ -1,5 +1,5 @@
 import { db } from '@/db'
-import { getServerSession } from '@/lib/auth' // your BetterAuth instance
+import { getServerSession } from '@/lib/auth/server' // your BetterAuth instance
 import { processAppointments } from '@/types/helper'
 
 import { daysOfWeek } from '../'

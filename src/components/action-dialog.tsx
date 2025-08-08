@@ -1,15 +1,8 @@
-'use client'
-
+// app/components/action-dialog.tsx
 import { Trash2 } from 'lucide-react'
-import { useRouter } from 'next/navigation'
-import { useState } from 'react'
 import { FaQuestion } from 'react-icons/fa6'
-import { toast } from 'sonner'
 
-// import { deleteDataById } from '@/app/actions/general'
-
-import { trpc } from '@/trpc/server'
-
+import { DeleteButton } from './delete-button' // New small client component
 import { ProfileImage } from './profile-image'
 import { SmallCard } from './small-card'
 import { Button } from './ui/button'
@@ -25,9 +18,9 @@ interface ActionDialogProps {
   type: 'doctor' | 'staff' | 'delete'
   id: string
   data?: {
-    img?: string | null // Changed to allow null
-    name?: string | null // Changed to allow null
-    colorCode?: string | null // Changed to allow null
+    img?: string | null
+    name?: string | null
+    colorCode?: string | null
     role?: string | null
     email?: string | null
     phone?: string | null
@@ -37,46 +30,21 @@ interface ActionDialogProps {
   }
   deleteType?: 'doctor' | 'staff' | 'patient' | 'payment' | 'bill'
 }
-export const ActionDialog = ({
+
+export function ActionDialog({
   id,
   data,
   type,
   deleteType,
-}: ActionDialogProps) => {
-  const router = useRouter()
-  const [loading, setLoading] = useState(false)
-
+}: ActionDialogProps) {
+  // Handles the deletion confirmation dialog
   if (type === 'delete') {
-    const handleDelete = async () => {
-      try {
-        setLoading(true)
-
-        if (!deleteType) {
-          toast.error('Delete type is not specified')
-          setLoading(false)
-          return
-        }
-        const res = await trpc.admin.deleteData({ id, deleteType })
-
-        if (res.success) {
-          toast.success('Record deleted successfully')
-          router.refresh()
-        } else {
-          toast.error('Failed to delete record')
-        }
-      } catch (_error) {
-        toast.error('Something went wrong')
-      } finally {
-        setLoading(false)
-      }
-    }
-
     return (
       <Dialog>
         <DialogTrigger asChild>
           <Button
             className='flex items-center justify-center rounded-full text-red-500'
-            variant={'outline'}
+            variant='outline'
           >
             <Trash2
               className='text-red-500'
@@ -106,20 +74,16 @@ export const ActionDialog = ({
               <DialogClose asChild>
                 <Button
                   className='px-4 py-2'
-                  variant={'outline'}
+                  variant='outline'
                 >
                   Cancel
                 </Button>
               </DialogClose>
 
-              <Button
-                className='bg-destructive px-4 py-2 font-medium text-sm text-white hover:bg-destructive hover:text-white'
-                disabled={loading}
-                onClick={handleDelete}
-                variant='outline'
-              >
-                Yes. Delete
-              </Button>
+              <DeleteButton
+                deleteType={deleteType}
+                id={id}
+              />
             </div>
           </div>
         </DialogContent>
@@ -127,13 +91,14 @@ export const ActionDialog = ({
     )
   }
 
+  // Handles the staff information dialog
   if (type === 'staff') {
     return (
       <Dialog>
         <DialogTrigger asChild>
           <Button
-            className='flex items-center justify-center rounded-full text-blue-600 text-blue-600/10 hover:underline'
-            variant={'outline'}
+            className='flex items-center justify-center rounded-full text-blue-600 hover:underline'
+            variant='outline'
           >
             View
           </Button>
@@ -165,8 +130,7 @@ export const ActionDialog = ({
           </div>
 
           <div className='mt-10 space-y-6'>
-            <div className='flex flex-col gap-y-4 md:flex-row md:flex-wrap md:items-center md:gap-x-0 xl:justify-between'>
-              {/* <SmallCard label="Full Name" value={data?.name} /> */}
+            <div className='flex flex-col gap-y-4 md:flex-row md:flex-wrap xl:justify-between'>
               <SmallCard
                 label='Email Address'
                 value={data?.email ?? 'N/A'}
@@ -184,7 +148,7 @@ export const ActionDialog = ({
               />
             </div>
 
-            <div className='flex flex-col gap-y-4 md:flex-row md:flex-wrap md:items-center md:gap-x-0 xl:justify-between'>
+            <div className='flex flex-col gap-y-4 md:flex-row md:flex-wrap xl:justify-between'>
               <SmallCard
                 label='Role'
                 value={data?.role ?? 'N/A'}
@@ -203,5 +167,60 @@ export const ActionDialog = ({
       </Dialog>
     )
   }
+
+  // Handles the doctor information dialog (placeholder)
+  if (type === 'doctor') {
+    return (
+      <Dialog>
+        <DialogTrigger asChild>
+          <Button
+            className='flex items-center justify-center rounded-full text-green-600 hover:underline'
+            variant='outline'
+          >
+            View
+          </Button>
+        </DialogTrigger>
+
+        <DialogContent className='max-h-[90%] max-w-[300px] overflow-y-auto p-8 md:max-w-2xl'>
+          <DialogTitle className='mb-4 font-semibold text-gray-600 text-lg'>
+            Doctor Information
+          </DialogTitle>
+          <div className='flex justify-between'>
+            <div className='flex items-center gap-3'>
+              <ProfileImage
+                bgColor={data?.colorCode ?? '0000'}
+                className='xl:size-20'
+                name={data?.name ?? ''}
+                textClassName='xl:text-2xl'
+                url={data?.img ?? ''}
+              />
+              <div className='flex flex-col'>
+                <p className='font-semibold text-xl'>{data?.name}</p>
+                <span className='text-gray-600 text-sm capitalize md:text-base'>
+                  {data?.department ?? 'N/A'}
+                </span>
+                <span className='text-green-500 text-sm'>Doctor</span>
+              </div>
+            </div>
+          </div>
+          {/* Add more doctor-specific details here */}
+          <div className='mt-10 space-y-6'>
+            <div className='flex flex-col gap-y-4 md:flex-row md:flex-wrap xl:justify-between'>
+              <SmallCard
+                label='Email Address'
+                value={data?.email ?? 'N/A'}
+              />
+              <SmallCard
+                label='Phone Number'
+                value={data?.phone ?? 'N/A'}
+              />
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
+    )
+  }
+
+  // Return null if the type is not recognized
   return null
 }

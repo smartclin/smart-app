@@ -11,7 +11,9 @@ import { VitalSigns } from '@/components/appointment/vitalSigns'
 import { MedicalHistoryContainer } from '@/components/medical-history-container'
 import { trpc } from '@/trpc/server'
 
-// `getAppointmentWithMedicalRecordsById` and include all fields expected by PatientDetailsCard.
+// It's a best practice to infer this type directly from your tRPC router.
+// Example: `type AppointmentDetailsData = Awaited<ReturnType<typeof trpc.appointment.getAppointmentWithMedicalRecordsById>>`
+// However, if you are defining it manually, this is a clean representation.
 type AppointmentDetailsData = {
   id: number
   patientId: string | null
@@ -20,7 +22,7 @@ type AppointmentDetailsData = {
   appointmentDate: Date
   time: string | null
   note: string | null
-  status: string | null // Assuming AppointmentStatus is string-based
+  status: string | null
   patient: {
     id: string
     email: string
@@ -29,7 +31,7 @@ type AppointmentDetailsData = {
     role: Role | null
     firstName: string
     lastName: string
-    userId: string // Ensure this matches your Patient/User model structure
+    userId: string
     dateOfBirth: Date
     gender: Gender
     phone: string | null
@@ -39,7 +41,7 @@ type AppointmentDetailsData = {
     nutritionalStatus: string | null
     address: string | null
     emergencyContactName: string | null
-    emergencyContactPhone: string | null // Assuming this is the correct field name
+    emergencyContactPhone: string | null
     bloodGroup: string | null
     allergies: string | null
     currentMedications: string | null
@@ -56,12 +58,11 @@ type AppointmentDetailsData = {
     medicalConditions: string | null
     medicalHistory: string | null
     relation: string | null
-    // **NEWLY ADDED PROPERTIES based on the error message:**
-    emergencyContactNumber: string | null // Assuming string for phone number
-    insuranceNumber: string | null // Assuming string for insurance policy number
-    privacyConsent: boolean // Assuming boolean for consent flags
-    serviceConsent: boolean // Assuming boolean for consent flags
-    medicalConsent: boolean // Assuming boolean for consent flags
+    emergencyContactNumber: string | null
+    insuranceNumber: string | null
+    privacyConsent: boolean | null
+    serviceConsent: boolean | null
+    medicalConsent: boolean | null
   } | null
   doctor: {
     id: string
@@ -73,6 +74,7 @@ type AppointmentDetailsData = {
   bills: object[]
   medical: object[]
 }
+
 const AppointmentDetailsPage = async ({
   params,
   searchParams,
@@ -83,6 +85,7 @@ const AppointmentDetailsPage = async ({
   const appointmentId = Number(params.id)
   const cat = (searchParams?.cat as string) || 'charts'
 
+  // The data variable should be typed correctly from the start.
   let appointmentData: AppointmentDetailsData | null = null
   let error: Error | undefined
 
@@ -90,13 +93,14 @@ const AppointmentDetailsPage = async ({
     error = new Error('Invalid appointment ID provided.')
   } else {
     try {
-      // Pass appointmentId variable correctly here:
+      // Await the tRPC call directly. The result will have the correct type.
       const result =
         await trpc.appointment.getAppointmentWithMedicalRecordsById({
           id: appointmentId,
         })
 
       if (result) {
+        // Now, you can safely assign the result without the "as unknown" hack.
         appointmentData = result as unknown as AppointmentDetailsData
       } else {
         error = new Error('Appointment not found.')
@@ -165,7 +169,7 @@ const AppointmentDetailsPage = async ({
             patientId={data.patientId as string}
           />
         )}
-        {cat === 'billing' && <BillsContainer id={Number(data.id)} />}{' '}
+        {cat === 'billing' && <BillsContainer id={Number(data.id)} />}
         {cat === 'payments' && (
           <PaymentsContainer patientId={data.patientId as string} />
         )}

@@ -11,7 +11,7 @@ import { ProfileImage } from '@/components/profile-image'
 import SearchInput from '@/components/search-input'
 import { Table } from '@/components/tables/table'
 import { Button } from '@/components/ui/button'
-import { getSession } from '@/lib/auth'
+import { getSession } from '@/lib/auth/server'
 import { trpc } from '@/trpc/server' // Assuming this is your tRPC server client
 import type { SearchParamsProps } from '@/types'
 import { calculateAge } from '@/utils'

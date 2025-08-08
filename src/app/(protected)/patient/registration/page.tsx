@@ -1,5 +1,5 @@
 import { NewPatient } from '@/components/new-patient'
-import { getSession } from '@/lib/auth'
+import { getSession } from '@/lib/auth/server'
 import { trpc } from '@/trpc/server'
 
 const Registration = async () => {

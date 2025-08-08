@@ -3,7 +3,7 @@
 import type { AppointmentStatus } from '@prisma/client'
 
 import { db } from '@/db'
-import { getSession } from '@/lib/auth'
+import { getSession } from '@/lib/auth/server'
 import { AppointmentSchema, VitalSignsSchema } from '@/lib/schema'
 import type { AppointmentInput, VitalSignsInput } from '@/types/data-types'
 

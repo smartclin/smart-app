@@ -5,7 +5,7 @@ import type { Payment as PaymentPrismaType } from '@prisma/client'
 import type { z } from 'zod'
 
 import db from '@/db'
-import { getSession } from '@/lib/auth'
+import { getSession } from '@/lib/auth/server'
 import {
   AddNewBillInputSchema,
   type DiagnosisFormData,

@@ -1,6 +1,6 @@
 import Link from 'next/link'
 
-import { getSession } from '@/lib/auth'
+import { getSession } from '@/lib/auth/server'
 import type { AvailableDoctorProps } from '@/types/data-types'
 import { daysOfWeek } from '@/utils'
 import { checkRole } from '@/utils/roles'

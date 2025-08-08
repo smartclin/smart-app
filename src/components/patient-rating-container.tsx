@@ -1,5 +1,5 @@
 import db from '@/db'
-import { getSession } from '@/lib/auth'
+import { getSession } from '@/lib/auth/server'
 
 import { RatingList } from './rating-list'
 

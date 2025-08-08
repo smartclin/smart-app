@@ -2,7 +2,7 @@ import type { AppointmentStatus } from '@prisma/client'
 import { EllipsisVertical, User } from 'lucide-react'
 import Link from 'next/link'
 
-import { getSession } from '@/lib/auth'
+import { getSession } from '@/lib/auth/server'
 import { checkRole } from '@/utils/roles'
 
 import { AppointmentActionDialog } from './appointment-action-dialog'

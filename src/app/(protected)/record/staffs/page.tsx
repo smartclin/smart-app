@@ -8,7 +8,7 @@ import { Pagination } from '@/components/pagination'
 import { ProfileImage } from '@/components/profile-image'
 import SearchInput from '@/components/search-input'
 import { Table } from '@/components/tables/table'
-import { getSession } from '@/lib/auth'
+import { getSession } from '@/lib/auth/server'
 import { trpc } from '@/trpc/server' // API for server fetch
 import { checkRole } from '@/utils/roles'
 import { DATA_LIMIT } from '@/utils/seetings'

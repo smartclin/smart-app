@@ -2,7 +2,7 @@ import type { AppointmentStatus } from '@prisma/client'
 import { format } from 'date-fns'
 import { Calendar, Phone } from 'lucide-react'
 
-import { getSession } from '@/lib/auth'
+import { getSession } from '@/lib/auth/server'
 import { trpc } from '@/trpc/server'
 import { calculateAge, formatDateTime } from '@/utils'
 import { checkRole } from '@/utils/roles'

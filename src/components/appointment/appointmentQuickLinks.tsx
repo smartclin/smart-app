@@ -1,6 +1,6 @@
 import Link from 'next/link'
 
-import { getSession } from '@/lib/auth'
+import { getSession } from '@/lib/auth/server'
 import { checkRole } from '@/utils/roles'
 
 import { ReviewForm } from '../dialogs/review-form'

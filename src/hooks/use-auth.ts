@@ -2,9 +2,10 @@
 import { useCallback, useEffect, useState } from 'react'
 
 import { useSession } from '@/lib/auth/auth-client'
-import { type User, UserRole } from '@/types'
+import { getSession } from '@/lib/auth/server'
+import type { UserRole } from '@/lib/routes'
 
-import { getSession, type Session } from '../lib/auth'
+import type { Session, User } from '../lib/auth'
 
 export interface AuthUser {
   twoFactorEnabled: boolean | null
@@ -116,7 +117,7 @@ export function useCurrentUser(): User | null {
   if (!session?.user) return null
 
   // Map better-auth user to our User type
-  const betterAuthUser = session.user as unknown as AuthUser
+  const betterAuthUser = session.user
   return {
     id: betterAuthUser.id,
     email: betterAuthUser.email,

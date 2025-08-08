@@ -12,7 +12,7 @@ import { ThemeToggle } from '@/components/theme/toggle'
 import { Toast } from '@/components/toast'
 import { Button } from '@/components/ui/button'
 import { appRoutes } from '@/config'
-import { getServerSession } from '@/lib/auth'
+import { getServerSession } from '@/lib/auth/server'
 import { api, HydrateClient } from '@/trpc/server'
 import { getUserRole } from '@/utils/roles'
 

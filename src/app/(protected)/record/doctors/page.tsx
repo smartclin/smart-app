@@ -9,7 +9,7 @@ import { Pagination } from '@/components/pagination'
 import { ProfileImage } from '@/components/profile-image'
 import SearchInput from '@/components/search-input'
 import { Table } from '@/components/tables/table'
-import { getSession } from '@/lib/auth'
+import { getSession } from '@/lib/auth/server'
 import { trpc } from '@/trpc/server' // Import the tRPC server client
 import type { SearchParamsProps } from '@/types'
 import { checkRole } from '@/utils/roles'

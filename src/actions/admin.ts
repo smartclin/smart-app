@@ -3,7 +3,8 @@
 import z, { treeifyError } from 'zod'
 
 import db from '@/db'
-import { auth, getServerSession } from '@/lib/auth'
+import { auth } from '@/lib/auth'
+import { getServerSession } from '@/lib/auth/server'
 import {
   DoctorSchema,
   ServicesSchema,

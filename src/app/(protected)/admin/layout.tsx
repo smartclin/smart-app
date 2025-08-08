@@ -3,7 +3,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { redirect } from 'next/navigation'
 
-import { getSession } from '@/lib/auth'
+import { getSession } from '@/lib/auth/server'
 import { cn } from '@/lib/utils'
 
 interface AdminLayoutProps {

@@ -8,7 +8,7 @@ import { Pagination } from '@/components/pagination'
 import { ProfileImage } from '@/components/profile-image'
 import SearchInput from '@/components/search-input'
 import { Table } from '@/components/tables/table'
-import { getServerSession } from '@/lib/auth'
+import { getServerSession } from '@/lib/auth/server'
 import { cn } from '@/lib/utils'
 // import { getPaymentRecords } from '@/utils/services/payments'; // REMOVE this import
 import { api } from '@/trpc/server' // Import the tRPC server client

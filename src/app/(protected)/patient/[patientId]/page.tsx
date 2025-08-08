@@ -5,7 +5,7 @@ import { MedicalHistoryContainer } from '@/components/medical-history-container'
 import { PatientRatingContainer } from '@/components/patient-rating-container'
 import { ProfileImage } from '@/components/profile-image'
 import { Card } from '@/components/ui/card'
-import { getSession } from '@/lib/auth'
+import { getSession } from '@/lib/auth/server'
 import { trpc } from '@/trpc/server'
 
 interface ParamsProps {

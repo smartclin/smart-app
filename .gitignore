@@ -12,7 +12,7 @@
 src/lib/db/client
 # testing
 /coverage
-/prisma/generated
+/generated
 /prisma/migration
 /generated/*
 # next.js

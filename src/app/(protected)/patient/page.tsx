@@ -9,7 +9,7 @@ import { PatientRatingContainer } from '@/components/patient-rating-container'
 import { StatCard } from '@/components/stat-card'
 import { RecentAppointments } from '@/components/tables/recent-appointment'
 import { Button } from '@/components/ui/button'
-import { getSession } from '@/lib/auth'
+import { getSession } from '@/lib/auth/server'
 import { trpc } from '@/trpc/server'
 import type { AvailableDoctorProps } from '@/types/data-types'
 

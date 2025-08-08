@@ -15,6 +15,7 @@
     "noUncheckedIndexedAccess": true,
     "paths": {
       "@/*": ["./src/*"],
+      "@/trpc/server": ["src/app/_lib/server"],
       "@prisma/client": ["generated/client/client"]
     },
     "plugins": [

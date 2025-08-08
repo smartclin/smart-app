@@ -9,7 +9,6 @@ const withBundleAnalyzer = initializeBundleAnalyzer({
 })
 
 const isProd = process.env.NODE_ENV === 'production'
-const isDev = process.env.NODE_ENV === 'development'
 
 const nextConfig: NextConfig = {
   // TypeScript and ESLint
@@ -154,7 +153,7 @@ const nextConfig: NextConfig = {
   },
 
   // Webpack customizations for better optimization
-  webpack: (config, { buildId, dev, isServer, defaultLoaders, webpack }) => {
+  webpack: (config, { dev, isServer }) => {
     // Optimize bundle splitting
     if (!dev && !isServer) {
       config.optimization.splitChunks = {
