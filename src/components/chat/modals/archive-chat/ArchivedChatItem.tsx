@@ -1,50 +1,50 @@
-'use client';
+'use client'
 
-import { IconRestore, IconTrash } from '@tabler/icons-react';
-import { useRouter } from 'next/navigation';
-import { toast } from 'sonner';
+import { IconRestore, IconTrash } from '@tabler/icons-react'
+import { useRouter } from 'next/navigation'
+import { toast } from 'sonner'
 
-import { Button } from '@/components/ui/button';
-import { trpc } from '@/trpc/client';
-import type { ChatGetOneOutput } from '@/types';
+import { Button } from '@/components/ui/button'
+import { trpc } from '@/trpc/client'
+import type { ChatGetOneOutput } from '@/types'
 
 interface Props {
-  chat: ChatGetOneOutput;
-  onOpenChange: (open: boolean) => void;
+  chat: ChatGetOneOutput
+  onOpenChange: (open: boolean) => void
 }
 
 const ArchivedChatItem = ({ chat, onOpenChange }: Props) => {
-  const router = useRouter();
+  const router = useRouter()
 
-  const utils = trpc.useUtils();
+  const utils = trpc.useUtils()
 
   const deleteChat = trpc.chats.deleteOne.useMutation({
     onSuccess: () => {
-      toast.success('Chat Deleted');
-      utils.chats.getMany.invalidate();
-      onOpenChange(false);
-      router.push('/');
+      toast.success('Chat Deleted')
+      utils.chats.getMany.invalidate()
+      onOpenChange(false)
+      router.push('/')
     },
-    onError: error => {
+    onError: (error) => {
       toast.error('Failed to delete chat', {
-        description: error.message || 'Something went wrong. Please try again.'
-      });
-    }
-  });
+        description: error.message || 'Something went wrong. Please try again.',
+      })
+    },
+  })
 
   const restoreChat = trpc.chats.restore.useMutation({
-    onSuccess: data => {
-      toast.success('Chat Restored');
-      utils.chats.getMany.invalidate();
-      utils.chats.getOne.invalidate({ chatId: data.id });
-      onOpenChange(false);
+    onSuccess: (data) => {
+      toast.success('Chat Restored')
+      utils.chats.getMany.invalidate()
+      utils.chats.getOne.invalidate({ chatId: data.id })
+      onOpenChange(false)
     },
-    onError: error => {
+    onError: (error) => {
       toast.error('Failed to restore chat', {
-        description: error.message || 'Something went wrong. Please try again.'
-      });
-    }
-  });
+        description: error.message || 'Something went wrong. Please try again.',
+      })
+    },
+  })
 
   return (
     <div className='flex w-full items-center justify-between rounded-lg p-1 sm:pl-3 md:hover:bg-muted-foreground/5'>
@@ -54,7 +54,7 @@ const ArchivedChatItem = ({ chat, onOpenChange }: Props) => {
           disabled={restoreChat.isPending}
           onClick={() => {
             if (chat) {
-              restoreChat.mutate({ chatId: chat?.id });
+              restoreChat.mutate({ chatId: chat?.id })
             }
           }}
           size='icon'
@@ -66,7 +66,7 @@ const ArchivedChatItem = ({ chat, onOpenChange }: Props) => {
           disabled={deleteChat.isPending}
           onClick={() => {
             if (chat) {
-              deleteChat.mutate({ chatId: chat.id });
+              deleteChat.mutate({ chatId: chat.id })
             }
           }}
           size='icon'
@@ -76,7 +76,7 @@ const ArchivedChatItem = ({ chat, onOpenChange }: Props) => {
         </Button>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default ArchivedChatItem;
+export default ArchivedChatItem

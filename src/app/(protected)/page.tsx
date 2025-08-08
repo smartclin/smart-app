@@ -1,102 +1,106 @@
-import type { AppointmentStatus } from '@prisma/client';
-import { format } from 'date-fns';
-import { BriefcaseBusiness } from 'lucide-react';
+import type { AppointmentStatus } from '@prisma/client'
+import { format } from 'date-fns'
+import { BriefcaseBusiness } from 'lucide-react'
 
-import { AppointmentActionOptions } from '@/components/appointment-actions';
-import { AppointmentContainer } from '@/components/appointment-container';
-import { AppointmentStatusIndicator } from '@/components/appointment-status-indicator';
-import { Pagination } from '@/components/pagination';
-import { ProfileImage } from '@/components/profile-image';
-import SearchInput from '@/components/search-input';
-import { Table } from '@/components/tables/table';
-import { ViewAppointment } from '@/components/view-appointment';
-import { getSession } from '@/lib/auth';
-import { HydrateClient, trpc } from '@/trpc/server';
-import { checkRole, getRole } from '@/utils/roles';
-import { DATA_LIMIT } from '@/utils/seetings';
+import { AppointmentActionOptions } from '@/components/appointment-actions'
+import { AppointmentContainer } from '@/components/appointment-container'
+import { AppointmentStatusIndicator } from '@/components/appointment-status-indicator'
+import { Pagination } from '@/components/pagination'
+import { ProfileImage } from '@/components/profile-image'
+import SearchInput from '@/components/search-input'
+import { Table } from '@/components/tables/table'
+import { ViewAppointment } from '@/components/view-appointment'
+import { getSession } from '@/lib/auth'
+import { HydrateClient, trpc } from '@/trpc/server'
+import { checkRole, getRole } from '@/utils/roles'
+import { DATA_LIMIT } from '@/utils/seetings'
 
 type AppointmentItem = {
-  id: number;
-  patientId: string | null;
-  doctorId: string | null;
-  type: string | null;
-  appointmentDate: Date;
-  time: string | null;
-  status: AppointmentStatus | null;
+  id: number
+  patientId: string | null
+  doctorId: string | null
+  type: string | null
+  appointmentDate: Date
+  time: string | null
+  status: AppointmentStatus | null
   patient: {
-    id: string;
-    firstName: string;
-    lastName: string;
-    phone: string | null;
-    gender: string;
-    img: string | null;
-    dateOfBirth: Date | null;
-    colorCode: string | null;
-  } | null;
+    id: string
+    firstName: string
+    lastName: string
+    phone: string | null
+    gender: string
+    img: string | null
+    dateOfBirth: Date | null
+    colorCode: string | null
+  } | null
   doctor: {
-    id: string;
-    name: string;
-    specialization: string | null;
-    colorCode: string | null;
-    img: string | null;
-  } | null;
-};
+    id: string
+    name: string
+    specialization: string | null
+    colorCode: string | null
+    img: string | null
+  } | null
+}
 
 // 2. Define the type for the complete successful response object
 // that your `getPatientAppointments` procedure returns.
 type AppointmentsApiSuccess = {
-  data: AppointmentItem[]; // The array of appointment items
-  totalPages: number;
-  totalRecord: number;
-  currentPage: number;
+  data: AppointmentItem[] // The array of appointment items
+  totalPages: number
+  totalRecord: number
+  currentPage: number
   // If your API also returns a 'success' boolean or 'message' on success, add them here.
   // Based on your previous procedure, it probably just returns the data and pagination.
   // If it *does* return `success: true` then add `success: true;` here.
-};
+}
 
 // --- Columns Definition ---
 const columns = [
   { header: 'Info', key: 'name' },
-  { header: 'Date', key: 'appointment_date', className: 'hidden md:table-cell' },
+  {
+    header: 'Date',
+    key: 'appointment_date',
+    className: 'hidden md:table-cell',
+  },
   { header: 'Time', key: 'time', className: 'hidden md:table-cell' },
   { header: 'Doctor', key: 'doctor', className: 'hidden md:table-cell' },
   { header: 'Status', key: 'status', className: 'hidden xl:table-cell' },
-  { header: 'Actions', key: 'action' }
-];
+  { header: 'Actions', key: 'action' },
+]
 
 // --- getQueryId Helper ---
 function getQueryId(
   userRole: string | undefined,
   id: string | undefined,
-  userId: string | undefined
+  userId: string | undefined,
 ): string | undefined {
-  if (userRole === 'ADMIN') return id;
-  if (userRole === 'DOCTOR' || userRole === 'STAFF') return id ?? userId;
-  return userRole === 'PATIENT' ? userId : undefined;
+  if (userRole === 'ADMIN') return id
+  if (userRole === 'DOCTOR' || userRole === 'STAFF') return id ?? userId
+  return userRole === 'PATIENT' ? userId : undefined
 }
 const Appointments = async (props: {
-  searchParams?: { [key: string]: string | string[] | undefined };
+  searchParams?: { [key: string]: string | string[] | undefined }
 }) => {
-  const searchParams = props.searchParams;
-  const session = await getSession();
-  const userId = session?.user.id;
-  const userRole = await getRole();
+  const searchParams = props.searchParams
+  const session = await getSession()
+  const userId = session?.user.id
+  const userRole = await getRole()
 
-  const isPatient = await checkRole(session, 'PATIENT');
+  const isPatient = await checkRole(session, 'PATIENT')
 
   // Convert 'page' to number with fallback to 1
-  const pageParam = typeof searchParams?.p === 'string' ? searchParams.p : '1';
-  const page = Number(pageParam);
-  const safePage = Number.isNaN(page) || page < 1 ? 1 : page;
+  const pageParam = typeof searchParams?.p === 'string' ? searchParams.p : '1'
+  const page = Number(pageParam)
+  const safePage = Number.isNaN(page) || page < 1 ? 1 : page
 
-  const searchQuery = typeof searchParams?.q === 'string' ? searchParams.q : '';
-  const id = typeof searchParams?.id === 'string' ? searchParams.id : undefined;
+  const searchQuery = typeof searchParams?.q === 'string' ? searchParams.q : ''
+  const id = typeof searchParams?.id === 'string' ? searchParams.id : undefined
 
-  const queryId = getQueryId(userRole, id, userId);
+  const queryId = getQueryId(userRole, id, userId)
 
   // Initialize `appointmentsResponse` to undefined, as it might fail
-  let appointmentsResponse: AppointmentsApiSuccess | undefined;
-  let error: Error | undefined;
+  let appointmentsResponse: AppointmentsApiSuccess | undefined
+  let error: Error | undefined
 
   try {
     // Pass numeric page
@@ -104,22 +108,24 @@ const Appointments = async (props: {
       page: safePage,
       search: searchQuery,
       id: queryId,
-      limit: DATA_LIMIT
-    })) as AppointmentsApiSuccess;
+      limit: DATA_LIMIT,
+    })) as AppointmentsApiSuccess
   } catch (err) {
-    error = err as Error;
-    console.error('Error fetching appointments in page.tsx:', error);
+    error = err as Error
+    console.error('Error fetching appointments in page.tsx:', error)
   }
 
   // --- Error and No Data Handling ---
   if (error) {
-    let errorMessage = 'An unexpected error occurred.';
+    let errorMessage = 'An unexpected error occurred.'
     if (error instanceof Error) {
-      errorMessage = `Error loading appointments: ${error.message}`;
+      errorMessage = `Error loading appointments: ${error.message}`
     }
     return (
-      <div className='flex h-screen items-center justify-center text-red-500'>{errorMessage}</div>
-    );
+      <div className='flex h-screen items-center justify-center text-red-500'>
+        {errorMessage}
+      </div>
+    )
   }
 
   // If there was no error but no response or data, display a message.
@@ -130,19 +136,19 @@ const Appointments = async (props: {
       <div className='flex h-screen items-center justify-center text-red-500'>
         No appointments data available.
       </div>
-    );
+    )
   }
 
   // At this point, `appointmentsResponse` is definitely `AppointmentsApiSuccess`.
   // Destructure properties directly.
-  const { data, totalPages, totalRecord, currentPage } = appointmentsResponse;
+  const { data, totalPages, totalRecord, currentPage } = appointmentsResponse
 
   // --- renderItem function definition ---
   const renderItem = (item: AppointmentItem) => {
     // Use AppointmentItem here
     const patientName = item?.patient
       ? `${item.patient.firstName ?? ''} ${item.patient.lastName ?? ''}`
-      : 'N/A';
+      : 'N/A'
 
     return (
       <tr
@@ -166,7 +172,9 @@ const Appointments = async (props: {
         </td>
 
         <td className='hidden md:table-cell'>
-          {item.appointmentDate ? format(new Date(item.appointmentDate), 'yyyy-MM-dd') : 'N/A'}
+          {item.appointmentDate
+            ? format(new Date(item.appointmentDate), 'yyyy-MM-dd')
+            : 'N/A'}
         </td>
         <td className='hidden md:table-cell'>{item.time ?? 'N/A'}</td>
 
@@ -181,7 +189,9 @@ const Appointments = async (props: {
               />
             )}
             <div>
-              <h3 className='font-semibold uppercase'>{item.doctor?.name ?? 'N/A'}</h3>
+              <h3 className='font-semibold uppercase'>
+                {item.doctor?.name ?? 'N/A'}
+              </h3>
               <span className='text-xs capitalize md:text-sm'>
                 {item.doctor?.specialization ?? 'N/A'}
               </span>
@@ -206,8 +216,8 @@ const Appointments = async (props: {
           </div>
         </td>
       </tr>
-    );
-  };
+    )
+  }
 
   // --- Main Component Return (JSX) ---
   return (
@@ -220,7 +230,9 @@ const Appointments = async (props: {
               size={20}
             />
             <p className='font-semibold text-2xl'>{totalRecord}</p>
-            <span className='text-gray-600 text-sm xl:text-base'>total appointments</span>
+            <span className='text-gray-600 text-sm xl:text-base'>
+              total appointments
+            </span>
           </div>
 
           <div className='flex w-full items-center justify-between gap-2 lg:w-fit lg:justify-start'>
@@ -248,7 +260,7 @@ const Appointments = async (props: {
         </div>
       </div>
     </HydrateClient>
-  );
-};
+  )
+}
 
-export default Appointments;
+export default Appointments

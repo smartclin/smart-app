@@ -1,7 +1,7 @@
-'use client';
+'use client'
 
-import { getToolName, type ReasoningUIPart, type UIMessage } from 'ai';
-import equal from 'fast-deep-equal';
+import { getToolName, type ReasoningUIPart, type UIMessage } from 'ai'
+import equal from 'fast-deep-equal'
 import {
   CheckCircle,
   ChevronDownIcon,
@@ -9,46 +9,49 @@ import {
   Loader2,
   PocketKnife,
   SparklesIcon,
-  StopCircle
-} from 'lucide-react';
-import { AnimatePresence, motion } from 'motion/react';
-import { memo, useCallback, useEffect, useState } from 'react';
+  StopCircle,
+} from 'lucide-react'
+import { AnimatePresence, motion } from 'motion/react'
+import { memo, useCallback, useEffect, useState } from 'react'
 
-import { cn } from '@/lib/utils';
+import { cn } from '@/lib/utils'
 
-import { SpinnerIcon } from './icons';
-import { Markdown } from './markdown';
+import { SpinnerIcon } from './icons'
+import { Markdown } from './markdown'
 
 interface ReasoningMessagePartProps {
-  part: ReasoningUIPart;
-  isReasoning: boolean;
+  part: ReasoningUIPart
+  isReasoning: boolean
 }
 
-export function ReasoningMessagePart({ part, isReasoning }: ReasoningMessagePartProps) {
-  const [isExpanded, setIsExpanded] = useState(false);
+export function ReasoningMessagePart({
+  part,
+  isReasoning,
+}: ReasoningMessagePartProps) {
+  const [isExpanded, setIsExpanded] = useState(false)
 
   const variants = {
     collapsed: {
       height: 0,
       opacity: 0,
       marginTop: 0,
-      marginBottom: 0
+      marginBottom: 0,
     },
     expanded: {
       height: 'auto',
       opacity: 1,
       marginTop: '1rem',
-      marginBottom: 0
-    }
-  };
+      marginBottom: 0,
+    },
+  }
 
   const memoizedSetIsExpanded = useCallback((value: boolean) => {
-    setIsExpanded(value);
-  }, []);
+    setIsExpanded(value)
+  }, [])
 
   useEffect(() => {
-    memoizedSetIsExpanded(isReasoning);
-  }, [isReasoning, memoizedSetIsExpanded]);
+    memoizedSetIsExpanded(isReasoning)
+  }, [isReasoning, memoizedSetIsExpanded])
 
   return (
     <div className='flex flex-col'>
@@ -63,11 +66,14 @@ export function ReasoningMessagePart({ part, isReasoning }: ReasoningMessagePart
         <div className='flex flex-row items-center gap-2'>
           <div className='font-medium text-sm'>Reasoned for a few seconds</div>
           <button
-            className={cn('cursor-pointer rounded-full hover:bg-zinc-200 dark:hover:bg-zinc-800', {
-              'bg-zinc-200 dark:bg-zinc-800': isExpanded
-            })}
+            className={cn(
+              'cursor-pointer rounded-full hover:bg-zinc-200 dark:hover:bg-zinc-800',
+              {
+                'bg-zinc-200 dark:bg-zinc-800': isExpanded,
+              },
+            )}
             onClick={() => {
-              setIsExpanded(!isExpanded);
+              setIsExpanded(!isExpanded)
             }}
             type='button'
           >
@@ -96,18 +102,18 @@ export function ReasoningMessagePart({ part, isReasoning }: ReasoningMessagePart
         )}
       </AnimatePresence>
     </div>
-  );
+  )
 }
 
 const PurePreviewMessage = ({
   message,
   isLatestMessage,
-  status
+  status,
 }: {
-  message: UIMessage;
-  isLoading: boolean;
-  status: 'error' | 'submitted' | 'streaming' | 'ready';
-  isLatestMessage: boolean;
+  message: UIMessage
+  isLoading: boolean
+  status: 'error' | 'submitted' | 'streaming' | 'ready'
+  isLatestMessage: boolean
 }) => {
   return (
     <AnimatePresence key={message.id}>
@@ -121,7 +127,7 @@ const PurePreviewMessage = ({
         <div
           className={cn(
             'flex w-full gap-4 group-data-[role=user]/message:ml-auto group-data-[role=user]/message:max-w-2xl',
-            'group-data-[role=user]/message:w-fit'
+            'group-data-[role=user]/message:w-fit',
           )}
         >
           {message.role === 'assistant' && (
@@ -146,16 +152,16 @@ const PurePreviewMessage = ({
                       <div
                         className={cn('flex flex-col gap-4', {
                           'rounded-tl-xl rounded-tr-xl rounded-bl-xl bg-secondary px-3 py-2 text-secondary-foreground':
-                            message.role === 'user'
+                            message.role === 'user',
                         })}
                       >
                         <Markdown>{part.text}</Markdown>
                       </div>
                     </motion.div>
-                  );
+                  )
                 // TODO: add your other tools here
                 case 'tool-getWeather': {
-                  const { state } = part;
+                  const { state } = part
 
                   return (
                     <motion.div
@@ -192,7 +198,7 @@ const PurePreviewMessage = ({
                         </div>
                       </div>
                     </motion.div>
-                  );
+                  )
                 }
                 case 'reasoning':
                   return (
@@ -206,21 +212,21 @@ const PurePreviewMessage = ({
                       key={`message-${message.id}-${i}`}
                       part={part}
                     />
-                  );
+                  )
                 default:
-                  return null;
+                  return null
               }
             })}
           </div>
         </div>
       </motion.div>
     </AnimatePresence>
-  );
-};
+  )
+}
 
 export const Message = memo(PurePreviewMessage, (prevProps, nextProps) => {
-  if (prevProps.status !== nextProps.status) return false;
-  if (!equal(prevProps.message.parts, nextProps.message.parts)) return false;
+  if (prevProps.status !== nextProps.status) return false
+  if (!equal(prevProps.message.parts, nextProps.message.parts)) return false
 
-  return true;
-});
+  return true
+})

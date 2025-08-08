@@ -1,11 +1,18 @@
 // src/config.ts
-export * from './chat';
-export * from './constants';
+export * from './chat'
+export * from './constants'
 
-import type { Role } from '@prisma/client';
-import { Baby, CalendarDays, Shield, Syringe, UserPlus, Wallet } from 'lucide-react';
+import type { Role } from '@prisma/client'
+import {
+  Baby,
+  CalendarDays,
+  Shield,
+  Syringe,
+  UserPlus,
+  Wallet,
+} from 'lucide-react'
 
-import { env } from '../env'; // Assuming you have a file to load environment variables, like src/env.ts or next.config.js
+import { env } from '../env' // Assuming you have a file to load environment variables, like src/env.ts or next.config.js
 /**
  * ============================================================================
  * Clinic and Application Core Configuration
@@ -56,7 +63,7 @@ export const metaData = {
     'Infant Care Hurghada',
     'Adolescent Health',
     'Child Development',
-    'Family Doctor Hurghada'
+    'Family Doctor Hurghada',
   ],
 
   // Specific author/creator information
@@ -71,11 +78,11 @@ export const metaData = {
   // Contact Information for easier access and local SEO
   contactEmail: 'info@drhazemali.com', // Official clinic email
   contactPhone: '+20 123 456 7890', // Official clinic phone number
-  address: 'Your Clinic Full Address, Hurghada, Red Sea Governorate, Egypt' // Full physical address
+  address: 'Your Clinic Full Address, Hurghada, Red Sea Governorate, Egypt', // Full physical address
 
   // Optional: A CDN URL if you host assets separately
   // cdn: "https://cdn.drhazemali.com/",
-};
+}
 // --- 1. Site Metadata ---
 // Used for SEO, Open Graph, and general site branding.
 export const siteMetadata = {
@@ -96,7 +103,7 @@ export const siteMetadata = {
     'Child Specialist Egypt',
     "Women's Health Egypt",
     'Medical Clinic Hurghada',
-    'Red Sea Healthcare'
+    'Red Sea Healthcare',
   ],
   authors: [{ name: 'Hazem A. Ali', url: 'https://hazemali.dev' }], // Replace with actual author info
   creator: 'Hazem A. Ali',
@@ -108,17 +115,17 @@ export const siteMetadata = {
     mondayToFriday: '9:00 AM - 8:00 PM',
     saturday: '10:00 AM - 4:00 PM',
     sunday: 'Closed',
-    emergency: '24/7 On-Call'
+    emergency: '24/7 On-Call',
   },
-  googleMapsLink: 'https://maps.app.goo.gl/YOUR_CLINIC_LOCATION_LINK' // Replace with your actual Google Maps link
-};
+  googleMapsLink: 'https://maps.app.goo.gl/YOUR_CLINIC_LOCATION_LINK', // Replace with your actual Google Maps link
+}
 
-export * from './constants';
+export * from './constants'
 // --- 2. External Services Configuration ---
 // Public keys and IDs for third-party services.
 export const externalServices = {
   // Add other services like Sentry, Crisp Chat, etc.
-};
+}
 
 // --- 3. Routing and Navigation ---
 // Centralized definitions for internal and external navigation links.
@@ -145,8 +152,8 @@ export const appRoutes = {
   // Add specific routes for women's health and child health sections
   womensHealth: '/womens-health',
   childHealth: '/child-health',
-  scheduleAppointment: '/appointments'
-};
+  scheduleAppointment: '/appointments',
+}
 
 export const navLinks = {
   mainNav: [
@@ -158,24 +165,24 @@ export const navLinks = {
     {
       title: 'Book Appointment',
       href: appRoutes.scheduleAppointment,
-      highlight: true
-    }
+      highlight: true,
+    },
   ],
   dashboardNav: [
     {
       title: 'Overview',
       href: appRoutes.dashboard,
-      roles: ['ADMIN', 'DOCTOR', 'STAFF'] as Role[]
+      roles: ['ADMIN', 'DOCTOR', 'STAFF'] as Role[],
     },
     {
       title: 'Appointments',
       href: appRoutes.appointments,
-      roles: ['ADMIN', 'DOCTOR', 'STAFF'] as Role[]
+      roles: ['ADMIN', 'DOCTOR', 'STAFF'] as Role[],
     },
     {
       title: 'Patients',
       href: appRoutes.patients,
-      roles: ['ADMIN', 'DOCTOR', 'STAFF'] as Role[]
+      roles: ['ADMIN', 'DOCTOR', 'STAFF'] as Role[],
     },
     { title: 'Doctors', href: appRoutes.doctors, roles: ['ADMIN'] as Role[] },
     { title: 'Staff', href: appRoutes.staff, roles: ['ADMIN'] as Role[] },
@@ -183,24 +190,24 @@ export const navLinks = {
     {
       title: 'Services Offered',
       href: appRoutes.services,
-      roles: ['ADMIN', 'STAFF'] as Role[]
+      roles: ['ADMIN', 'STAFF'] as Role[],
     },
     {
       title: 'Prescriptions',
       href: appRoutes.prescriptions,
-      roles: ['ADMIN', 'DOCTOR', 'STAFF'] as Role[]
+      roles: ['ADMIN', 'DOCTOR', 'STAFF'] as Role[],
     },
     {
       title: 'Vaccinations',
       href: appRoutes.vaccinations,
-      roles: ['ADMIN', 'DOCTOR', 'STAFF'] as Role[]
+      roles: ['ADMIN', 'DOCTOR', 'STAFF'] as Role[],
     },
     {
       title: 'Growth Standards',
       href: appRoutes.growthStandards,
-      roles: ['ADMIN', 'DOCTOR', 'STAFF'] as Role[]
+      roles: ['ADMIN', 'DOCTOR', 'STAFF'] as Role[],
     },
-    { title: 'Settings', href: appRoutes.settings, roles: ['ADMIN'] as Role[] }
+    { title: 'Settings', href: appRoutes.settings, roles: ['ADMIN'] as Role[] },
     // Add more specific dashboard links with role-based access if needed
   ],
   socialLinks: [
@@ -208,47 +215,49 @@ export const navLinks = {
     { name: 'instagram', href: 'https://instagram.com/drhazemibclc' },
     { name: 'linkedin', href: 'https://linkedin.com/drhazemibclc' },
     { name: 'youtube', href: 'https://youtube.com/@drhazemibclc' },
-    { name: 'email', href: 'hazem032012@gmail.com' }
+    { name: 'email', href: 'hazem032012@gmail.com' },
     // Add more social media links
-  ]
-};
+  ],
+}
 
 export const clinicFeatures = [
   {
     title: 'Secure Patient Records',
     description:
       'Ensure the highest level of privacy and security for all patient data, compliant with health regulations.',
-    icon: Shield
+    icon: Shield,
   },
   {
     title: 'Effortless Appointments',
     description:
       'Manage bookings, send automated reminders, and integrate with calendars for seamless scheduling.',
-    icon: CalendarDays
+    icon: CalendarDays,
   },
   {
     title: 'Streamlined Registration',
-    description: 'Simplify patient intake with easy-to-use forms and quick record creation.',
-    icon: UserPlus
+    description:
+      'Simplify patient intake with easy-to-use forms and quick record creation.',
+    icon: UserPlus,
   },
   {
     title: 'Comprehensive Vaccinations',
     description:
       'Track and manage vaccination schedules effortlessly, ensuring timely immunizations.',
-    icon: Syringe
+    icon: Syringe,
   },
   {
     title: 'Integrated Billing & Payments',
     description:
       'Handle all financial transactions, insurance claims, and billing with clarity and ease.',
-    icon: Wallet
+    icon: Wallet,
   },
   {
     title: 'Pediatric Growth Tracking',
-    description: 'Monitor child development with intuitive growth charts and milestones tracking.',
-    icon: Baby
-  }
-];
+    description:
+      'Monitor child development with intuitive growth charts and milestones tracking.',
+    icon: Baby,
+  },
+]
 
 // --- 4. Application Constants ---
 export const appConstants = {
@@ -256,23 +265,23 @@ export const appConstants = {
   PAGINATION_LIMIT: 10,
   DEBOUNCE_TIME_MS: 300,
   PASSWORD_MIN_LENGTH: 8,
-  OTP_EXPIRATION_MINUTES: 5
+  OTP_EXPIRATION_MINUTES: 5,
   // Add any other application-wide constants
-};
+}
 
 // --- 5. Theming Configuration (if not fully handled by next-themes props) ---
 export const themeConfig = {
   defaultTheme: 'system', // 'light', 'dark', 'system'
   themeAttribute: 'class', // 'class' or 'data-theme'
-  enableSystem: true
-};
+  enableSystem: true,
+}
 
 // --- 6. Other General Settings ---
 export const clinicSettings = {
   enableOnlineAppointments: true,
-  enablePatientPortal: true
+  enablePatientPortal: true,
   // ... any other clinic-specific settings
-};
+}
 
 // You can export a default object if you prefer, or individual constants.
 const config = {
@@ -282,7 +291,7 @@ const config = {
   navLinks,
   appConstants,
   themeConfig,
-  clinicSettings
-};
+  clinicSettings,
+}
 
-export default config;
+export default config

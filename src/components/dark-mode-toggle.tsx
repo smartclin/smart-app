@@ -1,20 +1,20 @@
-'use client';
+'use client'
 
-import { Moon, Sun } from 'lucide-react';
-import { useTheme } from 'next-themes';
+import { Moon, Sun } from 'lucide-react'
+import { useTheme } from 'next-themes'
 
-import { Button } from '@/components/ui/button';
+import { Button } from '@/components/ui/button'
 
 interface DarkModeToggleProps {
-  className?: string;
+  className?: string
 }
 
 export function DarkModeToggle({ className }: DarkModeToggleProps) {
-  const { theme, setTheme } = useTheme();
+  const { theme, setTheme } = useTheme()
 
   const toggleTheme = () => {
-    setTheme(theme === 'light' ? 'dark' : 'light');
-  };
+    setTheme(theme === 'light' ? 'dark' : 'light')
+  }
 
   return (
     <Button
@@ -29,5 +29,5 @@ export function DarkModeToggle({ className }: DarkModeToggleProps) {
         {theme === 'light' ? 'Switch to light mode' : 'Switch to dark mode'}
       </span>
     </Button>
-  );
+  )
 }

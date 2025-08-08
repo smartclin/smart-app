@@ -1,43 +1,43 @@
-'use client';
+'use client'
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react'
 
-import { authClient } from '@/lib/auth/auth-client';
+import { authClient } from '@/lib/auth/auth-client'
 
 const AuthGate = ({ children }: { children: React.ReactNode }) => {
-  const [ready, setReady] = useState(false);
+  const [ready, setReady] = useState(false)
 
   useEffect(() => {
-    let cancelled = false;
+    let cancelled = false
 
     const init = async () => {
-      const session = await authClient.getSession();
+      const session = await authClient.getSession()
 
       if (!cancelled) {
         if (!session.data?.user) {
-          await authClient.signIn.anonymous();
+          await authClient.signIn.anonymous()
         }
 
-        setReady(true);
+        setReady(true)
       }
-    };
+    }
 
-    init();
+    init()
 
     return () => {
-      cancelled = true;
-    };
-  }, []);
+      cancelled = true
+    }
+  }, [])
 
   if (!ready) {
     return (
       <div className='fixed inset-0 flex items-center justify-center overflow-hidden'>
         Redirecting to chat
       </div>
-    );
+    )
   }
 
-  return <>{children}</>;
-};
+  return <>{children}</>
+}
 
-export default AuthGate;
+export default AuthGate

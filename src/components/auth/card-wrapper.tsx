@@ -1,4 +1,4 @@
-'use client';
+'use client'
 
 import {
   Card,
@@ -6,10 +6,10 @@ import {
   CardDescription,
   CardFooter,
   CardHeader,
-  CardTitle
-} from '@/components/ui/card';
+  CardTitle,
+} from '@/components/ui/card'
 
-import { Button } from '../ui/button';
+import { Button } from '../ui/button'
 
 export const CardWrapper = ({
   children,
@@ -19,16 +19,20 @@ export const CardWrapper = ({
   logoSrc,
   footerRef,
   param,
-  ref
+  ref,
 }: {
-  children: React.ReactNode;
-  title: string;
-  description: string;
-  hasLogo?: boolean;
-  logoSrc?: string;
-  footerRef?: 'login' | 'register' | 'registerWithRedirect' | 'loginWithRedirect';
-  param?: string;
-  ref?: React.Ref<HTMLDivElement>;
+  children: React.ReactNode
+  title: string
+  description: string
+  hasLogo?: boolean
+  logoSrc?: string
+  footerRef?:
+    | 'login'
+    | 'register'
+    | 'registerWithRedirect'
+    | 'loginWithRedirect'
+  param?: string
+  ref?: React.Ref<HTMLDivElement>
 }) => {
   return (
     <Card
@@ -41,7 +45,7 @@ export const CardWrapper = ({
             <Button
               className='h-full w-full bg-center bg-contain bg-no-repeat'
               style={{
-                backgroundImage: `url('${logoSrc}')`
+                backgroundImage: `url('${logoSrc}')`,
               }}
               variant='ghost'
             />
@@ -88,7 +92,9 @@ export const CardWrapper = ({
             <Button
               className='px-1 font-[400px] text-[14px] text-blue-500 leading-4 after:bg-blue-600 hover:text-blue-600'
               onClick={() =>
-                window.location.replace(`/signup?redirect=${encodeURIComponent(param ?? '')}`)
+                window.location.replace(
+                  `/signup?redirect=${encodeURIComponent(param ?? '')}`,
+                )
               }
               size={'sm'}
               type='button'
@@ -104,7 +110,9 @@ export const CardWrapper = ({
             <Button
               className='px-1 font-[400px] text-[14px] text-blue-500 leading-4 after:bg-blue-600 hover:text-blue-600'
               onClick={() =>
-                window.location.replace(`/login?redirect=${encodeURIComponent(param ?? '')}`)
+                window.location.replace(
+                  `/login?redirect=${encodeURIComponent(param ?? '')}`,
+                )
               }
               size={'sm'}
               type='button'
@@ -116,5 +124,5 @@ export const CardWrapper = ({
         )}
       </CardFooter>
     </Card>
-  );
-};
+  )
+}

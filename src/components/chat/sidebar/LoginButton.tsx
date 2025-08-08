@@ -1,9 +1,9 @@
-'use client';
+'use client'
 
-import { LogIn } from 'lucide-react';
-import Link from 'next/link';
+import { LogIn } from 'lucide-react'
+import Link from 'next/link'
 
-import { Button } from '@/components/ui/button';
+import { Button } from '@/components/ui/button'
 
 const LoginButton = () => {
   return (
@@ -19,7 +19,7 @@ const LoginButton = () => {
         <LogIn /> Log In
       </Button>
     </Link>
-  );
-};
+  )
+}
 
-export default LoginButton;
+export default LoginButton

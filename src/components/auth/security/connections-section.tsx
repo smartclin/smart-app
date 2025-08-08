@@ -1,39 +1,45 @@
-'use client';
+'use client'
 
-import { useAutoAnimate } from '@formkit/auto-animate/react';
-import axios from 'axios';
-import type { Account } from 'better-auth';
-import { Ellipsis, Loader } from 'lucide-react';
-import { useEffect, useState } from 'react';
-import { FaGithub } from 'react-icons/fa';
-import { FcGoogle } from 'react-icons/fc';
+import { useAutoAnimate } from '@formkit/auto-animate/react'
+import axios from 'axios'
+import type { Account } from 'better-auth'
+import { Ellipsis, Loader } from 'lucide-react'
+import { useEffect, useState } from 'react'
+import { FaGithub } from 'react-icons/fa'
+import { FcGoogle } from 'react-icons/fc'
 
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button'
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card'
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
-  DropdownMenuTrigger
-} from '@/components/ui/dropdown-menu';
-import { Skeleton } from '@/components/ui/skeleton';
-import type { AuthUser } from '@/hooks/use-auth';
-import { authClient } from '@/lib/auth/auth-client';
-import { cn } from '@/lib/utils';
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu'
+import { Skeleton } from '@/components/ui/skeleton'
+import type { AuthUser } from '@/hooks/use-auth'
+import { authClient } from '@/lib/auth/auth-client'
+import { cn } from '@/lib/utils'
 
-import { ErrorCard } from '../error-card';
+import { ErrorCard } from '../error-card'
 
 export const ConnectionsSection = ({ user }: { user: AuthUser }) => {
-  const [animate] = useAutoAnimate();
-  const [error, setError] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
-  const [connections, setConnections] = useState<Account[]>([]);
+  const [animate] = useAutoAnimate()
+  const [error, setError] = useState('')
+  const [isLoading, setIsLoading] = useState(false)
+  const [connections, setConnections] = useState<Account[]>([])
   const [isDeleteConnectionBoxOpen, setIsDeleteConnectionBoxOpen] = useState<
     'github' | 'google' | 'closed'
-  >('closed');
+  >('closed')
 
-  const passkeys = authClient.useListPasskeys();
+  const passkeys = authClient.useListPasskeys()
 
   useEffect(() => {
     const getConnections = async () => {
@@ -42,60 +48,60 @@ export const ConnectionsSection = ({ user }: { user: AuthUser }) => {
           {},
           {
             onRequest: () => {
-              setIsLoading(true);
+              setIsLoading(true)
             },
             onSuccess: () => {
               setTimeout(() => {
-                setIsLoading(false);
-              }, 250);
+                setIsLoading(false)
+              }, 250)
             },
-            onError: ctx => {
-              alert(ctx.error.message);
-              setIsLoading(false);
-            }
-          }
+            onError: (ctx) => {
+              alert(ctx.error.message)
+              setIsLoading(false)
+            },
+          },
         )
         // @ts-expect-error Just a simple type error
-        .then(res => setConnections(res.data));
-    };
-    getConnections();
-  }, []);
+        .then((res) => setConnections(res.data))
+    }
+    getConnections()
+  }, [])
 
   const onGithubDelete = async () => {
-    setIsLoading(true);
+    setIsLoading(true)
 
     setTimeout(async () => {
       await axios
         .delete('/api/connections/delete/github')
-        .catch(error => {
-          setError(error.response.data.message);
-          setIsLoading(false);
+        .catch((error) => {
+          setError(error.response.data.message)
+          setIsLoading(false)
         })
         .finally(() => {
-          setIsLoading(false);
-          setIsDeleteConnectionBoxOpen('closed');
-          window.location.reload();
-        });
-    }, 1000);
-  };
+          setIsLoading(false)
+          setIsDeleteConnectionBoxOpen('closed')
+          window.location.reload()
+        })
+    }, 1000)
+  }
 
   const onGoogleDelete = async () => {
-    setIsLoading(true);
+    setIsLoading(true)
 
     setTimeout(async () => {
       await axios
         .delete('/api/connections/delete/google')
-        .catch(error => {
-          setError(error.response.data.message);
-          setIsLoading(false);
+        .catch((error) => {
+          setError(error.response.data.message)
+          setIsLoading(false)
         })
         .finally(() => {
-          setIsLoading(false);
-          setIsDeleteConnectionBoxOpen('closed');
-          window.location.reload();
-        });
-    });
-  };
+          setIsLoading(false)
+          setIsDeleteConnectionBoxOpen('closed')
+          window.location.reload()
+        })
+    })
+  }
 
   return (
     <div className='flex flex-col gap-10 md:w-[72%]'>
@@ -123,10 +129,11 @@ export const ConnectionsSection = ({ user }: { user: AuthUser }) => {
             </div>
           ) : (
             <>
-              {connections.map(connection => {
+              {connections.map((connection) => {
                 // @ts-expect-error Just a simple type error
-                const provider: string = connection.provider;
-                const formattedProvider = provider.charAt(0).toUpperCase() + provider.slice(1);
+                const provider: string = connection.provider
+                const formattedProvider =
+                  provider.charAt(0).toUpperCase() + provider.slice(1)
 
                 return (
                   <div
@@ -138,7 +145,7 @@ export const ConnectionsSection = ({ user }: { user: AuthUser }) => {
                       <div
                         className={cn(
                           '-mt-2 flex items-center justify-between gap-4',
-                          provider === 'credential' && 'hidden'
+                          provider === 'credential' && 'hidden',
                         )}
                         key={connection.id}
                       >
@@ -147,7 +154,9 @@ export const ConnectionsSection = ({ user }: { user: AuthUser }) => {
                           {provider === 'github' && <FaGithub size={18} />}
                           <p className='text-sm'>{formattedProvider}</p>
                           <p className='text-sm text-zinc-500'>•</p>
-                          <p className='text-sm text-zinc-500/85'>{user.email}</p>
+                          <p className='text-sm text-zinc-500/85'>
+                            {user.email}
+                          </p>
                         </div>
                       </div>
                       <DropdownMenu>
@@ -155,7 +164,7 @@ export const ConnectionsSection = ({ user }: { user: AuthUser }) => {
                           asChild
                           className={cn(
                             'ml-auto inline-flex',
-                            provider === 'credential' && 'hidden'
+                            provider === 'credential' && 'hidden',
                           )}
                         >
                           <Button
@@ -174,8 +183,8 @@ export const ConnectionsSection = ({ user }: { user: AuthUser }) => {
                             className='cursor-pointer px-3 py-1 text-zinc-600 transition-all focus:text-zinc-800'
                             onClick={() => {
                               setIsDeleteConnectionBoxOpen(
-                                provider === 'github' ? 'github' : 'google'
-                              );
+                                provider === 'github' ? 'github' : 'google',
+                              )
                             }}
                           >
                             <p className='text-destructive text-sm'>Remove</p>
@@ -189,7 +198,7 @@ export const ConnectionsSection = ({ user }: { user: AuthUser }) => {
                           'my-4 w-full border-zinc-600/15 bg-muted-foreground/5 shadow-md md:max-w-[350px]',
                           isDeleteConnectionBoxOpen === 'github' &&
                             provider !== 'github' &&
-                            'hidden'
+                            'hidden',
                         )}
                       >
                         <CardHeader className='flex w-full flex-col'>
@@ -206,7 +215,9 @@ export const ConnectionsSection = ({ user }: { user: AuthUser }) => {
                           <Button
                             className='mt-4 mr-2'
                             disabled={isLoading}
-                            onClick={() => setIsDeleteConnectionBoxOpen('closed')}
+                            onClick={() =>
+                              setIsDeleteConnectionBoxOpen('closed')
+                            }
                             size={'sm'}
                             variant={'ghost'}
                           >
@@ -220,7 +231,9 @@ export const ConnectionsSection = ({ user }: { user: AuthUser }) => {
                             size={'sm'}
                             variant={'destructive'}
                           >
-                            {isLoading && <Loader className='size-2 animate-spin text-white' />}
+                            {isLoading && (
+                              <Loader className='size-2 animate-spin text-white' />
+                            )}
                             {!isLoading && 'Delete'}
                           </Button>
                         </CardContent>
@@ -232,7 +245,7 @@ export const ConnectionsSection = ({ user }: { user: AuthUser }) => {
                           'my-4 w-full border-zinc-600/15 bg-muted-foreground/5 shadow-md md:max-w-[350px]',
                           isDeleteConnectionBoxOpen === 'google' &&
                             provider !== 'google' &&
-                            'hidden'
+                            'hidden',
                         )}
                       >
                         <CardHeader className='flex w-full flex-col'>
@@ -249,7 +262,9 @@ export const ConnectionsSection = ({ user }: { user: AuthUser }) => {
                           <Button
                             className='mt-4 mr-2'
                             disabled={isLoading}
-                            onClick={() => setIsDeleteConnectionBoxOpen('closed')}
+                            onClick={() =>
+                              setIsDeleteConnectionBoxOpen('closed')
+                            }
                             size={'sm'}
                             variant={'ghost'}
                           >
@@ -263,21 +278,25 @@ export const ConnectionsSection = ({ user }: { user: AuthUser }) => {
                             size={'sm'}
                             variant={'destructive'}
                           >
-                            {isLoading && <Loader className='size-2 animate-spin text-white' />}
+                            {isLoading && (
+                              <Loader className='size-2 animate-spin text-white' />
+                            )}
                             {!isLoading && 'Delete'}
                           </Button>
                         </CardContent>
                       </Card>
                     )}
                   </div>
-                );
+                )
               })}
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button
                     className={cn(
                       '-mt-[7.5px] self-start text-sm',
-                      passkeys.data && passkeys.data.length > 0 ? '-ml-3' : 'md:ml-auto'
+                      passkeys.data && passkeys.data.length > 0
+                        ? '-ml-3'
+                        : 'md:ml-auto',
                     )}
                     size='sm'
                     variant='ghost'
@@ -295,14 +314,14 @@ export const ConnectionsSection = ({ user }: { user: AuthUser }) => {
                       await authClient.linkSocial(
                         {
                           provider: 'google',
-                          callbackURL: '/profile'
+                          callbackURL: '/profile',
                         },
                         {
-                          onError: ctx => {
-                            setError(ctx.error.message);
-                          }
-                        }
-                      );
+                          onError: (ctx) => {
+                            setError(ctx.error.message)
+                          },
+                        },
+                      )
                     }}
                   >
                     <FcGoogle size={18} />
@@ -315,14 +334,14 @@ export const ConnectionsSection = ({ user }: { user: AuthUser }) => {
                       await authClient.linkSocial(
                         {
                           provider: 'github',
-                          callbackURL: '/profile'
+                          callbackURL: '/profile',
                         },
                         {
-                          onError: ctx => {
-                            setError(ctx.error.message);
-                          }
-                        }
-                      );
+                          onError: (ctx) => {
+                            setError(ctx.error.message)
+                          },
+                        },
+                      )
                     }}
                   >
                     <FaGithub size={18} />
@@ -335,5 +354,5 @@ export const ConnectionsSection = ({ user }: { user: AuthUser }) => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}

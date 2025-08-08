@@ -1,14 +1,21 @@
-import { convertToModelMessages, stepCountIs, streamText, type UIMessage } from 'ai';
+import {
+  convertToModelMessages,
+  stepCountIs,
+  streamText,
+  type UIMessage,
+} from 'ai'
 
-import { model, type modelID } from '@/ai/providers';
-import { weatherTool } from '@/ai/tools';
+import { model, type modelID } from '@/ai/providers'
+import { weatherTool } from '@/ai/tools'
 
 // Allow streaming responses up to 30 seconds
-export const maxDuration = 30;
+export const maxDuration = 30
 
 export async function POST(req: Request) {
-  const { messages, selectedModel }: { messages: UIMessage[]; selectedModel: modelID } =
-    await req.json();
+  const {
+    messages,
+    selectedModel,
+  }: { messages: UIMessage[]; selectedModel: modelID } = await req.json()
 
   const result = streamText({
     model: model.languageModel(selectedModel),
@@ -16,23 +23,23 @@ export async function POST(req: Request) {
     messages: convertToModelMessages(messages),
     stopWhen: stepCountIs(5), // enable multi-step agentic flow
     tools: {
-      getWeather: weatherTool
+      getWeather: weatherTool,
     },
     experimental_telemetry: {
-      isEnabled: false
-    }
-  });
+      isEnabled: false,
+    },
+  })
 
   return result.toUIMessageStreamResponse({
     sendReasoning: true,
-    onError: error => {
+    onError: (error) => {
       if (error instanceof Error) {
         if (error.message.includes('Rate limit')) {
-          return 'Rate limit exceeded. Please try again later.';
+          return 'Rate limit exceeded. Please try again later.'
         }
       }
-      console.error(error);
-      return 'An error occurred.';
-    }
-  });
+      console.error(error)
+      return 'An error occurred.'
+    },
+  })
 }

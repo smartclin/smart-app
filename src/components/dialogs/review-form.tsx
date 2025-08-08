@@ -1,27 +1,27 @@
-'use client';
+'use client'
 
-import { zodResolver } from '@hookform/resolvers/zod';
-import { Plus, StarIcon } from 'lucide-react';
-import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { toast } from 'sonner';
-import { z } from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod'
+import { Plus, StarIcon } from 'lucide-react'
+import { useRouter } from 'next/navigation'
+import { useEffect, useState } from 'react'
+import { useForm } from 'react-hook-form'
+import { toast } from 'sonner'
+import { z } from 'zod'
 
 // import { createReview } from '@/app/actions/general' // REMOVE this import
-import { useAuth } from '@/hooks/use-auth';
-import { cn } from '@/lib/utils';
-import { trpc } from '@/trpc/client'; // Import the tRPC client
+import { useAuth } from '@/hooks/use-auth'
+import { cn } from '@/lib/utils'
+import { trpc } from '@/trpc/client' // Import the tRPC client
 
-import { Button } from '../ui/button';
+import { Button } from '../ui/button'
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogHeader,
   DialogTitle,
-  DialogTrigger
-} from '../ui/dialog';
+  DialogTrigger,
+} from '../ui/dialog'
 import {
   Form,
   FormControl,
@@ -29,9 +29,9 @@ import {
   FormField,
   FormItem,
   FormLabel,
-  FormMessage
-} from '../ui/form';
-import { Textarea } from '../ui/textarea';
+  FormMessage,
+} from '../ui/form'
+import { Textarea } from '../ui/textarea'
 
 // Define the Zod schema for the review form values.
 // This should match the input schema of your server-side tRPC procedure.
@@ -42,16 +42,16 @@ export const reviewSchema = z.object({
   comment: z
     .string()
     .min(10, 'Review must be at least 10 characters long')
-    .max(500, 'Review must not exceed 500 characters')
-});
+    .max(500, 'Review must not exceed 500 characters'),
+})
 
-export type ReviewFormValues = z.infer<typeof reviewSchema>;
+export type ReviewFormValues = z.infer<typeof reviewSchema>
 
 export const ReviewForm = ({ staffId }: { staffId: string }) => {
-  const router = useRouter();
-  const { user } = useAuth();
-  const userId = user?.id; // This will be the patientId
-  const [isDialogOpen, setIsDialogOpen] = useState(false); // State to control dialog open/close
+  const router = useRouter()
+  const { user } = useAuth()
+  const userId = user?.id // This will be the patientId
+  const [isDialogOpen, setIsDialogOpen] = useState(false) // State to control dialog open/close
 
   const form = useForm<ReviewFormValues>({
     resolver: zodResolver(reviewSchema),
@@ -59,58 +59,60 @@ export const ReviewForm = ({ staffId }: { staffId: string }) => {
       patientId: '', // Will be set by useEffect
       staffId: staffId,
       rating: 1,
-      comment: ''
-    }
-  });
+      comment: '',
+    },
+  })
 
   // Define the tRPC mutation for creating a review
   const { mutateAsync: createReviewMutation, isPending: isSubmitting } =
     trpc.staff.createReview.useMutation({
       // Ass your tRPC procedure is `trpc.review.createReview`
-      onSuccess: res => {
+      onSuccess: (res) => {
         // Assuming your tRPC mutation returns an object with `success` and `message`
         if (res.success) {
-          toast.success(res.message || 'Review submitted successfully!');
-          form.reset(); // Reset form fields
-          setIsDialogOpen(false); // Close the dialog on success
-          router.refresh(); // Refresh the page to show the new review
+          toast.success(res.message || 'Review submitted successfully!')
+          form.reset() // Reset form fields
+          setIsDialogOpen(false) // Close the dialog on success
+          router.refresh() // Refresh the page to show the new review
         } else {
-          toast.error(res.message || 'Failed to submit review.');
+          toast.error(res.message || 'Failed to submit review.')
         }
       },
-      onError: error => {
-        console.error('Error submitting review:', error);
-        toast.error(error.message || 'Something went wrong. Please try again.');
-      }
-    });
+      onError: (error) => {
+        console.error('Error submitting review:', error)
+        toast.error(error.message || 'Something went wrong. Please try again.')
+      },
+    })
 
   // Set patientId after userId is available
   useEffect(() => {
     if (userId) {
-      form.setValue('patientId', userId);
+      form.setValue('patientId', userId)
     }
-  }, [userId, form]);
+  }, [userId, form])
 
   const handleSubmit = async (values: ReviewFormValues) => {
     // Ensure patientId is set before submitting
     if (!userId) {
-      toast.error('User not authenticated. Cannot submit review.');
-      return;
+      toast.error('User not authenticated. Cannot submit review.')
+      return
     }
     // Ensure the patientId in form values is the current user's ID
     // This prevents potential mismatch if defaultValues was used before userId was available
-    values.patientId = userId;
+    values.patientId = userId
 
     try {
-      await createReviewMutation(values); // Call the tRPC mutation with form values
+      await createReviewMutation(values) // Call the tRPC mutation with form values
     } catch (error) {
       // Errors are handled by the `onError` callback of the mutation hook.
       // This catch block is primarily for unexpected errors that might occur
       // *before* the mutation is even sent (e.g., network issues, client-side validation not caught by RHF).
-      console.error('Unexpected error during review submission:', error);
-      toast.error('An unexpected error occurred during submission. Please try again.');
+      console.error('Unexpected error during review submission:', error)
+      toast.error(
+        'An unexpected error occurred during submission. Please try again.',
+      )
     }
-  };
+  }
 
   return (
     <Dialog
@@ -129,7 +131,9 @@ export const ReviewForm = ({ staffId }: { staffId: string }) => {
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Add New Review</DialogTitle>
-          <DialogDescription>Please fill in the form below to add a new review.</DialogDescription>
+          <DialogDescription>
+            Please fill in the form below to add a new review.
+          </DialogDescription>
         </DialogHeader>
 
         <Form {...form}>
@@ -145,7 +149,7 @@ export const ReviewForm = ({ staffId }: { staffId: string }) => {
                   <FormLabel>Rating</FormLabel>
                   <FormControl>
                     <div className='flex items-center space-x-3'>
-                      {[1, 2, 3, 4, 5].map(star => (
+                      {[1, 2, 3, 4, 5].map((star) => (
                         <button
                           disabled={isSubmitting}
                           key={star}
@@ -156,7 +160,7 @@ export const ReviewForm = ({ staffId }: { staffId: string }) => {
                             className={cn(
                               star <= field.value
                                 ? 'fill-yellow-500 text-yellow-500'
-                                : 'text-gray-400'
+                                : 'text-gray-400',
                             )}
                             size={30}
                           />
@@ -164,7 +168,9 @@ export const ReviewForm = ({ staffId }: { staffId: string }) => {
                       ))}
                     </div>
                   </FormControl>
-                  <FormDescription>Please rate the staff based on your experience.</FormDescription>
+                  <FormDescription>
+                    Please rate the staff based on your experience.
+                  </FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
@@ -203,5 +209,5 @@ export const ReviewForm = ({ staffId }: { staffId: string }) => {
         </Form>
       </DialogContent>
     </Dialog>
-  );
-};
+  )
+}

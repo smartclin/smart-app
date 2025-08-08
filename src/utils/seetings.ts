@@ -1,99 +1,99 @@
-export const DATA_LIMIT = 10;
+export const DATA_LIMIT = 10
 
 export const SPECIALIZATION = [
   {
     label: 'Cardiologist',
     value: 'cardiologist',
-    department: 'Cardiovascular'
+    department: 'Cardiovascular',
   },
   {
     label: 'Dermatologist',
     value: 'dermatologist',
-    department: 'Dermatology'
+    department: 'Dermatology',
   },
   {
     label: 'Endocrinologist',
     value: 'endocrinologist',
-    department: 'Endocrinology'
+    department: 'Endocrinology',
   },
   {
     label: 'Gastroenterologist',
     value: 'gastroenterologist',
-    department: 'Gastroenterology'
+    department: 'Gastroenterology',
   },
   {
     label: 'Neurologist',
     value: 'neurologist',
-    department: 'Neurology'
+    department: 'Neurology',
   },
   {
     label: 'Oncologist',
     value: 'oncologist',
-    department: 'Oncology'
+    department: 'Oncology',
   },
   {
     label: 'Orthopedic Surgeon',
     value: 'orthopedic surgeon',
-    department: 'Orthopedics'
+    department: 'Orthopedics',
   },
   {
     label: 'Pediatrician',
     value: 'pediatrician',
-    department: 'Pediatrics'
+    department: 'Pediatrics',
   },
   {
     label: 'Psychiatrist',
     value: 'psychiatrist',
-    department: 'Psychiatry'
+    department: 'Psychiatry',
   },
   {
     label: 'Radiologist',
     value: 'radiologist',
-    department: 'Radiology'
+    department: 'Radiology',
   },
   {
     label: 'Urologist',
     value: 'urologist',
-    department: 'Urology'
+    department: 'Urology',
   },
   {
     label: 'Ophthalmologist',
     value: 'ophthalmologist',
-    department: 'Ophthalmology'
+    department: 'Ophthalmology',
   },
   {
     label: 'Obstetrician/Gynecologist',
     value: 'obstetrician/gynecologist',
-    department: 'Obstetrics and Gynecology'
+    department: 'Obstetrics and Gynecology',
   },
   {
     label: 'Anesthesiologist',
     value: 'anesthesiologist',
-    department: 'Anesthesiology'
+    department: 'Anesthesiology',
   },
   {
     label: 'Pulmonologist',
     value: 'pulmonologist',
-    department: 'Pulmonology'
+    department: 'Pulmonology',
   },
   {
     label: 'Rheumatologist',
     value: 'rheumatologist',
-    department: 'Rheumatology'
+    department: 'Rheumatology',
   },
   {
     label: 'Otolaryngologist (ENT)',
     value: 'otolaryngologist',
-    department: 'Otolaryngology (ENT)'
+    department: 'Otolaryngology (ENT)',
   },
   {
     label: 'Nephrologist',
     value: 'nephrologist',
-    department: 'Nephrology'
+    department: 'Nephrology',
   },
   {
     label: 'Geriatrician',
     value: 'geriatrician',
-    department: 'Geriatrics'
-  }
-];
+    department: 'Geriatrics',
+  },
+]

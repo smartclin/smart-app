@@ -1,16 +1,22 @@
-import { ArrowUp } from 'lucide-react';
+import { ArrowUp } from 'lucide-react'
 
-import { Input as ShadcnInput } from '../ui/input';
+import { Input as ShadcnInput } from '../ui/input'
 
 interface InputProps {
-  input: string;
-  handleInputChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  isLoading: boolean;
-  status: string;
-  stop: () => void;
+  input: string
+  handleInputChange: (event: React.ChangeEvent<HTMLInputElement>) => void
+  isLoading: boolean
+  status: string
+  stop: () => void
 }
 
-export const Input = ({ input, handleInputChange, isLoading, status, stop }: InputProps) => {
+export const Input = ({
+  input,
+  handleInputChange,
+  isLoading,
+  status,
+  stop,
+}: InputProps) => {
   return (
     <div className='relative w-full'>
       <ShadcnInput
@@ -59,5 +65,5 @@ export const Input = ({ input, handleInputChange, isLoading, status, stop }: Inp
         </button>
       )}
     </div>
-  );
-};
+  )
+}

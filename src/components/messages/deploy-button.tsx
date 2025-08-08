@@ -1,4 +1,4 @@
-import Link from 'next/link';
+import Link from 'next/link'
 
 export const DeployButton = () => (
   <Link
@@ -27,4 +27,4 @@ export const DeployButton = () => (
     </svg>
     Deploy
   </Link>
-);
+)

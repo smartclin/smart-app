@@ -1,12 +1,12 @@
 // app/components/dashboard/appointment-list.tsx
 
-import { motion } from 'framer-motion';
-import React from 'react';
+import { motion } from 'framer-motion'
+import React from 'react'
 
-import type { Appointment } from '@/types/data-types';
+import type { Appointment } from '@/types/data-types'
 
-import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
-import AppointmentItem from './appointment-item';
+import { Card, CardContent, CardHeader, CardTitle } from '../ui/card'
+import AppointmentItem from './appointment-item'
 
 // --- REMOVE THE LOCAL APPOINTMENT INTERFACE HERE ---
 // interface Appointment { ... }
@@ -14,31 +14,31 @@ import AppointmentItem from './appointment-item';
 // Import the shared Appointment interface
 
 interface AppointmentListProps {
-  appointments: Appointment[];
-  title?: string;
-  onViewAppointmentDetails?: (id: number) => void;
+  appointments: Appointment[]
+  title?: string
+  onViewAppointmentDetails?: (id: number) => void
 }
 
 export const AppointmentList = React.memo(
   ({
     appointments,
     title = 'Recent Appointments',
-    onViewAppointmentDetails
+    onViewAppointmentDetails,
   }: AppointmentListProps) => {
     const containerVariants = {
       hidden: { opacity: 0 },
       show: {
         opacity: 1,
         transition: {
-          staggerChildren: 0.1
-        }
-      }
-    };
+          staggerChildren: 0.1,
+        },
+      },
+    }
 
     const itemVariants = {
       hidden: { opacity: 0, y: 20 },
-      show: { opacity: 1, y: 0 }
-    };
+      show: { opacity: 1, y: 0 },
+    }
 
     return (
       <Card>
@@ -57,7 +57,7 @@ export const AppointmentList = React.memo(
                 No appointments found.
               </p>
             ) : (
-              appointments.map(appointment => (
+              appointments.map((appointment) => (
                 <AppointmentItem
                   animationVariants={itemVariants}
                   appointment={appointment}
@@ -69,8 +69,8 @@ export const AppointmentList = React.memo(
           </motion.div>
         </CardContent>
       </Card>
-    );
-  }
-);
+    )
+  },
+)
 
-AppointmentList.displayName = 'AppointmentList';
+AppointmentList.displayName = 'AppointmentList'

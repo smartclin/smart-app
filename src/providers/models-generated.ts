@@ -1,4 +1,4 @@
-import type { ModelId } from '@/lib/chat/model-id';
+import type { ModelId } from '@/lib/chat/model-id'
 
 // List of unique providers extracted from models data
 export const providers = [
@@ -16,23 +16,23 @@ export const providers = [
   'openai',
   'perplexity',
   'vercel',
-  'xai'
-] as const;
+  'xai',
+] as const
 
-export type ProviderId = (typeof providers)[number];
+export type ProviderId = (typeof providers)[number]
 
 export interface ModelData {
-  id: ModelId;
-  object: string;
-  owned_by: ProviderId;
-  name: string;
-  description: string;
-  context_window: number; // Max input tokens
-  max_tokens: number; // Max output tokens
+  id: ModelId
+  object: string
+  owned_by: ProviderId
+  name: string
+  description: string
+  context_window: number // Max input tokens
+  max_tokens: number // Max output tokens
   pricing: {
-    input: string; // Input price per token
-    output: string; // Output price per token
-  };
+    input: string // Input price per token
+    output: string // Output price per token
+  }
 }
 
 // Define the data with proper typing
@@ -48,8 +48,8 @@ export const modelsData: ModelData[] = [
     max_tokens: 8192,
     pricing: {
       input: '0.00000008',
-      output: '0.00000024'
-    }
+      output: '0.00000024',
+    },
   },
   {
     id: 'alibaba/qwen-3-235b',
@@ -62,8 +62,8 @@ export const modelsData: ModelData[] = [
     max_tokens: 8192,
     pricing: {
       input: '0.0000002',
-      output: '0.0000006'
-    }
+      output: '0.0000006',
+    },
   },
   {
     id: 'alibaba/qwen-3-30b',
@@ -76,8 +76,8 @@ export const modelsData: ModelData[] = [
     max_tokens: 8192,
     pricing: {
       input: '0.0000001',
-      output: '0.0000003'
-    }
+      output: '0.0000003',
+    },
   },
   {
     id: 'alibaba/qwen-3-32b',
@@ -90,8 +90,8 @@ export const modelsData: ModelData[] = [
     max_tokens: 8192,
     pricing: {
       input: '0.0000001',
-      output: '0.0000003'
-    }
+      output: '0.0000003',
+    },
   },
   {
     id: 'alibaba/qwen3-coder',
@@ -104,8 +104,8 @@ export const modelsData: ModelData[] = [
     max_tokens: 8192,
     pricing: {
       input: '0.000002',
-      output: '0.0000035'
-    }
+      output: '0.0000035',
+    },
   },
   {
     id: 'amazon/nova-lite',
@@ -118,21 +118,22 @@ export const modelsData: ModelData[] = [
     max_tokens: 4096,
     pricing: {
       input: '0.00000006',
-      output: '0.00000024'
-    }
+      output: '0.00000024',
+    },
   },
   {
     id: 'amazon/nova-micro',
     object: 'model',
     owned_by: 'amazon',
     name: 'Nova Micro',
-    description: 'A text-only model that delivers the lowest latency responses at very low cost.',
+    description:
+      'A text-only model that delivers the lowest latency responses at very low cost.',
     context_window: 128000,
     max_tokens: 4096,
     pricing: {
       input: '0.000000035',
-      output: '0.00000014'
-    }
+      output: '0.00000014',
+    },
   },
   {
     id: 'amazon/nova-pro',
@@ -145,8 +146,8 @@ export const modelsData: ModelData[] = [
     max_tokens: 4096,
     pricing: {
       input: '0.0000008',
-      output: '0.0000032'
-    }
+      output: '0.0000032',
+    },
   },
   {
     id: 'anthropic/claude-3-haiku',
@@ -159,8 +160,8 @@ export const modelsData: ModelData[] = [
     max_tokens: 1024,
     pricing: {
       input: '0.00000025',
-      output: '0.00000125'
-    }
+      output: '0.00000125',
+    },
   },
   {
     id: 'anthropic/claude-3-opus',
@@ -173,8 +174,8 @@ export const modelsData: ModelData[] = [
     max_tokens: 1024,
     pricing: {
       input: '0.000015',
-      output: '0.000075'
-    }
+      output: '0.000075',
+    },
   },
   {
     id: 'anthropic/claude-3.5-haiku',
@@ -187,8 +188,8 @@ export const modelsData: ModelData[] = [
     max_tokens: 1024,
     pricing: {
       input: '0.0000008',
-      output: '0.000004'
-    }
+      output: '0.000004',
+    },
   },
   {
     id: 'anthropic/claude-3.5-sonnet',
@@ -201,8 +202,8 @@ export const modelsData: ModelData[] = [
     max_tokens: 1024,
     pricing: {
       input: '0.000003',
-      output: '0.000015'
-    }
+      output: '0.000015',
+    },
   },
   {
     id: 'anthropic/claude-3.7-sonnet',
@@ -215,8 +216,8 @@ export const modelsData: ModelData[] = [
     max_tokens: 1024,
     pricing: {
       input: '0.000003',
-      output: '0.000015'
-    }
+      output: '0.000015',
+    },
   },
   {
     id: 'anthropic/claude-4-opus',
@@ -229,8 +230,8 @@ export const modelsData: ModelData[] = [
     max_tokens: 1024,
     pricing: {
       input: '0.000015',
-      output: '0.000075'
-    }
+      output: '0.000075',
+    },
   },
   {
     id: 'anthropic/claude-4-sonnet',
@@ -243,8 +244,8 @@ export const modelsData: ModelData[] = [
     max_tokens: 1024,
     pricing: {
       input: '0.000003',
-      output: '0.000015'
-    }
+      output: '0.000015',
+    },
   },
   {
     id: 'cohere/command-a',
@@ -257,8 +258,8 @@ export const modelsData: ModelData[] = [
     max_tokens: 4000,
     pricing: {
       input: '0.0000025',
-      output: '0.00001'
-    }
+      output: '0.00001',
+    },
   },
   {
     id: 'cohere/command-r',
@@ -271,8 +272,8 @@ export const modelsData: ModelData[] = [
     max_tokens: 1024,
     pricing: {
       input: '0.00000015',
-      output: '0.0000006'
-    }
+      output: '0.0000006',
+    },
   },
   {
     id: 'cohere/command-r-plus',
@@ -285,8 +286,8 @@ export const modelsData: ModelData[] = [
     max_tokens: 1024,
     pricing: {
       input: '0.0000025',
-      output: '0.00001'
-    }
+      output: '0.00001',
+    },
   },
   {
     id: 'deepseek/deepseek-r1',
@@ -299,8 +300,8 @@ export const modelsData: ModelData[] = [
     max_tokens: 4096,
     pricing: {
       input: '0.00000055',
-      output: '0.00000219'
-    }
+      output: '0.00000219',
+    },
   },
   {
     id: 'deepseek/deepseek-r1-distill-llama-70b',
@@ -313,8 +314,8 @@ export const modelsData: ModelData[] = [
     max_tokens: 4096,
     pricing: {
       input: '0.00000075',
-      output: '0.00000099'
-    }
+      output: '0.00000099',
+    },
   },
   {
     id: 'deepseek/deepseek-v3',
@@ -327,8 +328,8 @@ export const modelsData: ModelData[] = [
     max_tokens: 1024,
     pricing: {
       input: '0.0000009',
-      output: '0.0000009'
-    }
+      output: '0.0000009',
+    },
   },
   {
     id: 'google/gemini-2.0-flash',
@@ -341,8 +342,8 @@ export const modelsData: ModelData[] = [
     max_tokens: 4096,
     pricing: {
       input: '0.00000015',
-      output: '0.0000006'
-    }
+      output: '0.0000006',
+    },
   },
   {
     id: 'google/gemini-2.0-flash-lite',
@@ -355,8 +356,8 @@ export const modelsData: ModelData[] = [
     max_tokens: 4096,
     pricing: {
       input: '0.000000075',
-      output: '0.0000003'
-    }
+      output: '0.0000003',
+    },
   },
   {
     id: 'google/gemini-2.5-flash',
@@ -369,8 +370,8 @@ export const modelsData: ModelData[] = [
     max_tokens: 4096,
     pricing: {
       input: '0.0000003',
-      output: '0.0000025'
-    }
+      output: '0.0000025',
+    },
   },
   {
     id: 'google/gemini-2.5-pro',
@@ -383,8 +384,8 @@ export const modelsData: ModelData[] = [
     max_tokens: 4096,
     pricing: {
       input: '0.0000025',
-      output: '0.00001'
-    }
+      output: '0.00001',
+    },
   },
   {
     id: 'google/gemma-2-9b',
@@ -397,8 +398,8 @@ export const modelsData: ModelData[] = [
     max_tokens: 1000,
     pricing: {
       input: '0.0000002',
-      output: '0.0000002'
-    }
+      output: '0.0000002',
+    },
   },
   {
     id: 'inception/mercury-coder-small',
@@ -411,8 +412,8 @@ export const modelsData: ModelData[] = [
     max_tokens: 8192,
     pricing: {
       input: '0.00000025',
-      output: '0.000001'
-    }
+      output: '0.000001',
+    },
   },
   {
     id: 'meta/llama-3-70b',
@@ -425,8 +426,8 @@ export const modelsData: ModelData[] = [
     max_tokens: 1000,
     pricing: {
       input: '0.00000059',
-      output: '0.00000079'
-    }
+      output: '0.00000079',
+    },
   },
   {
     id: 'meta/llama-3-8b',
@@ -439,8 +440,8 @@ export const modelsData: ModelData[] = [
     max_tokens: 1000,
     pricing: {
       input: '0.00000005',
-      output: '0.00000008'
-    }
+      output: '0.00000008',
+    },
   },
   {
     id: 'meta/llama-3.1-70b',
@@ -453,8 +454,8 @@ export const modelsData: ModelData[] = [
     max_tokens: 4096,
     pricing: {
       input: '0.00000072',
-      output: '0.00000072'
-    }
+      output: '0.00000072',
+    },
   },
   {
     id: 'meta/llama-3.1-8b',
@@ -467,8 +468,8 @@ export const modelsData: ModelData[] = [
     max_tokens: 4000,
     pricing: {
       input: '0.00000005',
-      output: '0.00000008'
-    }
+      output: '0.00000008',
+    },
   },
   {
     id: 'meta/llama-3.2-11b',
@@ -481,8 +482,8 @@ export const modelsData: ModelData[] = [
     max_tokens: 4096,
     pricing: {
       input: '0.00000016',
-      output: '0.00000016'
-    }
+      output: '0.00000016',
+    },
   },
   {
     id: 'meta/llama-3.2-1b',
@@ -495,8 +496,8 @@ export const modelsData: ModelData[] = [
     max_tokens: 4096,
     pricing: {
       input: '0.0000001',
-      output: '0.0000001'
-    }
+      output: '0.0000001',
+    },
   },
   {
     id: 'meta/llama-3.2-3b',
@@ -509,8 +510,8 @@ export const modelsData: ModelData[] = [
     max_tokens: 4096,
     pricing: {
       input: '0.00000015',
-      output: '0.00000015'
-    }
+      output: '0.00000015',
+    },
   },
   {
     id: 'meta/llama-3.2-90b',
@@ -523,8 +524,8 @@ export const modelsData: ModelData[] = [
     max_tokens: 4096,
     pricing: {
       input: '0.00000072',
-      output: '0.00000072'
-    }
+      output: '0.00000072',
+    },
   },
   {
     id: 'meta/llama-3.3-70b',
@@ -537,8 +538,8 @@ export const modelsData: ModelData[] = [
     max_tokens: 4096,
     pricing: {
       input: '0.00000072',
-      output: '0.00000072'
-    }
+      output: '0.00000072',
+    },
   },
   {
     id: 'meta/llama-4-maverick',
@@ -551,8 +552,8 @@ export const modelsData: ModelData[] = [
     max_tokens: 4096,
     pricing: {
       input: '0.0000002',
-      output: '0.0000006'
-    }
+      output: '0.0000006',
+    },
   },
   {
     id: 'meta/llama-4-scout',
@@ -565,8 +566,8 @@ export const modelsData: ModelData[] = [
     max_tokens: 4096,
     pricing: {
       input: '0.0000001',
-      output: '0.0000003'
-    }
+      output: '0.0000003',
+    },
   },
   {
     id: 'mistral/codestral',
@@ -579,8 +580,8 @@ export const modelsData: ModelData[] = [
     max_tokens: 1024,
     pricing: {
       input: '0.0000003',
-      output: '0.0000009'
-    }
+      output: '0.0000009',
+    },
   },
   {
     id: 'mistral/magistral-medium',
@@ -593,8 +594,8 @@ export const modelsData: ModelData[] = [
     max_tokens: 32768,
     pricing: {
       input: '0.000002',
-      output: '0.000005'
-    }
+      output: '0.000005',
+    },
   },
   {
     id: 'mistral/magistral-small',
@@ -607,8 +608,8 @@ export const modelsData: ModelData[] = [
     max_tokens: 32768,
     pricing: {
       input: '0.0000005',
-      output: '0.0000015'
-    }
+      output: '0.0000015',
+    },
   },
   {
     id: 'mistral/ministral-3b',
@@ -621,8 +622,8 @@ export const modelsData: ModelData[] = [
     max_tokens: 1024,
     pricing: {
       input: '0.00000004',
-      output: '0.00000004'
-    }
+      output: '0.00000004',
+    },
   },
   {
     id: 'mistral/ministral-8b',
@@ -635,8 +636,8 @@ export const modelsData: ModelData[] = [
     max_tokens: 1024,
     pricing: {
       input: '0.0000001',
-      output: '0.0000001'
-    }
+      output: '0.0000001',
+    },
   },
   {
     id: 'mistral/mistral-large',
@@ -649,8 +650,8 @@ export const modelsData: ModelData[] = [
     max_tokens: 1024,
     pricing: {
       input: '0.000002',
-      output: '0.000006'
-    }
+      output: '0.000006',
+    },
   },
   {
     id: 'mistral/mistral-saba-24b',
@@ -663,8 +664,8 @@ export const modelsData: ModelData[] = [
     max_tokens: 16384,
     pricing: {
       input: '0.00000079',
-      output: '0.00000079'
-    }
+      output: '0.00000079',
+    },
   },
   {
     id: 'mistral/mistral-small',
@@ -677,8 +678,8 @@ export const modelsData: ModelData[] = [
     max_tokens: 1024,
     pricing: {
       input: '0.0000001',
-      output: '0.0000003'
-    }
+      output: '0.0000003',
+    },
   },
   {
     id: 'mistral/mixtral-8x22b-instruct',
@@ -691,21 +692,22 @@ export const modelsData: ModelData[] = [
     max_tokens: 256,
     pricing: {
       input: '0.0000012',
-      output: '0.0000012'
-    }
+      output: '0.0000012',
+    },
   },
   {
     id: 'mistral/pixtral-12b',
     object: 'model',
     owned_by: 'mistral',
     name: 'Pixtral 12B 2409',
-    description: 'A 12B model with image understanding capabilities in addition to text.',
+    description:
+      'A 12B model with image understanding capabilities in addition to text.',
     context_window: 128000,
     max_tokens: 1024,
     pricing: {
       input: '0.00000015',
-      output: '0.00000015'
-    }
+      output: '0.00000015',
+    },
   },
   {
     id: 'mistral/pixtral-large',
@@ -718,8 +720,8 @@ export const modelsData: ModelData[] = [
     max_tokens: 1024,
     pricing: {
       input: '0.000002',
-      output: '0.000006'
-    }
+      output: '0.000006',
+    },
   },
   {
     id: 'moonshotai/kimi-k2',
@@ -732,8 +734,8 @@ export const modelsData: ModelData[] = [
     max_tokens: 8192,
     pricing: {
       input: '0.00000055',
-      output: '0.0000022'
-    }
+      output: '0.0000022',
+    },
   },
   {
     id: 'morph/morph-v3-fast',
@@ -746,8 +748,8 @@ export const modelsData: ModelData[] = [
     max_tokens: 4096,
     pricing: {
       input: '0.0000008',
-      output: '0.0000012'
-    }
+      output: '0.0000012',
+    },
   },
   {
     id: 'morph/morph-v3-large',
@@ -760,8 +762,8 @@ export const modelsData: ModelData[] = [
     max_tokens: 4096,
     pricing: {
       input: '0.0000009',
-      output: '0.0000019'
-    }
+      output: '0.0000019',
+    },
   },
   {
     id: 'openai/gpt-3.5-turbo',
@@ -774,8 +776,8 @@ export const modelsData: ModelData[] = [
     max_tokens: 500,
     pricing: {
       input: '0.0000005',
-      output: '0.0000015'
-    }
+      output: '0.0000015',
+    },
   },
   {
     id: 'openai/gpt-3.5-turbo-instruct',
@@ -788,8 +790,8 @@ export const modelsData: ModelData[] = [
     max_tokens: 200,
     pricing: {
       input: '0.0000015',
-      output: '0.000002'
-    }
+      output: '0.000002',
+    },
   },
   {
     id: 'openai/gpt-4-turbo',
@@ -802,8 +804,8 @@ export const modelsData: ModelData[] = [
     max_tokens: 1024,
     pricing: {
       input: '0.00001',
-      output: '0.00003'
-    }
+      output: '0.00003',
+    },
   },
   {
     id: 'openai/gpt-4.1',
@@ -816,8 +818,8 @@ export const modelsData: ModelData[] = [
     max_tokens: 8192,
     pricing: {
       input: '0.000002',
-      output: '0.000008'
-    }
+      output: '0.000008',
+    },
   },
   {
     id: 'openai/gpt-4.1-mini',
@@ -830,21 +832,22 @@ export const modelsData: ModelData[] = [
     max_tokens: 8192,
     pricing: {
       input: '0.0000004',
-      output: '0.0000016'
-    }
+      output: '0.0000016',
+    },
   },
   {
     id: 'openai/gpt-4.1-nano',
     object: 'model',
     owned_by: 'openai',
     name: 'GPT-4.1 nano',
-    description: 'GPT-4.1 nano is the fastest, most cost-effective GPT 4.1 model.',
+    description:
+      'GPT-4.1 nano is the fastest, most cost-effective GPT 4.1 model.',
     context_window: 1047576,
     max_tokens: 8192,
     pricing: {
       input: '0.0000001',
-      output: '0.0000004'
-    }
+      output: '0.0000004',
+    },
   },
   {
     id: 'openai/gpt-4o',
@@ -857,8 +860,8 @@ export const modelsData: ModelData[] = [
     max_tokens: 1024,
     pricing: {
       input: '0.0000025',
-      output: '0.00001'
-    }
+      output: '0.00001',
+    },
   },
   {
     id: 'openai/gpt-4o-mini',
@@ -871,8 +874,8 @@ export const modelsData: ModelData[] = [
     max_tokens: 1024,
     pricing: {
       input: '0.00000015',
-      output: '0.0000006'
-    }
+      output: '0.0000006',
+    },
   },
   {
     id: 'openai/o1',
@@ -885,8 +888,8 @@ export const modelsData: ModelData[] = [
     max_tokens: 4096,
     pricing: {
       input: '0.000015',
-      output: '0.00006'
-    }
+      output: '0.00006',
+    },
   },
   {
     id: 'openai/o3',
@@ -899,8 +902,8 @@ export const modelsData: ModelData[] = [
     max_tokens: 16384,
     pricing: {
       input: '0.000002',
-      output: '0.000008'
-    }
+      output: '0.000008',
+    },
   },
   {
     id: 'openai/o3-mini',
@@ -913,8 +916,8 @@ export const modelsData: ModelData[] = [
     max_tokens: 4096,
     pricing: {
       input: '0.0000011',
-      output: '0.0000044'
-    }
+      output: '0.0000044',
+    },
   },
   {
     id: 'openai/o4-mini',
@@ -927,8 +930,8 @@ export const modelsData: ModelData[] = [
     max_tokens: 16384,
     pricing: {
       input: '0.0000011',
-      output: '0.0000044'
-    }
+      output: '0.0000044',
+    },
   },
   {
     id: 'perplexity/sonar',
@@ -941,8 +944,8 @@ export const modelsData: ModelData[] = [
     max_tokens: 1024,
     pricing: {
       input: '0.000001',
-      output: '0.000001'
-    }
+      output: '0.000001',
+    },
   },
   {
     id: 'perplexity/sonar-pro',
@@ -955,8 +958,8 @@ export const modelsData: ModelData[] = [
     max_tokens: 1024,
     pricing: {
       input: '0.000003',
-      output: '0.000015'
-    }
+      output: '0.000015',
+    },
   },
   {
     id: 'perplexity/sonar-reasoning',
@@ -969,8 +972,8 @@ export const modelsData: ModelData[] = [
     max_tokens: 1024,
     pricing: {
       input: '0.000001',
-      output: '0.000005'
-    }
+      output: '0.000005',
+    },
   },
   {
     id: 'perplexity/sonar-reasoning-pro',
@@ -983,8 +986,8 @@ export const modelsData: ModelData[] = [
     max_tokens: 1024,
     pricing: {
       input: '0.000002',
-      output: '0.000008'
-    }
+      output: '0.000008',
+    },
   },
   {
     id: 'vercel/v0-1.0-md',
@@ -997,8 +1000,8 @@ export const modelsData: ModelData[] = [
     max_tokens: 1024,
     pricing: {
       input: '0.000003',
-      output: '0.000015'
-    }
+      output: '0.000015',
+    },
   },
   {
     id: 'vercel/v0-1.5-md',
@@ -1011,8 +1014,8 @@ export const modelsData: ModelData[] = [
     max_tokens: 8192,
     pricing: {
       input: '0.000003',
-      output: '0.000015'
-    }
+      output: '0.000015',
+    },
   },
   {
     id: 'xai/grok-2',
@@ -1025,8 +1028,8 @@ export const modelsData: ModelData[] = [
     max_tokens: 1024,
     pricing: {
       input: '0.000002',
-      output: '0.00001'
-    }
+      output: '0.00001',
+    },
   },
   {
     id: 'xai/grok-2-vision',
@@ -1039,8 +1042,8 @@ export const modelsData: ModelData[] = [
     max_tokens: 1024,
     pricing: {
       input: '0.000002',
-      output: '0.00001'
-    }
+      output: '0.00001',
+    },
   },
   {
     id: 'xai/grok-3',
@@ -1053,8 +1056,8 @@ export const modelsData: ModelData[] = [
     max_tokens: 8192,
     pricing: {
       input: '0.000003',
-      output: '0.000015'
-    }
+      output: '0.000015',
+    },
   },
   {
     id: 'xai/grok-3-fast',
@@ -1067,8 +1070,8 @@ export const modelsData: ModelData[] = [
     max_tokens: 8192,
     pricing: {
       input: '0.000005',
-      output: '0.000025'
-    }
+      output: '0.000025',
+    },
   },
   {
     id: 'xai/grok-3-mini',
@@ -1081,8 +1084,8 @@ export const modelsData: ModelData[] = [
     max_tokens: 8192,
     pricing: {
       input: '0.0000003',
-      output: '0.0000005'
-    }
+      output: '0.0000005',
+    },
   },
   {
     id: 'xai/grok-3-mini-fast',
@@ -1095,8 +1098,8 @@ export const modelsData: ModelData[] = [
     max_tokens: 8192,
     pricing: {
       input: '0.0000006',
-      output: '0.000004'
-    }
+      output: '0.000004',
+    },
   },
   {
     id: 'xai/grok-4',
@@ -1109,7 +1112,7 @@ export const modelsData: ModelData[] = [
     max_tokens: 8192,
     pricing: {
       input: '0.000003',
-      output: '0.000015'
-    }
-  }
-];
+      output: '0.000015',
+    },
+  },
+]

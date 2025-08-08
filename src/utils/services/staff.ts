@@ -1,19 +1,19 @@
-import { db } from '@/db';
+import { db } from '@/db'
 
 export async function getAllStaff({
   page,
   limit,
-  search
+  search,
 }: {
-  page: number | string;
-  limit?: number | string;
-  search?: string;
+  page: number | string
+  limit?: number | string
+  search?: string
 }) {
   try {
-    const PAGE_NUMBER = Number(page) <= 0 ? 1 : Number(page);
-    const LIMIT = Number(limit) || 10;
+    const PAGE_NUMBER = Number(page) <= 0 ? 1 : Number(page)
+    const LIMIT = Number(limit) || 10
 
-    const SKIP = (PAGE_NUMBER - 1) * LIMIT;
+    const SKIP = (PAGE_NUMBER - 1) * LIMIT
 
     const [staff, totalRecords] = await Promise.all([
       db.staff.findMany({
@@ -21,17 +21,17 @@ export async function getAllStaff({
           OR: [
             { name: { contains: search, mode: 'insensitive' } },
             { phone: { contains: search, mode: 'insensitive' } },
-            { email: { contains: search, mode: 'insensitive' } }
-          ]
+            { email: { contains: search, mode: 'insensitive' } },
+          ],
         },
 
         skip: SKIP,
-        take: LIMIT
+        take: LIMIT,
       }),
-      db.staff.count()
-    ]);
+      db.staff.count(),
+    ])
 
-    const totalPages = Math.ceil(totalRecords / LIMIT);
+    const totalPages = Math.ceil(totalRecords / LIMIT)
 
     return {
       success: true,
@@ -39,9 +39,9 @@ export async function getAllStaff({
       totalRecords,
       totalPages,
       currentPage: PAGE_NUMBER,
-      status: 200
-    };
+      status: 200,
+    }
   } catch (_error) {
-    return { success: false, message: 'Internal Server Error', status: 500 };
+    return { success: false, message: 'Internal Server Error', status: 500 }
   }
 }

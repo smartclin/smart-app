@@ -1,74 +1,79 @@
-import type { Doctor } from '@prisma/client'; // Assuming this Doctor type matches the API response
-import { format } from 'date-fns';
-import { Users } from 'lucide-react';
+import type { Doctor } from '@prisma/client' // Assuming this Doctor type matches the API response
+import { format } from 'date-fns'
+import { Users } from 'lucide-react'
 
-import { ActionDialog } from '@/components/action-dialog';
-import { ViewAction } from '@/components/action-options';
-import { DoctorForm } from '@/components/forms/doctor-form';
-import { Pagination } from '@/components/pagination';
-import { ProfileImage } from '@/components/profile-image';
-import SearchInput from '@/components/search-input';
-import { Table } from '@/components/tables/table';
-import { getSession } from '@/lib/auth';
-import { trpc } from '@/trpc/server'; // Import the tRPC server client
-import type { SearchParamsProps } from '@/types';
-import { checkRole } from '@/utils/roles';
-import { DATA_LIMIT } from '@/utils/seetings';
+import { ActionDialog } from '@/components/action-dialog'
+import { ViewAction } from '@/components/action-options'
+import { DoctorForm } from '@/components/forms/doctor-form'
+import { Pagination } from '@/components/pagination'
+import { ProfileImage } from '@/components/profile-image'
+import SearchInput from '@/components/search-input'
+import { Table } from '@/components/tables/table'
+import { getSession } from '@/lib/auth'
+import { trpc } from '@/trpc/server' // Import the tRPC server client
+import type { SearchParamsProps } from '@/types'
+import { checkRole } from '@/utils/roles'
+import { DATA_LIMIT } from '@/utils/seetings'
 
 const columns = [
   {
     header: 'Info',
-    key: 'name'
+    key: 'name',
   },
   {
     header: 'License #',
     key: 'license',
-    className: 'hidden md:table-cell'
+    className: 'hidden md:table-cell',
   },
   {
     header: 'Phone',
     key: 'contact',
-    className: 'hidden md:table-cell'
+    className: 'hidden md:table-cell',
   },
   {
     header: 'Email',
     key: 'email',
-    className: 'hidden lg:table-cell'
+    className: 'hidden lg:table-cell',
   },
   {
     header: 'Joined Date',
     key: 'created_at',
-    className: 'hidden xl:table-cell'
+    className: 'hidden xl:table-cell',
   },
   {
     header: 'Actions',
-    key: 'action'
-  }
-];
+    key: 'action',
+  },
+]
 
 const DoctorsList = async (props: SearchParamsProps) => {
-  const searchParams = await props.searchParams;
-  const pageParam = typeof searchParams?.p === 'string' ? searchParams.p : '1';
-  const page = Number(pageParam);
-  const searchQuery = (searchParams?.q || '') as string;
+  const searchParams = await props.searchParams
+  const pageParam = typeof searchParams?.p === 'string' ? searchParams.p : '1'
+  const page = Number(pageParam)
+  const searchQuery = (searchParams?.q || '') as string
 
   // Fetch data using the tRPC server client
   // Assuming trpc.doctor.getAllDoctors expects { page: number, search: string }
-  const { data, totalPages, totalRecords, currentPage } = await trpc.doctor.getAllDoctors({
-    page,
-    search: searchQuery
-  });
+  const { data, totalPages, totalRecords, currentPage } =
+    await trpc.doctor.getAllDoctors({
+      page,
+      search: searchQuery,
+    })
 
   // Handle case where data might be null (e.g., if the tRPC procedure explicitly returns null on error/no data)
   // However, if the tRPC procedure throws on error, this check might not be reached directly
   // and the component would crash unless wrapped in an error boundary or try-catch.
   if (!data) {
     // You might want to return an error message or a loading spinner if data can be null initially
-    return <div className='py-10 text-center'>No doctors found or an error occurred.</div>;
+    return (
+      <div className='py-10 text-center'>
+        No doctors found or an error occurred.
+      </div>
+    )
   }
 
-  const session = await getSession();
-  const isAdmin = await checkRole(session, 'ADMIN');
+  const session = await getSession()
+  const isAdmin = await checkRole(session, 'ADMIN')
 
   const renderRow = (item: Doctor) => (
     <tr
@@ -107,7 +112,7 @@ const DoctorsList = async (props: SearchParamsProps) => {
         </div>
       </td>
     </tr>
-  );
+  )
 
   return (
     <div className='rounded-xl bg-white px-3 py-6 2xl:px-6'>
@@ -118,7 +123,9 @@ const DoctorsList = async (props: SearchParamsProps) => {
             size={20}
           />
           <p className='font-semibold text-2xl'>{totalRecords}</p>
-          <span className='text-gray-600 text-sm xl:text-base'>total doctors</span>
+          <span className='text-gray-600 text-sm xl:text-base'>
+            total doctors
+          </span>
         </div>
         <div className='flex w-full items-center justify-between gap-2 lg:w-fit lg:justify-start'>
           <SearchInput />
@@ -143,7 +150,7 @@ const DoctorsList = async (props: SearchParamsProps) => {
         )}
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default DoctorsList;
+export default DoctorsList

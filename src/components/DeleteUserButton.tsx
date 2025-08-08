@@ -1,10 +1,10 @@
-'use client';
+'use client'
 
-import type { User } from 'better-auth';
-import { LoaderCircle, Trash2 } from 'lucide-react';
-import { useRouter } from 'next/navigation';
-import { useState } from 'react';
-import { toast } from 'sonner';
+import type { User } from 'better-auth'
+import { LoaderCircle, Trash2 } from 'lucide-react'
+import { useRouter } from 'next/navigation'
+import { useState } from 'react'
+import { toast } from 'sonner'
 
 import {
   AlertDialog,
@@ -15,35 +15,35 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-  AlertDialogTrigger
-} from '@/components/ui/alert-dialog';
-import { authClient } from '@/lib/auth/auth-client';
+  AlertDialogTrigger,
+} from '@/components/ui/alert-dialog'
+import { authClient } from '@/lib/auth/auth-client'
 
-import { Button } from './ui/button';
+import { Button } from './ui/button'
 
 export default function DeleteUserButton({ user }: { user: User }) {
-  const [loading, setLoading] = useState(false);
-  const router = useRouter();
+  const [loading, setLoading] = useState(false)
+  const router = useRouter()
 
   const deleteUser = async () => {
     await authClient.admin.removeUser(
       { userId: user.id },
       {
         onRequest: () => {
-          setLoading(true);
+          setLoading(true)
         },
         onSuccess: () => {
-          setLoading(false);
-          toast.success('Conta deletada com sucesso');
-          router.refresh();
+          setLoading(false)
+          toast.success('Conta deletada com sucesso')
+          router.refresh()
         },
         onError: () => {
-          setLoading(false);
-          toast.error('Erro ao deletar conta.');
-        }
-      }
-    );
-  };
+          setLoading(false)
+          toast.error('Erro ao deletar conta.')
+        },
+      },
+    )
+  }
 
   return (
     <AlertDialog>
@@ -62,7 +62,8 @@ export default function DeleteUserButton({ user }: { user: User }) {
           <AlertDialogTitle>Confirmar exclusão</AlertDialogTitle>
           <AlertDialogDescription>
             Tem certeza que deseja excluir o usuário{' '}
-            <span className='font-medium'>{user.name}</span>? Esta ação não pode ser desfeita.
+            <span className='font-medium'>{user.name}</span>? Esta ação não pode
+            ser desfeita.
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
@@ -84,5 +85,5 @@ export default function DeleteUserButton({ user }: { user: User }) {
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>
-  );
+  )
 }

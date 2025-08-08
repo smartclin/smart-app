@@ -1,6 +1,6 @@
-'use client';
+'use client'
 
-import { MODELS, type modelID } from '@/ai/providers';
+import { MODELS, type modelID } from '@/ai/providers'
 
 import {
   Select,
@@ -8,15 +8,18 @@ import {
   SelectGroup,
   SelectItem,
   SelectTrigger,
-  SelectValue
-} from '../ui/select';
+  SelectValue,
+} from '../ui/select'
 
 interface ModelPickerProps {
-  selectedModel: modelID;
-  setSelectedModel: (model: modelID) => void;
+  selectedModel: modelID
+  setSelectedModel: (model: modelID) => void
 }
 
-export const ModelPicker = ({ selectedModel, setSelectedModel }: ModelPickerProps) => {
+export const ModelPicker = ({
+  selectedModel,
+  setSelectedModel,
+}: ModelPickerProps) => {
   return (
     <div className='absolute bottom-2 left-2 flex flex-col gap-2'>
       <Select
@@ -28,7 +31,7 @@ export const ModelPicker = ({ selectedModel, setSelectedModel }: ModelPickerProp
         </SelectTrigger>
         <SelectContent>
           <SelectGroup>
-            {MODELS.map(modelId => (
+            {MODELS.map((modelId) => (
               <SelectItem
                 key={modelId}
                 value={modelId}
@@ -40,5 +43,5 @@ export const ModelPicker = ({ selectedModel, setSelectedModel }: ModelPickerProp
         </SelectContent>
       </Select>
     </div>
-  );
-};
+  )
+}

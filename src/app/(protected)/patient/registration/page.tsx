@@ -1,11 +1,11 @@
-import { NewPatient } from '@/components/new-patient';
-import { getSession } from '@/lib/auth';
-import { trpc } from '@/trpc/server';
+import { NewPatient } from '@/components/new-patient'
+import { getSession } from '@/lib/auth'
+import { trpc } from '@/trpc/server'
 
 const Registration = async () => {
-  const session = await getSession();
-  const userId = session?.user.id;
-  const data = await trpc.patient.getPatientById(userId ?? 'N/A');
+  const session = await getSession()
+  const userId = session?.user.id
+  const data = await trpc.patient.getPatientById(userId ?? 'N/A')
 
   return (
     <div className='flex h-full w-full justify-center'>
@@ -16,7 +16,7 @@ const Registration = async () => {
         />
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default Registration;
+export default Registration

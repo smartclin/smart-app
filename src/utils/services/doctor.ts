@@ -1,75 +1,80 @@
-import { db } from '@/db';
-import { getSession } from '@/lib/auth'; // your BetterAuth instance
-import { processAppointments } from '@/types/helper';
+import { db } from '@/db'
+import { getServerSession } from '@/lib/auth' // your BetterAuth instance
+import { processAppointments } from '@/types/helper'
 
-import { daysOfWeek } from '../';
+import { daysOfWeek } from '../'
 
 export async function getDoctors() {
   try {
-    const data = await db.doctor.findMany();
+    const data = await db.doctor.findMany()
 
-    return { success: true, data, status: 200 };
+    return { success: true, data, status: 200 }
   } catch (_error) {
-    return { success: false, message: 'Internal Server Error', status: 500 };
+    return { success: false, message: 'Internal Server Error', status: 500 }
   }
 }
 export async function getDoctorDashboardStats() {
   try {
-    const sessiom = await getSession();
-    const userId = sessiom?.user.id;
-    const todayDate = new Date().getDay();
-    const today = daysOfWeek[todayDate];
+    const sessiom = await getServerSession()
+    const userId = sessiom?.user.id
+    const todayDate = new Date().getDay()
+    const today = daysOfWeek[todayDate]
 
-    const [totalPatient, totalNurses, appointments, doctors] = await Promise.all([
-      db.patient.count(),
-      db.staff.count({ where: { role: 'STAFF' } }),
-      db.appointment.findMany({
-        where: { doctorId: userId ?? 'N/A', appointmentDate: { lte: new Date() } },
-        include: {
-          patient: {
-            select: {
-              id: true,
-              firstName: true,
-              lastName: true,
-              gender: true,
-              dateOfBirth: true,
-              colorCode: true,
-              img: true
-            }
+    const [totalPatient, totalNurses, appointments, doctors] =
+      await Promise.all([
+        db.patient.count(),
+        db.staff.count({ where: { role: 'STAFF' } }),
+        db.appointment.findMany({
+          where: {
+            doctorId: userId ?? 'N/A',
+            appointmentDate: { lte: new Date() },
           },
-          doctor: {
-            select: {
-              id: true,
-              name: true,
-              specialization: true,
-              img: true,
-              colorCode: true
-            }
-          }
-        },
-        orderBy: { appointmentDate: 'desc' }
-      }),
-      db.doctor.findMany({
-        where: {
-          workingDays: {
-            some: { day: { equals: today, mode: 'insensitive' } }
-          }
-        },
-        select: {
-          id: true,
-          name: true,
-          specialization: true,
-          img: true,
-          colorCode: true,
-          workingDays: true
-        },
-        take: 5
-      })
-    ]);
+          include: {
+            patient: {
+              select: {
+                id: true,
+                firstName: true,
+                lastName: true,
+                gender: true,
+                dateOfBirth: true,
+                colorCode: true,
+                img: true,
+              },
+            },
+            doctor: {
+              select: {
+                id: true,
+                name: true,
+                specialization: true,
+                img: true,
+                colorCode: true,
+              },
+            },
+          },
+          orderBy: { appointmentDate: 'desc' },
+        }),
+        db.doctor.findMany({
+          where: {
+            workingDays: {
+              some: { day: { equals: today, mode: 'insensitive' } },
+            },
+          },
+          select: {
+            id: true,
+            name: true,
+            specialization: true,
+            img: true,
+            colorCode: true,
+            workingDays: true,
+          },
+          take: 5,
+        }),
+      ])
 
-    const { appointmentCounts, monthlyData } = await processAppointments(appointments);
+    const { appointmentCounts, monthlyData } =
+      await processAppointments(appointments)
 
-    const last5Records = appointments.slice(0, 5);
+    const last5Records = appointments.slice(0, 5)
     // const availableDoctors = doctors.slice(0, 5);
 
     return {
@@ -79,10 +84,10 @@ export async function getDoctorDashboardStats() {
       last5Records,
       availableDoctors: doctors,
       totalAppointment: appointments?.length,
-      monthlyData
-    };
+      monthlyData,
+    }
   } catch (_error) {
-    return { success: false, message: 'Internal Server Error', status: 500 };
+    return { success: false, message: 'Internal Server Error', status: 500 }
   }
 }
 
@@ -102,31 +107,31 @@ export async function getDoctorById(id: string) {
                   lastName: true,
                   gender: true,
                   img: true,
-                  colorCode: true
-                }
+                  colorCode: true,
+                },
               },
               doctor: {
                 select: {
                   name: true,
                   specialization: true,
                   img: true,
-                  colorCode: true
-                }
-              }
+                  colorCode: true,
+                },
+              },
             },
             orderBy: { appointmentDate: 'desc' },
-            take: 10
-          }
-        }
+            take: 10,
+          },
+        },
       }),
       db.appointment.count({
-        where: { doctorId: id }
-      })
-    ]);
+        where: { doctorId: id },
+      }),
+    ])
 
-    return { data: doctor, totalAppointment };
+    return { data: doctor, totalAppointment }
   } catch (_error) {
-    return { success: false, message: 'Internal Server Error', status: 500 };
+    return { success: false, message: 'Internal Server Error', status: 500 }
   }
 }
 
@@ -135,40 +140,43 @@ export async function getRatingById(id: string) {
     const data = await db.rating.findMany({
       where: { staffId: id },
       include: {
-        patient: { select: { lastName: true, firstName: true } }
-      }
-    });
+        patient: { select: { lastName: true, firstName: true } },
+      },
+    })
 
-    const totalRatings = data?.length;
-    const sumRatings = data?.reduce((sum: number, el: { rating: number }) => sum + el.rating, 0);
+    const totalRatings = data?.length
+    const sumRatings = data?.reduce(
+      (sum: number, el: { rating: number }) => sum + el.rating,
+      0,
+    )
 
-    const averageRating = totalRatings > 0 ? sumRatings / totalRatings : 0;
-    const formattedRatings = (Math.round(averageRating * 10) / 10).toFixed(1);
+    const averageRating = totalRatings > 0 ? sumRatings / totalRatings : 0
+    const formattedRatings = (Math.round(averageRating * 10) / 10).toFixed(1)
 
     return {
       totalRatings,
       averageRating: formattedRatings,
-      ratings: data
-    };
+      ratings: data,
+    }
   } catch (_error) {
-    return { success: false, message: 'Internal Server Error', status: 500 };
+    return { success: false, message: 'Internal Server Error', status: 500 }
   }
 }
 
 export async function getAllDoctors({
   page,
   limit,
-  search
+  search,
 }: {
-  page: number | string;
-  limit?: number | string;
-  search?: string;
+  page: number | string
+  limit?: number | string
+  search?: string
 }) {
   try {
-    const PAGE_NUMBER = Number(page) <= 0 ? 1 : Number(page);
-    const LIMIT = Number(limit) || 10;
+    const PAGE_NUMBER = Number(page) <= 0 ? 1 : Number(page)
+    const LIMIT = Number(limit) || 10
 
-    const SKIP = (PAGE_NUMBER - 1) * LIMIT;
+    const SKIP = (PAGE_NUMBER - 1) * LIMIT
 
     const [doctors, totalRecords] = await Promise.all([
       db.doctor.findMany({
@@ -176,17 +184,17 @@ export async function getAllDoctors({
           OR: [
             { name: { contains: search, mode: 'insensitive' } },
             { specialization: { contains: search, mode: 'insensitive' } },
-            { email: { contains: search, mode: 'insensitive' } }
-          ]
+            { email: { contains: search, mode: 'insensitive' } },
+          ],
         },
         include: { workingDays: true },
         skip: SKIP,
-        take: LIMIT
+        take: LIMIT,
       }),
-      db.doctor.count()
-    ]);
+      db.doctor.count(),
+    ])
 
-    const totalPages = Math.ceil(totalRecords / LIMIT);
+    const totalPages = Math.ceil(totalRecords / LIMIT)
 
     return {
       success: true,
@@ -194,24 +202,24 @@ export async function getAllDoctors({
       totalRecords,
       totalPages,
       currentPage: PAGE_NUMBER,
-      status: 200
-    };
+      status: 200,
+    }
   } catch (_error) {
-    return { success: false, message: 'Internal Server Error', status: 500 };
+    return { success: false, message: 'Internal Server Error', status: 500 }
   }
 }
 
 export async function getAvailableDoctors() {
   try {
-    const todayDate = new Date().getDay();
-    const today = daysOfWeek[todayDate];
+    const todayDate = new Date().getDay()
+    const today = daysOfWeek[todayDate]
 
     const doctors = await db.doctor.findMany({
       where: {
         workingDays: {
-          some: { day: { equals: today, mode: 'insensitive' } }
+          some: { day: { equals: today, mode: 'insensitive' } },
         },
-        availabilityStatus: 'available'
+        availabilityStatus: 'available',
       },
       select: {
         id: true,
@@ -219,13 +227,13 @@ export async function getAvailableDoctors() {
         specialization: true,
         img: true,
         colorCode: true,
-        workingDays: true
+        workingDays: true,
       },
-      take: 3
-    });
+      take: 3,
+    })
 
-    return { success: true, data: doctors, status: 200 };
+    return { success: true, data: doctors, status: 200 }
   } catch (_error) {
-    return { success: false, message: 'Internal Server Error', status: 500 };
+    return { success: false, message: 'Internal Server Error', status: 500 }
   }
 }

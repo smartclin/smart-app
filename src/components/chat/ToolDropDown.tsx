@@ -1,46 +1,46 @@
-'use client';
+'use client'
 
-import { Settings2 } from 'lucide-react';
-import { startTransition } from 'react';
+import { Settings2 } from 'lucide-react'
+import { startTransition } from 'react'
 
-import { saveChatModelAsCookie } from '@/lib/model';
-import type { ModelId } from '@/lib/model/model';
-import { saveToolAsCookie } from '@/lib/tools';
-import { getModelForTool, TOOL_REGISTRY, type Tool } from '@/lib/tools/tool';
+import { saveChatModelAsCookie } from '@/lib/model'
+import type { ModelId } from '@/lib/model/model'
+import { saveToolAsCookie } from '@/lib/tools'
+import { getModelForTool, TOOL_REGISTRY, type Tool } from '@/lib/tools/tool'
 
-import { Button } from '../ui/button';
+import { Button } from '../ui/button'
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuTrigger
-} from '../ui/dropdown-menu';
+  DropdownMenuTrigger,
+} from '../ui/dropdown-menu'
 
 interface ModelDropDownProps {
-  disabledAll: boolean;
-  initialModel: ModelId;
-  optimisticTool: Tool;
-  setOptimisticTool: (toolId: Tool) => void;
+  disabledAll: boolean
+  initialModel: ModelId
+  optimisticTool: Tool
+  setOptimisticTool: (toolId: Tool) => void
 }
 
 const ToolDropDown = ({
   disabledAll,
   initialModel,
   optimisticTool,
-  setOptimisticTool
+  setOptimisticTool,
 }: ModelDropDownProps) => {
   const handleToolChange = (toolId: Tool) => {
     startTransition(async () => {
-      setOptimisticTool(toolId);
-      await saveToolAsCookie(toolId);
+      setOptimisticTool(toolId)
+      await saveToolAsCookie(toolId)
 
       // set appropriate model for the tool
       if (toolId !== 'none') {
-        const toolModel = getModelForTool(toolId, initialModel);
-        await saveChatModelAsCookie(toolModel as ModelId);
+        const toolModel = getModelForTool(toolId, initialModel)
+        await saveChatModelAsCookie(toolModel as ModelId)
       }
-    });
-  };
+    })
+  }
 
   return (
     <DropdownMenu>
@@ -80,7 +80,7 @@ const ToolDropDown = ({
         ))}
       </DropdownMenuContent>
     </DropdownMenu>
-  );
-};
+  )
+}
 
-export default ToolDropDown;
+export default ToolDropDown

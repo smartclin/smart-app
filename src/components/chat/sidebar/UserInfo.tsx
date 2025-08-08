@@ -1,12 +1,12 @@
-'use client';
+'use client'
 
-import { IconDotsVertical, IconLogout } from '@tabler/icons-react';
-import { createAuthClient } from 'better-auth/react';
-import { CommandIcon } from 'lucide-react';
-import Image from 'next/image';
-import { useState } from 'react';
+import { IconDotsVertical, IconLogout } from '@tabler/icons-react'
+import { createAuthClient } from 'better-auth/react'
+import { CommandIcon } from 'lucide-react'
+import Image from 'next/image'
+import { useState } from 'react'
 
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -14,44 +14,44 @@ import {
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
-  DropdownMenuTrigger
-} from '@/components/ui/dropdown-menu';
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu'
 import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-  useSidebar
-} from '@/components/ui/sidebar';
-import { trpc } from '@/trpc/client';
+  useSidebar,
+} from '@/components/ui/sidebar'
+import { trpc } from '@/trpc/client'
 
-import SearchCommand from '../modals/SearchCommand';
+import SearchCommand from '../modals/SearchCommand'
 
 interface Props {
-  name: string;
-  email: string;
-  image: string;
+  name: string
+  email: string
+  image: string
 }
 
 const UserInfo = ({ name, email, image }: Props) => {
-  const [openSearch, setOpenSearch] = useState(false);
+  const [openSearch, setOpenSearch] = useState(false)
 
-  const { isMobile } = useSidebar();
+  const { isMobile } = useSidebar()
 
-  const utils = trpc.useUtils();
+  const utils = trpc.useUtils()
 
-  const authClient = createAuthClient();
+  const authClient = createAuthClient()
 
   const signOut = async () => {
     await authClient.signOut({
       fetchOptions: {
         onSuccess: () => {
-          utils.user.getCurrentUser.invalidate();
-          window.location.replace('/');
+          utils.user.getCurrentUser.invalidate()
+          window.location.replace('/')
         },
-        onError: _error => {}
-      }
-    });
-  };
+        onError: (_error) => {},
+      },
+    })
+  }
 
   return (
     <>
@@ -84,7 +84,9 @@ const UserInfo = ({ name, email, image }: Props) => {
                 </Avatar>
                 <div className='grid flex-1 text-left text-sm leading-tight'>
                   <span className='truncate font-medium'>{name}</span>
-                  <span className='truncate text-muted-foreground text-xs'>{email}</span>
+                  <span className='truncate text-muted-foreground text-xs'>
+                    {email}
+                  </span>
                 </div>
                 <IconDotsVertical className='ml-auto size-4' />
               </SidebarMenuButton>
@@ -114,7 +116,9 @@ const UserInfo = ({ name, email, image }: Props) => {
                   </Avatar>
                   <div className='grid flex-1 text-left text-sm leading-tight'>
                     <span className='truncate font-medium'>{name}</span>
-                    <span className='truncate text-muted-foreground text-xs'>{email}</span>
+                    <span className='truncate text-muted-foreground text-xs'>
+                      {email}
+                    </span>
                   </div>
                 </div>
               </DropdownMenuLabel>
@@ -122,7 +126,8 @@ const UserInfo = ({ name, email, image }: Props) => {
               <DropdownMenuGroup>
                 <DropdownMenuItem onClick={() => setOpenSearch(true)}>
                   <div className='flex items-center gap-0.5'>
-                    <CommandIcon /> <span className='font-medium text-sm'>+ k</span>
+                    <CommandIcon />{' '}
+                    <span className='font-medium text-sm'>+ k</span>
                   </div>
                   Search
                 </DropdownMenuItem>
@@ -138,7 +143,7 @@ const UserInfo = ({ name, email, image }: Props) => {
         </SidebarMenuItem>
       </SidebarMenu>
     </>
-  );
-};
+  )
+}
 
-export default UserInfo;
+export default UserInfo

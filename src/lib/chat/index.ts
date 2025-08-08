@@ -1,37 +1,37 @@
-'use server';
+'use server'
 
-import { groq } from '@ai-sdk/groq';
-import { generateText } from 'ai';
+import { groq } from '@ai-sdk/groq'
+import { generateText } from 'ai'
 
-import { db } from '@/db';
+import { db } from '@/db'
 
 export async function getChatById(chatId: string) {
   const existingChat = await db.chat.findUnique({
     where: {
-      id: chatId
-    }
-  });
+      id: chatId,
+    },
+  })
 
-  return existingChat;
+  return existingChat
 }
 
 export async function getMessagesByChatId(chatId: string) {
   const existingChat = await db.chat.findUnique({
     where: {
-      id: chatId
-    }
-  });
+      id: chatId,
+    },
+  })
 
-  if (!existingChat) return [];
+  if (!existingChat) return []
 
   const messages = await db.message.findMany({
     where: {
-      chatId
+      chatId,
     },
-    orderBy: [{ createdAt: 'asc' }]
-  });
+    orderBy: [{ createdAt: 'asc' }],
+  })
 
-  return messages;
+  return messages
 }
 
 export async function generateTitleFromUserMessage(message: string) {
@@ -47,10 +47,10 @@ Guidelines:
 - Keep it under 50 characters.
 - Do not use quotation marks, colons, or the word "title".
 - Return only the title text, nothing else.
-    `
-  });
+    `,
+  })
 
-  return title.trim();
+  return title.trim()
 }
 
 /*for resumable streams*/
@@ -58,35 +58,35 @@ export const loadStreams = async (chatId: string) => {
   try {
     const streams = await db.stream.findMany({
       where: {
-        chatId
+        chatId,
       },
       orderBy: {
-        createdAt: 'asc'
-      }
-    });
+        createdAt: 'asc',
+      },
+    })
 
-    return streams.map(stream => stream.id);
+    return streams.map((stream) => stream.id)
   } catch (error) {
-    throw new Error(`Failed to load streamIds: ${(error as Error).message}`);
+    throw new Error(`Failed to load streamIds: ${(error as Error).message}`)
   }
-};
+}
 
 export const appendStreamId = async ({
   chatId,
-  streamId
+  streamId,
 }: {
-  chatId: string;
-  streamId: string;
+  chatId: string
+  streamId: string
 }) => {
   try {
     await db.stream.create({
       data: {
         id: streamId,
         chatId,
-        createdAt: new Date()
-      }
-    });
+        createdAt: new Date(),
+      },
+    })
   } catch (error) {
-    throw new Error(`Failed to append streamId: ${(error as Error).message}`);
+    throw new Error(`Failed to append streamId: ${(error as Error).message}`)
   }
-};
+}

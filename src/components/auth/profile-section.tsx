@@ -1,83 +1,89 @@
-'use client';
+'use client'
 
-import { useAutoAnimate } from '@formkit/auto-animate/react';
-import { zodResolver } from '@hookform/resolvers/zod';
-import type { User } from 'better-auth';
-import { Loader, UserIcon } from 'lucide-react';
-import { useRouter } from 'next/navigation';
-import { useState } from 'react';
-import { useForm } from 'react-hook-form';
-import * as z from 'zod';
+import { useAutoAnimate } from '@formkit/auto-animate/react'
+import { zodResolver } from '@hookform/resolvers/zod'
+import type { User } from 'better-auth'
+import { Loader, UserIcon } from 'lucide-react'
+import { useRouter } from 'next/navigation'
+import { useState } from 'react'
+import { useForm } from 'react-hook-form'
+import * as z from 'zod'
 
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { Button } from '@/components/ui/button'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import {
   Form,
   FormControl,
   FormField,
   FormItem,
   FormLabel,
-  FormMessage
-} from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
-import { UploadButton } from '@/components/uploadthing'; // Ensure this imports from your generated types
-import { authClient } from '@/lib/auth/auth-client';
-import { cn } from '@/lib/utils';
+  FormMessage,
+} from '@/components/ui/form'
+import { Input } from '@/components/ui/input'
+import { UploadButton } from '@/components/uploadthing' // Ensure this imports from your generated types
+import { authClient } from '@/lib/auth/auth-client'
+import { cn } from '@/lib/utils'
 
 const formSchema = z.object({
   name: z
     .string()
     .min(2, {
-      message: 'Name is required'
+      message: 'Name is required',
     })
     .max(25, {
-      message: 'Name must be less than 25 characters'
-    })
-});
+      message: 'Name must be less than 25 characters',
+    }),
+})
 
-export const ProfileSection = ({ user, className }: { user: User; className?: string }) => {
-  const [animate] = useAutoAnimate();
-  const [isProfileBoxOpen, setIsProfileBoxOpen] = useState(false);
-  const [image, setImage] = useState<string | null | undefined>(user.image);
-  const [isLoading, setIsLoading] = useState(false);
-  const [_error, setError] = useState('');
-  const router = useRouter();
+export const ProfileSection = ({
+  user,
+  className,
+}: {
+  user: User
+  className?: string
+}) => {
+  const [animate] = useAutoAnimate()
+  const [isProfileBoxOpen, setIsProfileBoxOpen] = useState(false)
+  const [image, setImage] = useState<string | null | undefined>(user.image)
+  const [isLoading, setIsLoading] = useState(false)
+  const [_error, setError] = useState('')
+  const router = useRouter()
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: user.name
-    }
-  });
+      name: user.name,
+    },
+  })
 
   const onProfileSubmit = async (data: z.infer<typeof formSchema>) => {
     await authClient.updateUser(
       {
         name: data.name,
-        image
+        image,
       },
       {
         onRequest: () => {
-          setIsLoading(true);
+          setIsLoading(true)
         },
         onSuccess: () => {
-          setIsLoading(false);
-          window.location.reload();
+          setIsLoading(false)
+          window.location.reload()
         },
-        onError: ctx => {
-          setError(ctx.error.message);
-          setIsLoading(false);
-        }
-      }
-    );
-  };
-  const [animateRef] = useAutoAnimate();
+        onError: (ctx) => {
+          setError(ctx.error.message)
+          setIsLoading(false)
+        },
+      },
+    )
+  }
+  const [animateRef] = useAutoAnimate()
   return (
     <div
       className={cn(
         'flex w-full flex-col items-start justify-between gap-8 py-3 md:flex-row md:gap-0',
-        className
+        className,
       )}
     >
       <p className='pointer-events-none font-medium text-sm'>Profile</p>
@@ -109,7 +115,9 @@ export const ProfileSection = ({ user, className }: { user: User; className?: st
         ) : (
           <Card className='shadow-md'>
             <CardHeader className='flex w-full flex-row items-center justify-between'>
-              <CardTitle className='text-sm tracking-tight'>Update profile</CardTitle>
+              <CardTitle className='text-sm tracking-tight'>
+                Update profile
+              </CardTitle>
             </CardHeader>
             <CardContent>
               <div className='mb-6 flex items-center gap-3'>
@@ -131,8 +139,8 @@ export const ProfileSection = ({ user, className }: { user: User; className?: st
                     className='ut-allowed-content:hidden ut-button:h-8 ut-button:w-20 ut-button:border ut-button:bg-transparent ut-button:text-black/60 ut-button:text-xs ut-label:text-red-500 ut-button:transition-all hover:ut-button:bg-black/5 hover:ut-button:text-black focus-visible:ut-button:ring-[4px] focus-visible:ut-button:ring-ring/20'
                     disabled={true}
                     endpoint='imageUploader' // <-- Fixed this line
-                    onClientUploadComplete={res => {
-                      setImage(res[0]?.ufsUrl);
+                    onClientUploadComplete={(res) => {
+                      setImage(res[0]?.ufsUrl)
                     }}
                     onUploadError={(_error: Error) => {}}
                   />
@@ -140,8 +148,8 @@ export const ProfileSection = ({ user, className }: { user: User; className?: st
                     className='text-destructive transition-all hover:bg-destructive/5 hover:text-destructive/80 focus-visible:border-2 focus-visible:border-destructive/15 focus-visible:ring-destructive/30'
                     disabled={true}
                     onClick={() => {
-                      setImage(null);
-                      router.refresh();
+                      setImage(null)
+                      router.refresh()
                     }}
                     size={'sm'}
                     variant={'ghost'}
@@ -201,5 +209,5 @@ export const ProfileSection = ({ user, className }: { user: User; className?: st
         )}
       </div>
     </div>
-  );
-};
+  )
+}

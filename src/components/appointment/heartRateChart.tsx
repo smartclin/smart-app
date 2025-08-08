@@ -1,4 +1,4 @@
-'use client';
+'use client'
 
 import {
   CartesianGrid,
@@ -7,23 +7,23 @@ import {
   ResponsiveContainer,
   Tooltip,
   XAxis,
-  YAxis
-} from 'recharts';
+  YAxis,
+} from 'recharts'
 
-import { Button } from '../ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
+import { Button } from '../ui/button'
+import { Card, CardContent, CardHeader, CardTitle } from '../ui/card'
 
 interface DataProps {
-  average: string;
+  average: string
   data: {
-    label: string;
-    value1: number;
-    value2: number;
-  }[];
+    label: string
+    value1: number
+    value2: number
+  }[]
 }
 
 export function HeartRateChart({ average, data }: DataProps) {
-  const lastData = data[data.length - 1];
+  const lastData = data[data.length - 1]
 
   return (
     <Card>
@@ -72,7 +72,9 @@ export function HeartRateChart({ average, data }: DataProps) {
               tick={{ fill: '#9ca3af' }}
               tickLine={false}
             />
-            <Tooltip contentStyle={{ borderRadius: '10px', borderColor: '#fff' }} />
+            <Tooltip
+              contentStyle={{ borderRadius: '10px', borderColor: '#fff' }}
+            />
             <Line
               activeDot={{ r: 8 }}
               dataKey='value1'
@@ -88,5 +90,5 @@ export function HeartRateChart({ average, data }: DataProps) {
         </ResponsiveContainer>
       </CardContent>
     </Card>
-  );
+  )
 }

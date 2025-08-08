@@ -1,35 +1,35 @@
-'use client';
+'use client'
 
-import { zodResolver } from '@hookform/resolvers/zod';
-import { Plus } from 'lucide-react';
-import { useRouter } from 'next/navigation';
-import { type SubmitHandler, useForm } from 'react-hook-form';
-import { toast } from 'sonner';
-import { z } from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod'
+import { Plus } from 'lucide-react'
+import { useRouter } from 'next/navigation'
+import { type SubmitHandler, useForm } from 'react-hook-form'
+import { toast } from 'sonner'
+import { z } from 'zod'
 
-import { PaymentSchema } from '@/lib/schema';
-import { trpc } from '@/trpc/client';
+import { PaymentSchema } from '@/lib/schema'
+import { trpc } from '@/trpc/client'
 
-import { CustomInput } from '../custom-input';
-import { Button } from '../ui/button';
-import { CardHeader } from '../ui/card';
-import { Dialog, DialogContent, DialogTitle, DialogTrigger } from '../ui/dialog';
-import { Form } from '../ui/form';
+import { CustomInput } from '../custom-input'
+import { Button } from '../ui/button'
+import { CardHeader } from '../ui/card'
+import { Dialog, DialogContent, DialogTitle, DialogTrigger } from '../ui/dialog'
+import { Form } from '../ui/form'
 
 const schema = PaymentSchema.pick({ discount: true, billDate: true }).extend({
   totalAmount: z.number(),
-  id: z.number().optional()
-});
+  id: z.number().optional(),
+})
 
-type GenerateBillInput = z.infer<typeof schema>;
+type GenerateBillInput = z.infer<typeof schema>
 
 interface DataProps {
-  id?: number;
-  totalBill: number;
+  id?: number
+  totalBill: number
 }
 
 export const GenerateFinalBills = ({ id, totalBill }: DataProps) => {
-  const router = useRouter();
+  const router = useRouter()
 
   const form = useForm<GenerateBillInput>({
     resolver: zodResolver(schema),
@@ -37,30 +37,30 @@ export const GenerateFinalBills = ({ id, totalBill }: DataProps) => {
       discount: 0,
       billDate: new Date() ?? '00/00/0000',
       totalAmount: totalBill,
-      id: id ?? undefined
-    }
-  });
+      id: id ?? undefined,
+    },
+  })
 
-  const { control, handleSubmit } = form;
+  const { control, handleSubmit } = form
 
   const generateBill = trpc.payment.generateBill.useMutation({
     onSuccess: () => {
-      toast.success('Patient bill generated successfully!');
-      router.refresh();
-      form.reset();
+      toast.success('Patient bill generated successfully!')
+      router.refresh()
+      form.reset()
     },
-    onError: error => {
-      toast.error(error.message || 'Something went wrong');
-    }
-  });
+    onError: (error) => {
+      toast.error(error.message || 'Something went wrong')
+    },
+  })
 
-  const handleOnSubmit: SubmitHandler<GenerateBillInput> = values => {
+  const handleOnSubmit: SubmitHandler<GenerateBillInput> = (values) => {
     generateBill.mutate({
       ...values,
       id: id ?? 1,
-      totalAmount: totalBill
-    });
-  };
+      totalAmount: totalBill,
+    })
+  }
 
   return (
     <Dialog>
@@ -122,5 +122,5 @@ export const GenerateFinalBills = ({ id, totalBill }: DataProps) => {
         </Form>
       </DialogContent>
     </Dialog>
-  );
-};
+  )
+}

@@ -1,68 +1,78 @@
-'use client';
+'use client'
 
-import { Ban, Check } from 'lucide-react';
-import { useRouter } from 'next/navigation';
-import { useState } from 'react';
-import { GiConfirmed } from 'react-icons/gi';
-import { MdCancel } from 'react-icons/md';
-import { toast } from 'sonner';
+import { Ban, Check } from 'lucide-react'
+import { useRouter } from 'next/navigation'
+import { useState } from 'react'
+import { GiConfirmed } from 'react-icons/gi'
+import { MdCancel } from 'react-icons/md'
+import { toast } from 'sonner'
 
-import { cn } from '@/lib/utils';
-import { trpc } from '@/trpc/client'; // Import tRPC client for client components
+import { cn } from '@/lib/utils'
+import { trpc } from '@/trpc/client' // Import tRPC client for client components
 
-import { Button } from './ui/button';
-import { Dialog, DialogClose, DialogContent, DialogTitle, DialogTrigger } from './ui/dialog';
-import { Textarea } from './ui/textarea';
+import { Button } from './ui/button'
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogTitle,
+  DialogTrigger,
+} from './ui/dialog'
+import { Textarea } from './ui/textarea'
 
 interface ActionsProps {
-  type: 'approve' | 'cancel';
-  id: number; // Assuming ID is a string (UUID) based on common Prisma patterns
-  disabled: boolean; // This prop likely means 'is the button disabled by external logic?'
+  type: 'approve' | 'cancel'
+  id: number // Assuming ID is a string (UUID) based on common Prisma patterns
+  disabled: boolean // This prop likely means 'is the button disabled by external logic?'
 }
 
-export const AppointmentActionDialog = ({ type, id, disabled }: ActionsProps) => {
+export const AppointmentActionDialog = ({
+  type,
+  id,
+  disabled,
+}: ActionsProps) => {
   // `isSubmitting` will come from the tRPC mutation hook
-  const [reason, setReason] = useState('');
-  const [isDialogOpen, setIsDialogOpen] = useState(false); // State to control dialog open/close
-  const router = useRouter();
+  const [reason, setReason] = useState('')
+  const [isDialogOpen, setIsDialogOpen] = useState(false) // State to control dialog open/close
+  const router = useRouter()
 
   // 1. Declare the tRPC mutation hook at the top level of the component
   // Assuming your tRPC procedure is `trpc.appointment.updateAppointmentStatus`
   const { mutateAsync: updateStatusMutation, isPending: isSubmitting } =
     trpc.appointment.appointmentAction.useMutation({
-      onSuccess: res => {
+      onSuccess: (res) => {
         // Assuming your tRPC mutation returns an object with `success` and `msg`
         if (res.success) {
-          toast.success(res.msg || 'Appointment status updated successfully!');
-          setReason(''); // Clear reason on success
-          setIsDialogOpen(false); // Close the dialog on success
-          router.refresh(); // Refresh page data
+          toast.success(res.msg || 'Appointment status updated successfully!')
+          setReason('') // Clear reason on success
+          setIsDialogOpen(false) // Close the dialog on success
+          router.refresh() // Refresh page data
         } else {
           // If your backend returns `success: false` but no specific error field, check `msg`
-          toast.error(res.msg || 'Failed to update appointment status.');
+          toast.error(res.msg || 'Failed to update appointment status.')
         }
       },
-      onError: error => {
-        console.error('Error updating appointment status:', error);
-        toast.error(error.message || 'Something went wrong. Please try again.');
-      }
-    });
+      onError: (error) => {
+        console.error('Error updating appointment status:', error)
+        toast.error(error.message || 'Something went wrong. Please try again.')
+      },
+    })
 
   const handleAction = async () => {
     if (type === 'cancel' && !reason.trim()) {
       // Use .trim() to check for empty string
-      toast.error('Please provide a reason for cancellation.');
-      return;
+      toast.error('Please provide a reason for cancellation.')
+      return
     }
 
     try {
       // Determine the new status based on the action type
-      const newStatus = type === 'approve' ? 'SCHEDULED' : 'CANCELLED';
+      const newStatus = type === 'approve' ? 'SCHEDULED' : 'CANCELLED'
 
       // Construct the reason message
       const finalReason =
         reason.trim() || // Use provided reason if available
-        `Appointment has been ${newStatus.toLowerCase()} on ${new Date().toLocaleString()}`; // Fallback message
+        `Appointment has been ${newStatus.toLowerCase()} on ${new Date().toLocaleString()}` // Fallback message
 
       // 2. Call the `mutateAsync` function with the payload
       // The payload must match the input schema of your `updateAppointmentStatus` tRPC procedure.
@@ -70,16 +80,16 @@ export const AppointmentActionDialog = ({ type, id, disabled }: ActionsProps) =>
       await updateStatusMutation({
         id: id, // Pass the appointment ID
         status: newStatus, // Pass the new status
-        reason: finalReason // Pass the reason
-      });
+        reason: finalReason, // Pass the reason
+      })
     } catch (error) {
       // Errors from tRPC mutations are generally caught by the `onError` callback.
       // This outer catch block would only catch errors that occur *before* the mutation
       // is even sent (e.g., network issues, or if `mutateAsync` itself throws synchronously).
-      console.error('Unexpected error during appointment action:', error);
-      toast.error('An unexpected error occurred. Please try again.');
+      console.error('Unexpected error during appointment action:', error)
+      toast.error('An unexpected error occurred. Please try again.')
     }
-  };
+  }
 
   return (
     <Dialog
@@ -150,7 +160,7 @@ export const AppointmentActionDialog = ({ type, id, disabled }: ActionsProps) =>
             <Textarea
               className='mt-4'
               disabled={isSubmitting} // Disable textarea while submitting
-              onChange={e => setReason(e.target.value)}
+              onChange={(e) => setReason(e.target.value)}
               placeholder='Cancellation reason (required)...'
               value={reason} // Controlled component
             />
@@ -162,13 +172,17 @@ export const AppointmentActionDialog = ({ type, id, disabled }: ActionsProps) =>
                 'px-4 py-2 font-medium text-sm text-white hover:text-white',
                 type === 'approve'
                   ? 'bg-blue-600 hover:bg-blue-700'
-                  : 'bg-destructive hover:bg-destructive-dark' // Use a specific hover color
+                  : 'bg-destructive hover:bg-destructive-dark', // Use a specific hover color
               )}
               disabled={isSubmitting || (type === 'cancel' && !reason.trim())} // Disable if submitting OR if cancel and reason is empty
               onClick={handleAction}
               // variant="outline" // Removed variant="outline" as it conflicts with background color
             >
-              {isSubmitting ? 'Processing...' : type === 'approve' ? 'Confirm' : 'Yes, Cancel'}
+              {isSubmitting
+                ? 'Processing...'
+                : type === 'approve'
+                  ? 'Confirm'
+                  : 'Yes, Cancel'}
             </Button>
             <DialogClose asChild>
               <Button
@@ -183,5 +197,5 @@ export const AppointmentActionDialog = ({ type, id, disabled }: ActionsProps) =>
         </div>
       </DialogContent>
     </Dialog>
-  );
-};
+  )
+}

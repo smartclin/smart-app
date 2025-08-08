@@ -1,12 +1,16 @@
-import type { SubArray } from 'better-auth/plugins/access';
-import { createAccessControl } from 'better-auth/plugins/access';
-import { adminAc, defaultStatements, userAc } from 'better-auth/plugins/admin/access';
+import type { SubArray } from 'better-auth/plugins/access'
+import { createAccessControl } from 'better-auth/plugins/access'
+import {
+  adminAc,
+  defaultStatements,
+  userAc,
+} from 'better-auth/plugins/admin/access'
 
-export type Role = keyof typeof allRoles;
+export type Role = keyof typeof allRoles
 
 export type Permissions = {
-  [k in keyof typeof statement]?: SubArray<(typeof statement)[k]>;
-};
+  [k in keyof typeof statement]?: SubArray<(typeof statement)[k]>
+}
 
 export const statement = {
   task: ['create', 'read', 'update', 'delete'],
@@ -17,10 +21,10 @@ export const statement = {
   staff: ['create', 'read', 'update', 'delete'],
   payments: ['create', 'read', 'update', 'delete'],
 
-  ...defaultStatements
-} as const;
+  ...defaultStatements,
+} as const
 
-export const ac = createAccessControl(statement);
+export const ac = createAccessControl(statement)
 
 const adminRole = ac.newRole({
   task: ['create', 'read', 'update', 'delete'],
@@ -31,8 +35,8 @@ const adminRole = ac.newRole({
   staff: ['create', 'read', 'update', 'delete'],
   payments: ['create', 'read', 'update', 'delete'],
 
-  ...adminAc.statements
-});
+  ...adminAc.statements,
+})
 
 // const userRole = ac.newRole({
 //   task: ['create', 'read', 'update', 'delete'],
@@ -46,8 +50,8 @@ const doctorRole = ac.newRole({
   records: ['create', 'read', 'update'], // Can create, read, and update medical records
   prescriptions: ['create', 'read', 'update'], // Can create, read, and update prescriptions
   staff: ['read'], // Can view staff information (e.g., for collaboration)
-  payments: ['read'] // Can view payment details (e.g., for billing inquiries)
-});
+  payments: ['read'], // Can view payment details (e.g., for billing inquiries)
+})
 
 // Staff Role (e.g., receptionist, nurse): Focus on administrative tasks and basic patient interaction
 const staffRole = ac.newRole({
@@ -58,8 +62,8 @@ const staffRole = ac.newRole({
   records: ['read'], // Can view patient records (e.g., for administrative purposes)
   prescriptions: ['read'], // Can view prescriptions
   staff: ['read'], // Can view other staff information
-  payments: ['create', 'read'] // Can record new payments and view payment history
-});
+  payments: ['create', 'read'], // Can record new payments and view payment history
+})
 
 // Patient Role: Access to their own data and services
 const patientRole = ac.newRole({
@@ -70,16 +74,16 @@ const patientRole = ac.newRole({
   records: ['read'], // Can read their own medical records
   prescriptions: ['read'], // Can read their own prescriptions
   staff: [], // No access to staff management
-  payments: ['create', 'read'] // Can make payments and view their own payment history
-});
+  payments: ['create', 'read'], // Can make payments and view their own payment history
+})
 export const allRoles = {
   admin: adminRole,
   //user: userRole,
   doctor: doctorRole,
   staff: staffRole,
-  patient: patientRole
-} as const;
+  patient: patientRole,
+} as const
 
-export const rolesData = Object.keys(allRoles) as Array<Role>;
+export const rolesData = Object.keys(allRoles) as Array<Role>
 
-export type rolesEnumData = (typeof rolesData)[number];
+export type rolesEnumData = (typeof rolesData)[number]

@@ -1,16 +1,16 @@
-import { format } from 'date-fns';
-import Link from 'next/link';
+import { format } from 'date-fns'
+import Link from 'next/link'
 
-import { MedicalHistoryContainer } from '@/components/medical-history-container';
-import { PatientRatingContainer } from '@/components/patient-rating-container';
-import { ProfileImage } from '@/components/profile-image';
-import { Card } from '@/components/ui/card';
-import { getSession } from '@/lib/auth';
-import { trpc } from '@/trpc/server';
+import { MedicalHistoryContainer } from '@/components/medical-history-container'
+import { PatientRatingContainer } from '@/components/patient-rating-container'
+import { ProfileImage } from '@/components/profile-image'
+import { Card } from '@/components/ui/card'
+import { getSession } from '@/lib/auth'
+import { trpc } from '@/trpc/server'
 
 interface ParamsProps {
-  params: Promise<{ patientId: string }>;
-  searchParams?: Promise<{ [key: string]: string | string[] | undefined }>;
+  params: Promise<{ patientId: string }>
+  searchParams?: Promise<{ [key: string]: string | string[] | undefined }>
 }
 
 const SmallCard = ({ label, value }: { label: string; value: string }) => (
@@ -18,21 +18,21 @@ const SmallCard = ({ label, value }: { label: string; value: string }) => (
     <span className='text-gray-500 text-sm'>{label}</span>
     <p className='text-sm capitalize md:text-base'>{value}</p>
   </div>
-);
+)
 
 async function resolvePatientId(params: Promise<{ patientId: string }>) {
-  const resolvedParams = await params;
-  let id = resolvedParams.patientId;
+  const resolvedParams = await params
+  let id = resolvedParams.patientId
   if (id === 'self') {
-    const session = await getSession();
-    const user = session?.user;
-    const userId = user?.id;
+    const session = await getSession()
+    const user = session?.user
+    const userId = user?.id
     if (!userId) {
-      throw new Error('User ID not found in session.');
+      throw new Error('User ID not found in session.')
     }
-    id = userId;
+    id = userId
   }
-  return id;
+  return id
 }
 
 const QuickLinks = ({ id, patientId }: { id: string; patientId: string }) => (
@@ -79,17 +79,17 @@ const QuickLinks = ({ id, patientId }: { id: string; patientId: string }) => (
       )}
     </div>
   </div>
-);
+)
 
 const PatientProfile = async (props: ParamsProps) => {
-  const searchParams = await props.searchParams;
-  const params = await props.params;
+  const searchParams = await props.searchParams
+  const params = await props.params
 
-  const id = await resolvePatientId(props.params);
-  const patientId = (await params).patientId;
-  const cat = searchParams?.cat || 'medical-history';
+  const id = await resolvePatientId(props.params)
+  const patientId = (await params).patientId
+  const cat = searchParams?.cat || 'medical-history'
 
-  const { data } = await trpc.patient.getPatientFullDataById(id);
+  const { data } = await trpc.patient.getPatientFullDataById(id)
 
   return (
     <div className='flex h-full flex-col gap-6 rounded-xl bg-gray-100/60 px-3 py-6 lg:flex-row 2xl:p-6'>
@@ -124,7 +124,11 @@ const PatientProfile = async (props: ParamsProps) => {
               />
               <SmallCard
                 label='Date of Birth'
-                value={data?.dateOfBirth ? format(data.dateOfBirth, 'yyyy-MM-dd') : 'N/A'}
+                value={
+                  data?.dateOfBirth
+                    ? format(data.dateOfBirth, 'yyyy-MM-dd')
+                    : 'N/A'
+                }
               />
               <SmallCard
                 label={'Phone Number'}
@@ -163,7 +167,9 @@ const PatientProfile = async (props: ParamsProps) => {
               <SmallCard
                 label='Last Visit'
                 value={
-                  data?.lastVisit ? format(data?.lastVisit ?? 'N/A', 'yyyy-MM-dd') : 'No last visit'
+                  data?.lastVisit
+                    ? format(data?.lastVisit ?? 'N/A', 'yyyy-MM-dd')
+                    : 'No last visit'
                 }
               />
             </div>
@@ -171,7 +177,9 @@ const PatientProfile = async (props: ParamsProps) => {
         </div>
 
         <div className='mt-10'>
-          {cat === 'medical-history' && <MedicalHistoryContainer patientId={id} />}
+          {cat === 'medical-history' && (
+            <MedicalHistoryContainer patientId={id} />
+          )}
 
           {/* {cat === "payments" && <Payments patientId={id!} />} */}
         </div>
@@ -185,7 +193,7 @@ const PatientProfile = async (props: ParamsProps) => {
         <PatientRatingContainer id={id ?? 'N/A'} />
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default PatientProfile;
+export default PatientProfile

@@ -1,6 +1,6 @@
-'use client';
+'use client'
 
-import { motion } from 'framer-motion';
+import { motion } from 'framer-motion'
 import {
   Baby,
   CalendarDays,
@@ -11,78 +11,80 @@ import {
   Stethoscope,
   Syringe,
   UserPlus,
-  Wallet
-} from 'lucide-react';
-import Image from 'next/image';
+  Wallet,
+} from 'lucide-react'
+import Image from 'next/image'
 
-import FloatingAnimation from '@/components/floating-animation';
+import FloatingAnimation from '@/components/floating-animation'
 
 const clinicFeatures = [
   {
     title: 'Secure Patient Records',
     description:
       'Ensure the highest level of privacy and security for all patient data, compliant with health regulations.',
-    icon: Shield
+    icon: Shield,
   },
   {
     title: 'Effortless Appointments',
     description:
       'Manage bookings, send automated reminders, and integrate with calendars for seamless scheduling.',
-    icon: CalendarDays
+    icon: CalendarDays,
   },
   {
     title: 'Streamlined Registration',
-    description: 'Simplify patient intake with easy-to-use forms and quick record creation.',
-    icon: UserPlus
+    description:
+      'Simplify patient intake with easy-to-use forms and quick record creation.',
+    icon: UserPlus,
   },
   {
     title: 'Comprehensive Vaccinations',
     description:
       'Track and manage vaccination schedules effortlessly, ensuring timely immunizations.',
-    icon: Syringe
+    icon: Syringe,
   },
   {
     title: 'Integrated Billing & Payments',
     description:
       'Handle all financial transactions, insurance claims, and billing with clarity and ease.',
-    icon: Wallet
+    icon: Wallet,
   },
   {
     title: 'Routine Checkup',
     description:
       'Comprehensive well-baby and child exams to monitor growth, health, and early signs of illness.',
-    icon: Stethoscope
+    icon: Stethoscope,
   },
   {
     title: 'Medical Examination',
     description:
       'Focused evaluations for acute concerns, sick visits, and follow-ups with thorough documentation.',
-    icon: ClipboardCheck
+    icon: ClipboardCheck,
   },
   {
     title: 'Vaccination Services',
     description:
       'Administering essential and elective vaccines according to international and local immunization schedules.',
-    icon: Syringe
+    icon: Syringe,
   },
   {
     title: 'Nutritional Assessment',
     description:
       'Dietary evaluation and tailored advice to support healthy weight, growth, and nutritional needs.',
-    icon: Salad
+    icon: Salad,
   },
   {
     title: 'Developmental Tracking',
     description:
       'Monitoring milestones in motor, cognitive, language, and social-emotional development.',
-    icon: Baby
+    icon: Baby,
   },
   {
     title: 'Health Counseling',
-    description: 'Guidance for parents on sleep, behavior, safety, and preventive pediatric care.',
-    icon: HeartHandshake
-  }
-];
+    description:
+      'Guidance for parents on sleep, behavior, safety, and preventive pediatric care.',
+    icon: HeartHandshake,
+  },
+]
 
 export function FeaturesSection() {
   return (
@@ -149,8 +151,8 @@ export function FeaturesSection() {
               viewport={{ once: true }}
               whileInView={{ opacity: 1, y: 0 }}
             >
-              Everything your family needs for a healthier future—streamlined by smart clinic
-              technology.
+              Everything your family needs for a healthier future—streamlined by
+              smart clinic technology.
             </motion.p>
           </div>
 
@@ -166,7 +168,7 @@ export function FeaturesSection() {
                   y: -5,
                   boxShadow:
                     '0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1)',
-                  transition: { duration: 0.2 }
+                  transition: { duration: 0.2 },
                 }}
                 whileInView={{ opacity: 1, y: 0 }}
               >
@@ -181,5 +183,5 @@ export function FeaturesSection() {
         </div>
       </section>
     </>
-  );
+  )
 }

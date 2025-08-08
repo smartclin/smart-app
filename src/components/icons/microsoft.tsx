@@ -23,5 +23,5 @@ export function Microsoft(props: React.HTMLAttributes<SVGElement>) {
         fill='#fbbc09'
       />
     </svg>
-  );
+  )
 }

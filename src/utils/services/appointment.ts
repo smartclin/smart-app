@@ -1,6 +1,6 @@
-import type { Prisma } from '@prisma/client';
+import type { Prisma } from '@prisma/client'
 
-import { db } from '@/db';
+import { db } from '@/db'
 
 export async function getAppointmentById(id: number) {
   try {
@@ -8,15 +8,15 @@ export async function getAppointmentById(id: number) {
       return {
         success: false,
         message: 'Appointment id does not exist.',
-        status: 404
-      };
+        status: 404,
+      }
     }
 
     const data = await db.appointment.findUnique({
       where: { id },
       include: {
         doctor: {
-          select: { id: true, name: true, specialization: true, img: true }
+          select: { id: true, name: true, specialization: true, img: true },
         },
         patient: {
           select: {
@@ -27,32 +27,32 @@ export async function getAppointmentById(id: number) {
             gender: true,
             img: true,
             address: true,
-            phone: true
-          }
-        }
-      }
-    });
+            phone: true,
+          },
+        },
+      },
+    })
 
     if (!data) {
       return {
         success: false,
         message: 'Appointment data not found',
         status: 200,
-        data: null
-      };
+        data: null,
+      }
     }
 
-    return { success: true, data, status: 200 };
+    return { success: true, data, status: 200 }
   } catch (_error) {
-    return { success: false, message: 'Internal Server Error', status: 500 };
+    return { success: false, message: 'Internal Server Error', status: 500 }
   }
 }
 
 interface AllAppointmentsProps {
-  page: number | string;
-  limit?: number | string;
-  search?: string;
-  id?: string;
+  page: number | string
+  limit?: number | string
+  search?: string
+  id?: string
 }
 
 const buildQuery = (id?: string, search?: string) => {
@@ -62,50 +62,57 @@ const buildQuery = (id?: string, search?: string) => {
         OR: [
           {
             patient: {
-              firstName: { contains: search, mode: 'insensitive' }
-            }
+              firstName: { contains: search, mode: 'insensitive' },
+            },
           },
           {
             patient: {
-              lastName: { contains: search, mode: 'insensitive' }
-            }
+              lastName: { contains: search, mode: 'insensitive' },
+            },
           },
           {
             doctor: {
-              name: { contains: search, mode: 'insensitive' }
-            }
-          }
-        ]
+              name: { contains: search, mode: 'insensitive' },
+            },
+          },
+        ],
       }
-    : {};
+    : {}
 
   // ID filtering conditions if ID exists
   const idConditions: Prisma.AppointmentWhereInput = id
     ? {
-        OR: [{ patientId: id }, { doctorId: id }]
+        OR: [{ patientId: id }, { doctorId: id }],
       }
-    : {};
+    : {}
 
   // Combine both conditions with AND if both exist
   const combinedQuery: Prisma.AppointmentWhereInput =
     id || search
       ? {
           AND: [
-            ...(Object.keys(searchConditions).length > 0 ? [searchConditions] : []),
-            ...(Object.keys(idConditions).length > 0 ? [idConditions] : [])
-          ]
+            ...(Object.keys(searchConditions).length > 0
+              ? [searchConditions]
+              : []),
+            ...(Object.keys(idConditions).length > 0 ? [idConditions] : []),
+          ],
         }
-      : {};
+      : {}
 
-  return combinedQuery;
-};
+  return combinedQuery
+}
 
-export async function getPatientAppointments({ page, limit, search, id }: AllAppointmentsProps) {
+export async function getPatientAppointments({
+  page,
+  limit,
+  search,
+  id,
+}: AllAppointmentsProps) {
   try {
-    const PAGE_NUMBER = Number(page) <= 0 ? 1 : Number(page);
-    const LIMIT = Number(limit) || 10;
+    const PAGE_NUMBER = Number(page) <= 0 ? 1 : Number(page)
+    const LIMIT = Number(limit) || 10
 
-    const SKIP = (PAGE_NUMBER - 1) * LIMIT; //0 -9
+    const SKIP = (PAGE_NUMBER - 1) * LIMIT //0 -9
 
     const [data, totalRecord] = await Promise.all([
       db.appointment.findMany({
@@ -129,8 +136,8 @@ export async function getPatientAppointments({ page, limit, search, id }: AllApp
               gender: true,
               img: true,
               dateOfBirth: true,
-              colorCode: true
-            }
+              colorCode: true,
+            },
           },
           doctor: {
             select: {
@@ -138,27 +145,27 @@ export async function getPatientAppointments({ page, limit, search, id }: AllApp
               name: true,
               specialization: true,
               colorCode: true,
-              img: true
-            }
-          }
+              img: true,
+            },
+          },
         },
-        orderBy: { appointmentDate: 'desc' }
+        orderBy: { appointmentDate: 'desc' },
       }),
       db.appointment.count({
-        where: buildQuery(id, search)
-      })
-    ]);
+        where: buildQuery(id, search),
+      }),
+    ])
 
     if (!data) {
       return {
         success: false,
         message: 'Appointment data not found',
         status: 200,
-        data: null
-      };
+        data: null,
+      }
     }
 
-    const totalPages = Math.ceil(totalRecord / LIMIT);
+    const totalPages = Math.ceil(totalRecord / LIMIT)
 
     return {
       success: true,
@@ -166,10 +173,10 @@ export async function getPatientAppointments({ page, limit, search, id }: AllApp
       totalPages,
       currentPage: PAGE_NUMBER,
       totalRecord,
-      status: 200
-    };
+      status: 200,
+    }
   } catch (_error) {
-    return { success: false, message: 'Internal Server Error', status: 500 };
+    return { success: false, message: 'Internal Server Error', status: 500 }
   }
 }
 
@@ -179,8 +186,8 @@ export async function getAppointmentWithMedicalRecordsById(id: number) {
       return {
         success: false,
         message: 'Appointment id does not exist.',
-        status: 404
-      };
+        status: 404,
+      }
     }
 
     const data = await db.appointment.findUnique({
@@ -193,22 +200,22 @@ export async function getAppointmentWithMedicalRecordsById(id: number) {
           include: {
             diagnosis: true,
             labTest: true,
-            vitalSigns: true
-          }
-        }
-      }
-    });
+            vitalSigns: true,
+          },
+        },
+      },
+    })
 
     if (!data) {
       return {
         success: false,
         message: 'Appointment data not found',
-        status: 200
-      };
+        status: 200,
+      }
     }
 
-    return { success: true, data, status: 200 };
+    return { success: true, data, status: 200 }
   } catch (_error) {
-    return { success: false, message: 'Internal Server Error', status: 500 };
+    return { success: false, message: 'Internal Server Error', status: 500 }
   }
 }

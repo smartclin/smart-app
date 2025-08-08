@@ -1,12 +1,16 @@
-import type React from 'react';
+import type React from 'react'
 
 interface TableProps<T> {
-  columns: { header: string; key: string; className?: string }[];
-  renderRow: (item: T) => React.ReactNode;
-  data: T[];
+  columns: { header: string; key: string; className?: string }[]
+  renderRow: (item: T) => React.ReactNode
+  data: T[]
 }
 
-export const Table = <T extends {}>({ columns, renderRow, data }: TableProps<T>) => {
+export const Table = <T extends {}>({
+  columns,
+  renderRow,
+  data,
+}: TableProps<T>) => {
   return (
     <table className='mt-4 w-full'>
       <thead>
@@ -30,8 +34,10 @@ export const Table = <T extends {}>({ columns, renderRow, data }: TableProps<T>)
         )}
 
         {data?.length > 0 &&
-          data?.map((item, id) => renderRow({ ...(item as object), index: id } as unknown as T))}
+          data?.map((item, id) =>
+            renderRow({ ...(item as object), index: id } as unknown as T),
+          )}
       </tbody>
     </table>
-  );
-};
+  )
+}

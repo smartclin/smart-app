@@ -1,38 +1,38 @@
-'use client';
+'use client'
 
-import { zodResolver } from '@hookform/resolvers/zod';
-import { Plus } from 'lucide-react';
-import { useRouter } from 'next/navigation';
-import { useForm } from 'react-hook-form';
-import { toast } from 'sonner';
-import type { z } from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod'
+import { Plus } from 'lucide-react'
+import { useRouter } from 'next/navigation'
+import { useForm } from 'react-hook-form'
+import { toast } from 'sonner'
+import type { z } from 'zod'
 
-import { DiagnosisSchema } from '@/lib/schema';
-import { trpc } from '@/trpc/client';
+import { DiagnosisSchema } from '@/lib/schema'
+import { trpc } from '@/trpc/client'
 
-import { CustomInput } from '../custom-input';
-import { Button } from '../ui/button';
-import { CardDescription, CardHeader } from '../ui/card';
-import { Dialog, DialogContent, DialogTitle, DialogTrigger } from '../ui/dialog';
-import { Form } from '../ui/form';
+import { CustomInput } from '../custom-input'
+import { Button } from '../ui/button'
+import { CardDescription, CardHeader } from '../ui/card'
+import { Dialog, DialogContent, DialogTitle, DialogTrigger } from '../ui/dialog'
+import { Form } from '../ui/form'
 
 interface AddDiagnosisProps {
-  patientId: string;
-  doctorId: string;
-  medicalId: number;
+  patientId: string
+  doctorId: string
+  medicalId: number
 
-  appointmentId: string | number;
+  appointmentId: string | number
 }
 
-export type DiagnosisFormData = z.infer<typeof DiagnosisSchema>;
+export type DiagnosisFormData = z.infer<typeof DiagnosisSchema>
 
 export const AddDiagnosis = ({
   patientId,
   doctorId,
   appointmentId,
-  medicalId
+  medicalId,
 }: AddDiagnosisProps) => {
-  const router = useRouter();
+  const router = useRouter()
 
   const form = useForm<DiagnosisFormData>({
     resolver: zodResolver(DiagnosisSchema),
@@ -44,28 +44,28 @@ export const AddDiagnosis = ({
       diagnosis: '',
       notes: '',
       prescribedMedications: '',
-      followUpPlan: ''
-    }
-  });
+      followUpPlan: '',
+    },
+  })
 
   const addDiagnosis = trpc.payment.addDiagnosis.useMutation({
-    onSuccess: data => {
-      toast.success(data.message);
-      form.reset();
-      router.refresh();
+    onSuccess: (data) => {
+      toast.success(data.message)
+      form.reset()
+      router.refresh()
     },
-    onError: error => {
-      console.error(error);
-      toast.error(error.message || 'Failed to add diagnosis');
-    }
-  });
+    onError: (error) => {
+      console.error(error)
+      toast.error(error.message || 'Failed to add diagnosis')
+    },
+  })
 
   const onSubmit = (values: DiagnosisFormData) => {
     addDiagnosis.mutate({
       ...values,
-      appointmentId: String(appointmentId)
-    });
-  };
+      appointmentId: String(appointmentId),
+    })
+  }
 
   return (
     <Dialog>
@@ -87,7 +87,8 @@ export const AddDiagnosis = ({
         <CardHeader className='px-0'>
           <DialogTitle>Add New Diagnosis</DialogTitle>
           <CardDescription>
-            Ensure accurate findings are submitted and well-documented for future reference.
+            Ensure accurate findings are submitted and well-documented for
+            future reference.
           </CardDescription>
         </CardHeader>
 
@@ -148,5 +149,5 @@ export const AddDiagnosis = ({
         </Form>
       </DialogContent>
     </Dialog>
-  );
-};
+  )
+}

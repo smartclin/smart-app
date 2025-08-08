@@ -61,5 +61,5 @@ export function Zoom(props: React.HTMLAttributes<SVGElement>) {
         fill='#FFF'
       />
     </svg>
-  );
+  )
 }

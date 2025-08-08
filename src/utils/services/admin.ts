@@ -1,60 +1,62 @@
-import { db } from '@/db';
-import { processAppointments } from '@/types/helper';
+import { db } from '@/db'
+import { processAppointments } from '@/types/helper'
 
-import { daysOfWeek } from '../';
+import { daysOfWeek } from '../'
 
 export async function getAdminDashboardStats() {
   try {
-    const todayDate = new Date().getDay();
-    const today = daysOfWeek[todayDate];
+    const todayDate = new Date().getDay()
+    const today = daysOfWeek[todayDate]
 
-    const [totalPatient, totalDoctors, appointments, doctors] = await Promise.all([
-      db.patient.count(),
-      db.doctor.count(),
-      db.appointment.findMany({
-        include: {
-          patient: {
-            select: {
-              id: true,
-              lastName: true,
-              firstName: true,
-              img: true,
-              colorCode: true,
-              gender: true,
-              dateOfBirth: true
-            }
+    const [totalPatient, totalDoctors, appointments, doctors] =
+      await Promise.all([
+        db.patient.count(),
+        db.doctor.count(),
+        db.appointment.findMany({
+          include: {
+            patient: {
+              select: {
+                id: true,
+                lastName: true,
+                firstName: true,
+                img: true,
+                colorCode: true,
+                gender: true,
+                dateOfBirth: true,
+              },
+            },
+            doctor: {
+              select: {
+                name: true,
+                img: true,
+                colorCode: true,
+                specialization: true,
+              },
+            },
           },
-          doctor: {
-            select: {
-              name: true,
-              img: true,
-              colorCode: true,
-              specialization: true
-            }
-          }
-        },
-        orderBy: { appointmentDate: 'desc' }
-      }),
-      db.doctor.findMany({
-        where: {
-          workingDays: {
-            some: { day: { equals: today, mode: 'insensitive' } }
-          }
-        },
-        select: {
-          id: true,
-          name: true,
-          specialization: true,
-          img: true,
-          colorCode: true
-        },
-        take: 5
-      })
-    ]);
+          orderBy: { appointmentDate: 'desc' },
+        }),
+        db.doctor.findMany({
+          where: {
+            workingDays: {
+              some: { day: { equals: today, mode: 'insensitive' } },
+            },
+          },
+          select: {
+            id: true,
+            name: true,
+            specialization: true,
+            img: true,
+            colorCode: true,
+          },
+          take: 5,
+        }),
+      ])
 
-    const { appointmentCounts, monthlyData } = await processAppointments(appointments);
+    const { appointmentCounts, monthlyData } =
+      await processAppointments(appointments)
 
-    const last5Records = appointments.slice(0, 5);
+    const last5Records = appointments.slice(0, 5)
 
     return {
       success: true,
@@ -65,33 +67,33 @@ export async function getAdminDashboardStats() {
       monthlyData,
       last5Records,
       totalAppointments: appointments.length,
-      status: 200
-    };
+      status: 200,
+    }
   } catch (_error) {
-    return { error: true, message: 'Something went wrong' };
+    return { error: true, message: 'Something went wrong' }
   }
 }
 
 export async function getServices() {
   try {
     const data = await db.services.findMany({
-      orderBy: { serviceName: 'asc' }
-    });
+      orderBy: { serviceName: 'asc' },
+    })
 
     if (!data) {
       return {
         success: false,
         message: 'Data not found',
         status: 404,
-        data: []
-      };
+        data: [],
+      }
     }
 
     return {
       success: true,
-      data
-    };
+      data,
+    }
   } catch (_error) {
-    return { success: false, message: 'Internal Server Error', status: 500 };
+    return { success: false, message: 'Internal Server Error', status: 500 }
   }
 }

@@ -1,12 +1,12 @@
-import { Star } from 'lucide-react';
+import { Star } from 'lucide-react'
 
 interface DataProps {
-  id: number;
-  staffId: string;
-  rating: number;
-  comment?: string;
-  createdAt: Date | string;
-  patient: { lastName: string; firstName: string };
+  id: number
+  staffId: string
+  rating: number
+  comment?: string
+  createdAt: Date | string
+  patient: { lastName: string; firstName: string }
 }
 
 export const RatingList = ({ data }: { data: DataProps[] }) => {
@@ -34,7 +34,7 @@ export const RatingList = ({ data }: { data: DataProps[] }) => {
 
               <div className='flex flex-col items-center'>
                 <div className='flex items-center text-yellow-600'>
-                  {Array.from({ length: rate.rating }, _ => (
+                  {Array.from({ length: rate.rating }, (_) => (
                     <Star
                       className='text-lg'
                       key={rate.id}
@@ -59,5 +59,5 @@ export const RatingList = ({ data }: { data: DataProps[] }) => {
         )}
       </div>
     </div>
-  );
-};
+  )
+}

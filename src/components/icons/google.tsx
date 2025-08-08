@@ -26,5 +26,5 @@ export function Google(props: React.HTMLAttributes<SVGElement>) {
         fill='#EB4335'
       />
     </svg>
-  );
+  )
 }

@@ -1,22 +1,22 @@
 // src/components/footer.tsx
 
-import Link from 'next/link';
+import Link from 'next/link'
 
 // Import only the specific icon components you need
-import { GitHub, GMail, Instagram, LinkedIn, YouTube } from '@/components/icons';
+import { GitHub, GMail, Instagram, LinkedIn, YouTube } from '@/components/icons'
 // Import siteMetadata from config.ts
-import { siteMetadata } from '@/config';
+import { siteMetadata } from '@/config'
 
 // --- Interface Definitions ---
 // Define the shape of a single social link item
 interface SocialLink {
-  name: string; // e.g., "Instagram", "GitHub", "LinkedIn", "Email", "YouTube"
-  href: string;
+  name: string // e.g., "Instagram", "GitHub", "LinkedIn", "Email", "YouTube"
+  href: string
 }
 
 // Define the props interface for the Footer component
 interface FooterProps {
-  socialLinks: SocialLink[];
+  socialLinks: SocialLink[]
 }
 
 // --- Icon Mapping ---
@@ -27,14 +27,14 @@ const iconMap: { [key: string]: React.ElementType } = {
   GitHub: GitHub,
   LinkedIn: LinkedIn,
   Email: GMail, // Using 'Email' as the name for mailto links in config.ts
-  YouTube: YouTube
+  YouTube: YouTube,
   // If you have Facebook or Twitter in your config.ts, you'd need to import their icons here
   // e.g., Facebook: FaFacebook, Twitter: FaTwitter
-};
+}
 
 // --- Footer Component ---
 export default function Footer({ socialLinks }: FooterProps) {
-  const currentYear = new Date().getFullYear();
+  const currentYear = new Date().getFullYear()
 
   return (
     <footer className='flex flex-col items-center justify-between py-8 text-gray-500 text-sm md:flex-row'>
@@ -91,13 +91,13 @@ export default function Footer({ socialLinks }: FooterProps) {
 
       {/* Social Links Section */}
       <div className='flex gap-4 fill-foreground'>
-        {socialLinks.map(link => {
-          const IconComponent = iconMap[link.name];
+        {socialLinks.map((link) => {
+          const IconComponent = iconMap[link.name]
           if (!IconComponent) {
             console.warn(
-              `No icon component mapped for social link: ${link.name}. Please check iconMap in footer.tsx.`
-            );
-            return null; // Don't render link if no icon is mapped
+              `No icon component mapped for social link: ${link.name}. Please check iconMap in footer.tsx.`,
+            )
+            return null // Don't render link if no icon is mapped
           }
 
           return (
@@ -114,9 +114,9 @@ export default function Footer({ socialLinks }: FooterProps) {
                 width={20}
               />
             </Link>
-          );
+          )
         })}
       </div>
     </footer>
-  );
+  )
 }

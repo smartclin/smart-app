@@ -1,4 +1,4 @@
-'use client';
+'use client'
 
 import {
   Cloud,
@@ -9,32 +9,32 @@ import {
   CloudRain,
   CloudSnow,
   Sun,
-  Zap
-} from 'lucide-react';
-import type { JSX } from 'react';
+  Zap,
+} from 'lucide-react'
+import type { JSX } from 'react'
 
 interface WeatherData {
-  location: string;
-  country: string;
+  location: string
+  country: string
   current: {
-    temp: number;
-    condition: string;
-    description: string;
-    humidity: number;
-    windSpeed: number;
-  };
+    temp: number
+    condition: string
+    description: string
+    humidity: number
+    windSpeed: number
+  }
   forecast: Array<{
-    name: string;
-    temp: number;
-    condition: string;
-    dayIndex: number;
-  }>;
-  error: boolean;
-  message?: string;
+    name: string
+    temp: number
+    condition: string
+    dayIndex: number
+  }>
+  error: boolean
+  message?: string
 }
 
 interface Props {
-  data: WeatherData;
+  data: WeatherData
 }
 
 const weatherIcons: { [key: string]: JSX.Element } = {
@@ -42,7 +42,9 @@ const weatherIcons: { [key: string]: JSX.Element } = {
   Clouds: <Cloud className='size-6 text-muted-foreground sm:size-10' />,
   Rain: <CloudRain className='size-6 text-muted-foreground sm:size-10' />,
   Drizzle: <CloudDrizzle className='size-6 text-muted-foreground sm:size-10' />,
-  Thunderstorm: <CloudLightning className='size68 text-muted-foreground sm:size-10' />,
+  Thunderstorm: (
+    <CloudLightning className='size68 text-muted-foreground sm:size-10' />
+  ),
   Snow: <CloudSnow className='size-6 text-muted-foreground sm:size-10' />,
   Mist: <CloudFog className='size-6 text-muted-foreground sm:size-10' />,
   Smoke: <CloudFog className='size-6 text-muted-foreground sm:size-10' />,
@@ -52,19 +54,21 @@ const weatherIcons: { [key: string]: JSX.Element } = {
   Sand: <CloudFog className='size-6 text-muted-foreground sm:size-10' />,
   Ash: <CloudFog className='size-6 text-muted-foreground sm:size-10' />,
   Squall: <CloudHail className='size-6 text-muted-foreground sm:size-10' />,
-  Tornado: <Zap className='size-6 text-muted-foreground sm:size-10' />
-};
+  Tornado: <Zap className='size-6 text-muted-foreground sm:size-10' />,
+}
 
 const WeatherCard = ({ data }: Props) => {
   if (data.error) {
     return (
       <div className='w-full rounded-xl border border-muted-foreground/15 bg-transparent px-4 shadow-xs dark:shadow-none'>
         <div>
-          <div className='flex items-center font-medium text-base text-red-500'>Weather Error</div>
+          <div className='flex items-center font-medium text-base text-red-500'>
+            Weather Error
+          </div>
           <div className='text-sm'>{data.message}</div>
         </div>
       </div>
-    );
+    )
   }
 
   return (
@@ -80,7 +84,9 @@ const WeatherCard = ({ data }: Props) => {
             <div className='flex items-center gap-2'>
               {weatherIcons[data.current.condition] || weatherIcons.Clear}
               <div>
-                <div className='font-bold text-lg sm:text-2xl'>{data.current.temp}°C</div>
+                <div className='font-bold text-lg sm:text-2xl'>
+                  {data.current.temp}°C
+                </div>
                 <div className='hidden text-muted-foreground text-sm capitalize sm:block'>
                   {data.current.description}
                 </div>
@@ -101,12 +107,14 @@ const WeatherCard = ({ data }: Props) => {
 
         <div className='p-4'>
           <div className='grid grid-cols-5 gap-2 sm:gap-4'>
-            {data.forecast.map(day => (
+            {data.forecast.map((day) => (
               <div
                 className='space-y-2 text-center'
                 key={day.dayIndex}
               >
-                <div className='font-medium text-muted-foreground text-xs'>{day.name}</div>
+                <div className='font-medium text-muted-foreground text-xs'>
+                  {day.name}
+                </div>
                 <div className='flex justify-center'>
                   {weatherIcons[day.condition] || weatherIcons.Clear}
                 </div>
@@ -117,7 +125,7 @@ const WeatherCard = ({ data }: Props) => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default WeatherCard;
+export default WeatherCard

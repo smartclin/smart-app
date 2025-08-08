@@ -1,16 +1,16 @@
-import { TriangleAlert } from 'lucide-react';
+import { TriangleAlert } from 'lucide-react'
 
-import { cn } from '@/lib/utils';
+import { cn } from '@/lib/utils'
 
 export const ErrorCard = ({
   error,
   size = 'md',
-  className
+  className,
 }: {
-  error: string;
-  size?: 'sm' | 'md' | 'lg';
-  className?: string;
-  ref?: React.Ref<HTMLDivElement>;
+  error: string
+  size?: 'sm' | 'md' | 'lg'
+  className?: string
+  ref?: React.Ref<HTMLDivElement>
 }) => {
   return (
     <div
@@ -20,8 +20,8 @@ export const ErrorCard = ({
         {
           'p-2': size === 'sm',
           'p-4': size === 'md',
-          'p-6': size === 'lg'
-        }
+          'p-6': size === 'lg',
+        },
       )}
     >
       <span className='flex items-center gap-2'>
@@ -29,5 +29,5 @@ export const ErrorCard = ({
         {error}
       </span>
     </div>
-  );
-};
+  )
+}

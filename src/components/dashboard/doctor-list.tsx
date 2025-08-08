@@ -1,22 +1,22 @@
 // app/components/dashboard/doctor-list.tsx
-import { motion } from 'framer-motion';
-import Image from 'next/image';
-import Link from 'next/link';
+import { motion } from 'framer-motion'
+import Image from 'next/image'
+import Link from 'next/link'
 
-import { Button } from '../ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
+import { Button } from '../ui/button'
+import { Card, CardContent, CardHeader, CardTitle } from '../ui/card'
 
 interface Doctor {
-  id: string;
-  name: string;
-  specialization: string;
-  img?: string | null;
-  colorCode?: string | null;
+  id: string
+  name: string
+  specialization: string
+  img?: string | null
+  colorCode?: string | null
 }
 
 interface DoctorListProps {
-  doctors: Doctor[];
-  title?: string;
+  doctors: Doctor[]
+  title?: string
 }
 
 export function DoctorList({ doctors, title = 'Doctors' }: DoctorListProps) {
@@ -25,15 +25,15 @@ export function DoctorList({ doctors, title = 'Doctors' }: DoctorListProps) {
     show: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.1
-      }
-    }
-  };
+        staggerChildren: 0.1,
+      },
+    },
+  }
 
   const item = {
     hidden: { opacity: 0, y: 20 },
-    show: { opacity: 1, y: 0 }
-  };
+    show: { opacity: 1, y: 0 },
+  }
 
   return (
     <Card>
@@ -52,7 +52,7 @@ export function DoctorList({ doctors, title = 'Doctors' }: DoctorListProps) {
               No doctors available
             </p>
           ) : (
-            doctors.map(doctor => (
+            doctors.map((doctor) => (
               <motion.div
                 className='flex items-center justify-between rounded-lg border p-4'
                 key={doctor.id}
@@ -95,5 +95,5 @@ export function DoctorList({ doctors, title = 'Doctors' }: DoctorListProps) {
         </motion.div>
       </CardContent>
     </Card>
-  );
+  )
 }

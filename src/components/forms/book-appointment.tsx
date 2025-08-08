@@ -1,24 +1,43 @@
-'use client';
+'use client'
 
-import { zodResolver } from '@hookform/resolvers/zod';
-import type { Doctor, Patient } from '@prisma/client';
-import { UserPen } from 'lucide-react';
-import { useRouter } from 'next/navigation';
-import { useState } from 'react';
-import { type SubmitHandler, useForm } from 'react-hook-form';
-import { toast } from 'sonner';
-import type { z } from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod'
+import type { Doctor, Patient } from '@prisma/client'
+import { UserPen } from 'lucide-react'
+import { useRouter } from 'next/navigation'
+import { useState } from 'react'
+import { type SubmitHandler, useForm } from 'react-hook-form'
+import { toast } from 'sonner'
+import type { z } from 'zod'
 
-import { createNewAppointment } from '@/actions/appointment';
-import { AppointmentSchema } from '@/lib/schema';
-import { generateTimes } from '@/utils';
+import { createNewAppointment } from '@/actions/appointment'
+import { AppointmentSchema } from '@/lib/schema'
+import { generateTimes } from '@/utils'
 
-import { CustomInput } from '../custom-input';
-import { ProfileImage } from '../profile-image';
-import { Button } from '../ui/button';
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '../ui/form';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select';
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '../ui/sheet';
+import { CustomInput } from '../custom-input'
+import { ProfileImage } from '../profile-image'
+import { Button } from '../ui/button'
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '../ui/form'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '../ui/select'
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from '../ui/sheet'
 
 const TYPES = [
   { label: 'General Consultation', value: 'General Consultation' },
@@ -26,18 +45,24 @@ const TYPES = [
   { label: 'Antenatal', value: 'Antenatal' },
   { label: 'Maternity', value: 'Maternity' },
   { label: 'Lab Test', value: 'Lab Test' },
-  { label: 'ANT', value: 'ANT' }
-];
+  { label: 'ANT', value: 'ANT' },
+]
 
-export const BookAppointment = ({ data, doctors }: { data: Patient; doctors: Doctor[] }) => {
-  const [loading, _setLoading] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const router = useRouter();
-  const [physicians, _setPhysicians] = useState<Doctor[] | undefined>(doctors);
+export const BookAppointment = ({
+  data,
+  doctors,
+}: {
+  data: Patient
+  doctors: Doctor[]
+}) => {
+  const [loading, _setLoading] = useState(false)
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const router = useRouter()
+  const [physicians, _setPhysicians] = useState<Doctor[] | undefined>(doctors)
 
-  const appointmentTimes = generateTimes(8, 17, 30);
+  const appointmentTimes = generateTimes(8, 17, 30)
 
-  const patientName = `${data?.firstName} ${data?.lastName}`;
+  const patientName = `${data?.firstName} ${data?.lastName}`
 
   const form = useForm<z.infer<typeof AppointmentSchema>>({
     resolver: zodResolver(AppointmentSchema),
@@ -46,28 +71,30 @@ export const BookAppointment = ({ data, doctors }: { data: Patient; doctors: Doc
       appointmentDate: '',
       time: '',
       type: '',
-      note: ''
-    }
-  });
+      note: '',
+    },
+  })
 
-  const onSubmit: SubmitHandler<z.infer<typeof AppointmentSchema>> = async values => {
+  const onSubmit: SubmitHandler<z.infer<typeof AppointmentSchema>> = async (
+    values,
+  ) => {
     try {
-      setIsSubmitting(true);
-      const newData = { ...values, patientId: data?.id ?? 'N/A' };
+      setIsSubmitting(true)
+      const newData = { ...values, patientId: data?.id ?? 'N/A' }
 
-      const res = await createNewAppointment(newData);
+      const res = await createNewAppointment(newData)
 
       if (res.success) {
-        form.reset({});
-        router.refresh();
-        toast.success('Appointment created successfully');
+        form.reset({})
+        router.refresh()
+        toast.success('Appointment created successfully')
       }
     } catch (_error) {
-      toast.error('Something went wrong. Try again later.');
+      toast.error('Something went wrong. Try again later.')
     } finally {
-      setIsSubmitting(false);
+      setIsSubmitting(false)
     }
-  };
+  }
 
   return (
     <Sheet>
@@ -106,7 +133,9 @@ export const BookAppointment = ({ data, doctors }: { data: Patient; doctors: Doc
 
                   <div>
                     <p className='font-semibold text-lg'>{patientName}</p>
-                    <span className='text-gray-500 text-sm capitalize'>{data?.gender}</span>
+                    <span className='text-gray-500 text-sm capitalize'>
+                      {data?.gender}
+                    </span>
                   </div>
                 </div>
 
@@ -136,7 +165,7 @@ export const BookAppointment = ({ data, doctors }: { data: Patient; doctors: Doc
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent className=''>
-                          {physicians?.map(i => (
+                          {physicians?.map((i) => (
                             <SelectItem
                               className='p-2'
                               key={i.id}
@@ -150,8 +179,12 @@ export const BookAppointment = ({ data, doctors }: { data: Patient; doctors: Doc
                                   url={i?.img ?? undefined}
                                 />
                                 <div>
-                                  <p className='text-start font-medium'>{i.name}</p>
-                                  <span className='text-gray-600 text-sm'>{i?.specialization}</span>
+                                  <p className='text-start font-medium'>
+                                    {i.name}
+                                  </p>
+                                  <span className='text-gray-600 text-sm'>
+                                    {i?.specialization}
+                                  </span>
                                 </div>
                               </div>
                             </SelectItem>
@@ -203,5 +236,5 @@ export const BookAppointment = ({ data, doctors }: { data: Patient; doctors: Doc
         )}
       </SheetContent>
     </Sheet>
-  );
-};
+  )
+}

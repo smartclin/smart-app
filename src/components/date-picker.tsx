@@ -1,41 +1,41 @@
-'use client';
+'use client'
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react'
 
 // Assuming this Calendar component is indeed the Shadcn UI one,
 // which wraps react-day-picker
-import { Calendar } from '@/components/ui/calendar';
-import { useCalendarState } from '@/hooks/use-calendar-state'; // Your custom hook
-import { cn } from '@/lib/utils'; // Shadcn's utility for combining class names
+import { Calendar } from '@/components/ui/calendar'
+import { useCalendarState } from '@/hooks/use-calendar-state' // Your custom hook
+import { cn } from '@/lib/utils' // Shadcn's utility for combining class names
 
 export function DatePicker() {
-  const { currentDate, setCurrentDate, view } = useCalendarState();
-  const [displayedDate, setDisplayedDate] = useState<Date>(currentDate);
-  const [displayedMonth, setDisplayedMonth] = useState<Date>(currentDate);
-  const updateSource = useRef<'internal' | 'external'>('external');
+  const { currentDate, setCurrentDate, view } = useCalendarState()
+  const [displayedDate, setDisplayedDate] = useState<Date>(currentDate)
+  const [displayedMonth, setDisplayedMonth] = useState<Date>(currentDate)
+  const updateSource = useRef<'internal' | 'external'>('external')
 
   // Prevent circular updates and animation conflicts by tracking update source:
   // - Internal (calendar clicks): Update context directly, skip useEffect
   // - External (navigation/hotkeys): Update local state via useEffect
 
   const handleSelect = (date: Date | undefined) => {
-    if (!date) return;
+    if (!date) return
 
-    updateSource.current = 'internal';
-    setDisplayedDate(date);
-    setCurrentDate(date); // Update the context date
-  };
+    updateSource.current = 'internal'
+    setDisplayedDate(date)
+    setCurrentDate(date) // Update the context date
+  }
 
   useEffect(() => {
     if (updateSource.current === 'external') {
-      setDisplayedDate(currentDate);
-      setDisplayedMonth(currentDate);
+      setDisplayedDate(currentDate)
+      setDisplayedMonth(currentDate)
     }
-    updateSource.current = 'external';
-  }, [currentDate]);
+    updateSource.current = 'external'
+  }, [currentDate])
 
-  const isWeekView = view === 'week';
-  const isDayView = view === 'day' || view === 'agenda';
+  const isWeekView = view === 'week'
+  const isDayView = view === 'day' || view === 'agenda'
 
   return (
     <Calendar
@@ -59,14 +59,14 @@ export function DatePicker() {
           '[&[aria-selected="true"]>button:hover]:bg-sidebar-primary/80 [&[aria-selected="true"]>button:hover]:text-sidebar-primary-foreground',
           '[&[aria-selected="true"]>button:focus]:bg-sidebar-primary [&[aria-selected="true"]>button:focus]:text-sidebar-primary-foreground',
           isDayView &&
-            '[&[aria-selected="true"]>button]:bg-sidebar-foreground/4 dark:[&[aria-selected="true"]>button]:bg-sidebar-foreground/8'
+            '[&[aria-selected="true"]>button]:bg-sidebar-foreground/4 dark:[&[aria-selected="true"]>button]:bg-sidebar-foreground/8',
         ),
         // Today styling needs to target the day that has the `data-today` attribute
         day_today: cn(
           // This typically targets the today's day button
           '!bg-sidebar-primary !text-sidebar-primary-foreground',
           'hover:!bg-sidebar-primary hover:brightness-90',
-          'font-medium'
+          'font-medium',
         ),
         // Navigation buttons
         nav_button: 'z-10', // navClassName="[&>button]:z-10"
@@ -80,13 +80,13 @@ export function DatePicker() {
           // You might need a more complex CSS solution for this, or check if the shadcn calendar provides a specific prop for week highlighting.
           // For direct `classNames` on `week`, it's generally applied to the `div` wrapper for the week row.
           // The conditional `before:hidden` logic can also be applied here.
-          !isWeekView && 'before:hidden'
+          !isWeekView && 'before:hidden',
           // The `before:bg-sidebar-foreground/4` is tricky with classNames directly.
           // It's applied if the week `has` a selected day. This usually means
           // custom CSS in a global stylesheet or a `style` prop based on state.
           // For now, I'll put a placeholder.
         ),
-        weekday: 'flex-1 text-sidebar-foreground/70 font-medium' // weekdayClassName
+        weekday: 'flex-1 text-sidebar-foreground/70 font-medium', // weekdayClassName
         // You may need to inspect the rendered HTML to find the exact class names
         // for gridcell (if your `w-[33px]` is not applying correctly via global className)
         // The `[&_[role=gridcell]]:w-[33px]` should still work as it's targeting any `gridcell` role within the Calendar component's rendered output.
@@ -99,5 +99,5 @@ export function DatePicker() {
       required
       selected={displayedDate}
     />
-  );
+  )
 }

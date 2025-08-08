@@ -1,102 +1,103 @@
 // src/app/(protected)/record/patients/page.tsx
 
-import type { Patient } from '@prisma/client'; // Keep this if Patient is a base type
-import { format } from 'date-fns';
-import { UserPen, Users } from 'lucide-react';
+import type { Patient } from '@prisma/client' // Keep this if Patient is a base type
+import { format } from 'date-fns'
+import { UserPen, Users } from 'lucide-react'
 
-import { ActionDialog } from '@/components/action-dialog';
-import { ActionOptions, ViewAction } from '@/components/action-options';
-import { Pagination } from '@/components/pagination';
-import { ProfileImage } from '@/components/profile-image';
-import SearchInput from '@/components/search-input';
-import { Table } from '@/components/tables/table';
-import { Button } from '@/components/ui/button';
-import { getSession } from '@/lib/auth';
-import { trpc } from '@/trpc/server'; // Assuming this is your tRPC server client
-import type { SearchParamsProps } from '@/types';
-import { calculateAge } from '@/utils';
-import { checkRole } from '@/utils/roles';
-import { DATA_LIMIT } from '@/utils/seetings';
+import { ActionDialog } from '@/components/action-dialog'
+import { ActionOptions, ViewAction } from '@/components/action-options'
+import { Pagination } from '@/components/pagination'
+import { ProfileImage } from '@/components/profile-image'
+import SearchInput from '@/components/search-input'
+import { Table } from '@/components/tables/table'
+import { Button } from '@/components/ui/button'
+import { getSession } from '@/lib/auth'
+import { trpc } from '@/trpc/server' // Assuming this is your tRPC server client
+import type { SearchParamsProps } from '@/types'
+import { calculateAge } from '@/utils'
+import { checkRole } from '@/utils/roles'
+import { DATA_LIMIT } from '@/utils/seetings'
 
 const columns = [
   {
     header: 'Patient Name',
-    key: 'name'
+    key: 'name',
   },
   {
     header: 'Gender',
     key: 'gender',
-    className: 'hidden md:table-cell'
+    className: 'hidden md:table-cell',
   },
   {
     header: 'Phone',
     key: 'contact',
-    className: 'hidden md:table-cell'
+    className: 'hidden md:table-cell',
   },
   {
     header: 'Email',
     key: 'email',
-    className: 'hidden lg:table-cell'
+    className: 'hidden lg:table-cell',
   },
   {
     header: 'Address',
     key: 'address',
-    className: 'hidden xl:table-cell'
+    className: 'hidden xl:table-cell',
   },
   {
     header: 'Last Visit',
     key: 'created_at',
-    className: 'hidden lg:table-cell'
+    className: 'hidden lg:table-cell',
   },
   {
     header: 'Last Treatment',
     key: 'treatment',
-    className: 'hidden 2xl:table-cell'
+    className: 'hidden 2xl:table-cell',
   },
   {
     header: 'Actions',
-    key: 'action'
-  }
-];
+    key: 'action',
+  },
+]
 
 // FIX IS HERE: Change `string | undefined` to `string | null` for `treatmentPlan`
 interface PatientProps extends Patient {
   appointments: {
     medical: {
-      createdAt: Date;
-      treatmentPlan: string | null; // <--- Changed from `string | undefined` to `string | null`
-    }[];
-  }[];
+      createdAt: Date
+      treatmentPlan: string | null // <--- Changed from `string | undefined` to `string | null`
+    }[]
+  }[]
 }
 
 const PatientList = async (props: SearchParamsProps) => {
-  const searchParams = await props.searchParams;
-  const page = (searchParams?.p || '1') as string;
-  const searchQuery = (searchParams?.q || '') as string;
-  const session = await getSession();
+  const searchParams = await props.searchParams
+  const page = (searchParams?.p || '1') as string
+  const searchQuery = (searchParams?.q || '') as string
+  const session = await getSession()
 
   // Assuming trpc.patient.getAllPatients returns a structure compatible with PatientProps[]
   // The error indicates the returned data's `treatmentPlan` is `string | null`.
-  const { data, totalPages, totalRecords, currentPage } = (await trpc.patient.getAllPatients({
-    page,
-    search: searchQuery
-  })) as unknown as {
-    data: PatientProps[];
-    totalPages: number;
-    totalRecords: number;
-    currentPage: number;
-  };
+  const { data, totalPages, totalRecords, currentPage } =
+    (await trpc.patient.getAllPatients({
+      page,
+      search: searchQuery,
+    })) as unknown as {
+      data: PatientProps[]
+      totalPages: number
+      totalRecords: number
+      currentPage: number
+    }
 
-  if (!data) return null; // Consider returning a loading state or empty table message
+  if (!data) return null // Consider returning a loading state or empty table message
 
-  const isAdmin = await checkRole(session, 'ADMIN');
+  const isAdmin = await checkRole(session, 'ADMIN')
 
   const renderRow = (item: PatientProps) => {
     // Access `medical[0]` with optional chaining and default to null for safety
-    const lastVisit = item.appointments?.[0]?.medical?.[0] || null;
+    const lastVisit = item.appointments?.[0]?.medical?.[0] || null
 
     // Ensure firstName and lastName are handled if they are null
-    const name = `${item.firstName ?? ''} ${item.lastName ?? ''}`.trim();
+    const name = `${item.firstName ?? ''} ${item.lastName ?? ''}`.trim()
 
     return (
       <tr
@@ -112,7 +113,9 @@ const PatientList = async (props: SearchParamsProps) => {
           />
           <div>
             <h3 className='uppercase'>{name}</h3>
-            <span className='text-sm capitalize'>{calculateAge(item.dateOfBirth)}</span>
+            <span className='text-sm capitalize'>
+              {calculateAge(item.dateOfBirth)}
+            </span>
           </div>
         </td>
         <td className='hidden md:table-cell'>{item.gender}</td>
@@ -161,8 +164,8 @@ const PatientList = async (props: SearchParamsProps) => {
           </div>
         </td>
       </tr>
-    );
-  };
+    )
+  }
 
   return (
     <div className='rounded-xl bg-white px-3 py-6 2xl:px-6'>
@@ -174,7 +177,9 @@ const PatientList = async (props: SearchParamsProps) => {
           />
 
           <p className='font-semibold text-2xl'>{totalRecords}</p>
-          <span className='text-gray-600 text-sm xl:text-base'>total patients</span>
+          <span className='text-gray-600 text-sm xl:text-base'>
+            total patients
+          </span>
         </div>
         <div className='flex w-full items-center justify-between gap-2 lg:w-fit lg:justify-start'>
           <SearchInput />
@@ -198,7 +203,7 @@ const PatientList = async (props: SearchParamsProps) => {
         )}
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default PatientList;
+export default PatientList

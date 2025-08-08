@@ -1,34 +1,27 @@
 // db.ts
 
-import { withAccelerate } from '@prisma/extension-accelerate';
-import { PrismaClient } from 'generated/client/client';
+import { PrismaClient } from '@prisma/client'
+import { withAccelerate } from '@prisma/extension-accelerate'
 
-import { env } from '@/env';
+import { env } from '@/env'
 
-// Factory function to create the extended PrismaClient
-const createClient = () =>
+const createPrismaClient = () =>
   new PrismaClient({
     transactionOptions: {
       isolationLevel: 'ReadCommitted',
       timeout: 10000,
-      maxWait: 10000
+      maxWait: 10000,
     },
     errorFormat: 'pretty',
-    log: env.NODE_ENV === 'development' ? ['query', 'warn', 'error'] : ['error']
-  }).$extends(withAccelerate());
+    log:
+      env.NODE_ENV === 'development' ? ['query', 'warn', 'error'] : ['error'],
+  }).$extends(withAccelerate())
 
-// Global singleton pattern (for dev hot-reloading)
 const globalForPrisma = globalThis as unknown as {
-  __PRISMA__: ReturnType<typeof createClient> | undefined;
-};
-
-// Only create a new client if not already present
-const client = globalForPrisma.__PRISMA__ ?? createClient();
-
-if (env.NODE_ENV !== 'production') {
-  globalForPrisma.__PRISMA__ = client;
+  prisma: ReturnType<typeof createPrismaClient> | undefined
 }
 
-// Export single instance
-export const db = client;
-export default db;
+export const db = globalForPrisma.prisma ?? createPrismaClient()
+
+if (env.NODE_ENV !== 'production') globalForPrisma.prisma = db
+export default db

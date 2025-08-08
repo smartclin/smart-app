@@ -1,23 +1,23 @@
-import { format } from 'date-fns';
-import Link from 'next/link';
-import { BsCalendarDateFill, BsPersonWorkspace } from 'react-icons/bs';
-import { FaBriefcaseMedical, FaCalendarDays } from 'react-icons/fa6';
-import { IoTimeSharp } from 'react-icons/io5';
-import { MdEmail, MdLocalPhone } from 'react-icons/md';
+import { format } from 'date-fns'
+import Link from 'next/link'
+import { BsCalendarDateFill, BsPersonWorkspace } from 'react-icons/bs'
+import { FaBriefcaseMedical, FaCalendarDays } from 'react-icons/fa6'
+import { IoTimeSharp } from 'react-icons/io5'
+import { MdEmail, MdLocalPhone } from 'react-icons/md'
 
-import { availableDays } from '@/components/available-doctor';
-import { ProfileImage } from '@/components/profile-image';
-import { RatingContainer } from '@/components/rating-container';
-import { RecentAppointments } from '@/components/tables/recent-appointment';
-import { trpc } from '@/trpc/server';
+import { availableDays } from '@/components/available-doctor'
+import { ProfileImage } from '@/components/profile-image'
+import { RatingContainer } from '@/components/rating-container'
+import { RecentAppointments } from '@/components/tables/recent-appointment'
+import { trpc } from '@/trpc/server'
 
 // import { getDoctorById } from '@/utils/services/doctor'
 
 const DoctorProfile = async (props: { params: Promise<{ id: string }> }) => {
-  const params = await props.params;
-  const { data, totalAppointment } = await trpc.doctor.getDoctorById(params?.id);
+  const params = await props.params
+  const { data, totalAppointment } = await trpc.doctor.getDoctorById(params?.id)
 
-  if (!data) return null;
+  if (!data) return null
 
   return (
     <div className='flex h-full flex-col gap-6 rounded-xl bg-gray-100/60 px-3 py-6 lg:flex-row 2xl:px-5'>
@@ -34,9 +34,13 @@ const DoctorProfile = async (props: { params: Promise<{ id: string }> }) => {
 
             <div className='flex w-2/3 flex-col justify-between gap-x-4'>
               <div className='flex items-center gap-4'>
-                <h1 className='text=xl font-semibold uppercase'>{data?.name}</h1>
+                <h1 className='text=xl font-semibold uppercase'>
+                  {data?.name}
+                </h1>
               </div>
-              <p className='text-gray-500 text-sm'>{data?.address || 'No address information'}</p>
+              <p className='text-gray-500 text-sm'>
+                {data?.address || 'No address information'}
+              </p>
 
               <div className='mt-4 flex flex-wrap items-center justify-between gap-2 font-medium text-sm'>
                 <div className='flex w-full text-base'>
@@ -76,7 +80,9 @@ const DoctorProfile = async (props: { params: Promise<{ id: string }> }) => {
             <div className='doctorCard'>
               <FaCalendarDays className='size-5' />
               <div>
-                <h1 className='font-serif text-xl'>{data?.workingDays?.length}</h1>
+                <h1 className='font-serif text-xl'>
+                  {data?.workingDays?.length}
+                </h1>
                 <span className='text-gray-500 text-sm'>Working Days</span>
               </div>
             </div>
@@ -84,14 +90,18 @@ const DoctorProfile = async (props: { params: Promise<{ id: string }> }) => {
             <div className='doctorCard'>
               <IoTimeSharp className='size-5' />
               <div>
-                <h1 className='font-serif text-xl'>{availableDays({ data: data.workingDays })}</h1>
+                <h1 className='font-serif text-xl'>
+                  {availableDays({ data: data.workingDays })}
+                </h1>
                 <span className='text-gray-500 text-sm'>Working Hours</span>
               </div>
             </div>
             <div className='doctorCard'>
               <BsCalendarDateFill className='size-5' />
               <div>
-                <h1 className='font-serif text-xl'>{format(data?.createdAt, 'yyyy-MM-dd')}</h1>
+                <h1 className='font-serif text-xl'>
+                  {format(data?.createdAt, 'yyyy-MM-dd')}
+                </h1>
                 <span className='text-gray-500 text-sm'>Joined Date</span>
               </div>
             </div>
@@ -130,7 +140,7 @@ const DoctorProfile = async (props: { params: Promise<{ id: string }> }) => {
         <RatingContainer id={params?.id} />
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default DoctorProfile;
+export default DoctorProfile

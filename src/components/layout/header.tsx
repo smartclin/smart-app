@@ -1,8 +1,8 @@
 // app/components/layout/header.tsx
-import { Bell, Search, User } from 'lucide-react';
-import { Link } from 'react-router';
+import { Bell, Search, User } from 'lucide-react'
+import { Link } from 'react-router'
 
-import { Button } from '../ui/button';
+import { Button } from '../ui/button'
 
 export function Header() {
   return (
@@ -29,10 +29,12 @@ export function Header() {
             <div className='flex h-8 w-8 items-center justify-center rounded-full bg-blue-500 text-white'>
               <User className='h-4 w-4' />
             </div>
-            <span className='hidden font-medium text-sm md:block'>Dr. Hazem</span>
+            <span className='hidden font-medium text-sm md:block'>
+              Dr. Hazem
+            </span>
           </div>
         </Link>
       </div>
     </header>
-  );
+  )
 }

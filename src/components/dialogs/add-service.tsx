@@ -1,56 +1,56 @@
-'use client';
+'use client'
 
-import { zodResolver } from '@hookform/resolvers/zod';
-import { Plus } from 'lucide-react';
-import { useRouter } from 'next/navigation';
-import { useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { toast } from 'sonner';
-import type { z } from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod'
+import { Plus } from 'lucide-react'
+import { useRouter } from 'next/navigation'
+import { useState } from 'react'
+import { useForm } from 'react-hook-form'
+import { toast } from 'sonner'
+import type { z } from 'zod'
 
-import { ServicesSchema } from '@/lib/schema';
-import { trpc } from '@/trpc/client';
+import { ServicesSchema } from '@/lib/schema'
+import { trpc } from '@/trpc/client'
 
-import { CustomInput } from '../custom-input';
-import { Button } from '../ui/button';
-import { CardDescription, CardHeader } from '../ui/card';
-import { Dialog, DialogContent, DialogTitle, DialogTrigger } from '../ui/dialog';
-import { Form } from '../ui/form';
+import { CustomInput } from '../custom-input'
+import { Button } from '../ui/button'
+import { CardDescription, CardHeader } from '../ui/card'
+import { Dialog, DialogContent, DialogTitle, DialogTrigger } from '../ui/dialog'
+import { Form } from '../ui/form'
 
 export const AddService = () => {
-  const [isLoading, setIsLoading] = useState(false);
-  const router = useRouter();
+  const [isLoading, setIsLoading] = useState(false)
+  const router = useRouter()
 
   const form = useForm<z.infer<typeof ServicesSchema>>({
     resolver: zodResolver(ServicesSchema),
     defaultValues: {
       serviceName: '',
       price: 0,
-      description: ''
-    }
-  });
+      description: '',
+    },
+  })
 
   const addService = trpc.admin.addNewService.useMutation({
-    onSuccess: data => {
-      toast.success(data.msg);
-      router.refresh();
-      form.reset();
-      setIsLoading(false);
+    onSuccess: (data) => {
+      toast.success(data.msg)
+      router.refresh()
+      form.reset()
+      setIsLoading(false)
     },
-    onError: error => {
-      console.error(error);
-      toast.error(error.message || 'Something went wrong. Please try again.');
-      setIsLoading(false);
-    }
-  });
+    onError: (error) => {
+      console.error(error)
+      toast.error(error.message || 'Something went wrong. Please try again.')
+      setIsLoading(false)
+    },
+  })
 
   const onSubmit = (values: z.infer<typeof ServicesSchema>) => {
-    setIsLoading(true);
+    setIsLoading(true)
     addService.mutate({
       ...values,
-      price: Number(values.price)
-    });
-  };
+      price: Number(values.price),
+    })
+  }
 
   return (
     <Dialog>
@@ -70,7 +70,8 @@ export const AddService = () => {
         <CardHeader className='px-0'>
           <DialogTitle>Add New Service</DialogTitle>
           <CardDescription>
-            Ensure accurate data entry as this may affect diagnostics and other medical processes.
+            Ensure accurate data entry as this may affect diagnostics and other
+            medical processes.
           </CardDescription>
         </CardHeader>
 
@@ -114,5 +115,5 @@ export const AddService = () => {
         </Form>
       </DialogContent>
     </Dialog>
-  );
-};
+  )
+}

@@ -1,5 +1,5 @@
-import { createEnv } from '@t3-oss/env-nextjs';
-import { z } from 'zod';
+import { createEnv } from '@t3-oss/env-nextjs'
+import { z } from 'zod'
 
 export const env = createEnv({
   /**
@@ -7,14 +7,18 @@ export const env = createEnv({
    * These are **never** exposed to the client.
    */
   server: {
-    NODE_ENV: z.enum(['development', 'production', 'test']).default('development'),
+    NODE_ENV: z
+      .enum(['development', 'production', 'test'])
+      .default('development'),
     DATABASE_URL: z.url({ message: 'Invalid DATABASE_URL format.' }),
-    BETTER_AUTH_SECRET: z.string().min(1, 'BETTER_AUTH_SECRET cannot be empty.'),
+    BETTER_AUTH_SECRET: z
+      .string()
+      .min(1, 'BETTER_AUTH_SECRET cannot be empty.'),
     BETTER_AUTH_URL: z.url({ message: 'Invalid BETTER_AUTH_URL format.' }),
     CORS_ORIGIN: z.url({ message: 'Invalid CORS_ORIGIN format.' }),
     ADMIN_EMAIL: z.email().optional(),
     ADMIN_PASSWORD: z.string().min(8).optional(),
-    ADMIN_NAME: z.string().optional()
+    ADMIN_NAME: z.string().optional(),
   },
 
   /**
@@ -23,19 +27,19 @@ export const env = createEnv({
    */
   client: {
     NEXT_PUBLIC_APP_URL: z
-      .string()
+
       .url({ message: 'Invalid NEXT_PUBLIC_APP_URL format.' })
       .default('http://localhost:3001'),
 
     NEXT_PUBLIC_VERCEL_URL: z.string().optional(),
 
     NEXT_PUBLIC_BETTER_AUTH_URL: z.url({
-      message: 'Invalid NEXT_PUBLIC_BETTER_AUTH_URL format.'
+      message: 'Invalid NEXT_PUBLIC_BETTER_AUTH_URL format.',
     }),
 
     NEXT_PUBLIC_SERVER_URL: z.url({
-      message: 'Invalid NEXT_PUBLIC_SERVER_URL format.'
-    })
+      message: 'Invalid NEXT_PUBLIC_SERVER_URL format.',
+    }),
   },
 
   /**
@@ -53,7 +57,7 @@ export const env = createEnv({
     NEXT_PUBLIC_APP_URL: process.env.NEXT_PUBLIC_APP_URL,
     NEXT_PUBLIC_VERCEL_URL: process.env.NEXT_PUBLIC_VERCEL_URL,
     NEXT_PUBLIC_BETTER_AUTH_URL: process.env.NEXT_PUBLIC_BETTER_AUTH_URL,
-    NEXT_PUBLIC_SERVER_URL: process.env.NEXT_PUBLIC_SERVER_URL
+    NEXT_PUBLIC_SERVER_URL: process.env.NEXT_PUBLIC_SERVER_URL,
   },
 
   /**
@@ -65,5 +69,5 @@ export const env = createEnv({
   /**
    * Treat empty strings as undefined.
    */
-  emptyStringAsUndefined: true
-});
+  emptyStringAsUndefined: true,
+})

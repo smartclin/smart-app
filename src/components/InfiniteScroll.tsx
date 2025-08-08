@@ -1,17 +1,17 @@
-import { Loader2 } from 'lucide-react';
+import { Loader2 } from 'lucide-react'
 
-import { Button } from '@/components/ui/button';
+import { Button } from '@/components/ui/button'
 
 function InfiniteScroll({
   targetRef,
   hasNextPage,
   isFetchingNextPage,
-  fetchNextPage
+  fetchNextPage,
 }: {
-  targetRef: React.RefObject<HTMLDivElement | null>;
-  hasNextPage: boolean;
-  isFetchingNextPage: boolean;
-  fetchNextPage: () => void;
+  targetRef: React.RefObject<HTMLDivElement | null>
+  hasNextPage: boolean
+  isFetchingNextPage: boolean
+  fetchNextPage: () => void
 }) {
   return (
     <div className='flex flex-col items-center gap-4'>
@@ -35,7 +35,7 @@ function InfiniteScroll({
         <p className='text-muted-foreground text-sm'>No more items</p>
       )}
     </div>
-  );
+  )
 }
 
-export default InfiniteScroll;
+export default InfiniteScroll

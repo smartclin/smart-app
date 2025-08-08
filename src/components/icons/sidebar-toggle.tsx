@@ -1,5 +1,5 @@
-import { motion } from 'motion/react';
-import type * as React from 'react';
+import { motion } from 'motion/react'
+import type * as React from 'react'
 
 export function SidebarToggle(props: React.ComponentProps<typeof motion.svg>) {
   return (
@@ -25,5 +25,5 @@ export function SidebarToggle(props: React.ComponentProps<typeof motion.svg>) {
         y='2'
       />
     </motion.svg>
-  );
+  )
 }

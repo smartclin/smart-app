@@ -1,7 +1,7 @@
-import Link from 'next/link';
+import Link from 'next/link'
 
-import { DeployButton } from './deploy-button';
-import { XAiIcon } from './icons';
+import { DeployButton } from './deploy-button'
+import { XAiIcon } from './icons'
 
 export const Header = () => {
   return (
@@ -66,5 +66,5 @@ export const Header = () => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}

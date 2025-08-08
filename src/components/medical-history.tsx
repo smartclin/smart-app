@@ -1,57 +1,62 @@
-import type { Diagnosis, LabTest, MedicalRecords, Patient } from '@prisma/client';
-import { BriefcaseBusiness } from 'lucide-react';
+import type {
+  Diagnosis,
+  LabTest,
+  MedicalRecords,
+  Patient,
+} from '@prisma/client'
+import { BriefcaseBusiness } from 'lucide-react'
 
-import { formatDateTime } from '@/utils';
+import { formatDateTime } from '@/utils'
 
-import { ViewAction } from './action-options';
-import { MedicalHistoryDialog } from './medical-history-dialog';
-import { ProfileImage } from './profile-image';
-import { Table } from './tables/table';
+import { ViewAction } from './action-options'
+import { MedicalHistoryDialog } from './medical-history-dialog'
+import { ProfileImage } from './profile-image'
+import { Table } from './tables/table'
 
 export interface ExtendedMedicalHistory extends MedicalRecords {
-  patient?: Patient;
-  diagnosis: Diagnosis[];
-  labTest: LabTest[];
-  index?: number;
+  patient?: Patient
+  diagnosis: Diagnosis[]
+  labTest: LabTest[]
+  index?: number
 }
 
 interface DataProps {
-  data: ExtendedMedicalHistory[];
-  isShowProfile?: boolean;
+  data: ExtendedMedicalHistory[]
+  isShowProfile?: boolean
 }
 
 export const MedicalHistory = ({ data, isShowProfile }: DataProps) => {
   const columns = [
     {
       header: 'No',
-      key: 'no'
+      key: 'no',
     },
     {
       header: 'Info',
       key: 'name',
-      className: isShowProfile ? 'table-cell' : 'hidden'
+      className: isShowProfile ? 'table-cell' : 'hidden',
     },
     {
       header: 'Date & Time',
       key: 'medicalDate',
-      className: ''
+      className: '',
     },
     {
       header: 'Doctor',
       key: 'doctor',
-      className: 'hidden xl:table-cell'
+      className: 'hidden xl:table-cell',
     },
     {
       header: 'Diagnosis',
       key: 'diagnosis',
-      className: 'hidden md:table-cell'
+      className: 'hidden md:table-cell',
     },
     {
       header: 'Lab Test',
       key: 'labTest',
-      className: 'hidden 2xl:table-cell'
-    }
-  ];
+      className: 'hidden 2xl:table-cell',
+    },
+  ]
 
   const renderRow = (item: ExtendedMedicalHistory) => {
     return (
@@ -80,10 +85,14 @@ export const MedicalHistory = ({ data, isShowProfile }: DataProps) => {
 
         <td className=''>{formatDateTime(item?.createdAt.toString())}</td>
 
-        <td className='hidden items-center py-2 xl:table-cell'>{item?.doctorId}</td>
+        <td className='hidden items-center py-2 xl:table-cell'>
+          {item?.doctorId}
+        </td>
         <td className='hidden lg:table-cell'>
           {item?.diagnosis?.length === 0 ? (
-            <span className='text-gray-500 text-sm italic'>No diagnosis found</span>
+            <span className='text-gray-500 text-sm italic'>
+              No diagnosis found
+            </span>
           ) : (
             <MedicalHistoryDialog
               doctorId={item?.doctorId}
@@ -101,7 +110,9 @@ export const MedicalHistory = ({ data, isShowProfile }: DataProps) => {
         </td>
         <td className='hidden 2xl:table-cell'>
           {item?.labTest?.length === 0 ? (
-            <span className='text-gray-500 text-sm italic'>No lab test found</span>
+            <span className='text-gray-500 text-sm italic'>
+              No lab test found
+            </span>
           ) : (
             <div className='flex items-center gap-x-2 text-lg'>
               {item?.labTest?.length}
@@ -115,8 +126,8 @@ export const MedicalHistory = ({ data, isShowProfile }: DataProps) => {
           <ViewAction href={`/record/appointments/${item?.appointmentId}`} />
         </td>
       </tr>
-    );
-  };
+    )
+  }
 
   return (
     <div className='rounded-xl bg-white p-2 2xl:p-6'>
@@ -128,7 +139,9 @@ export const MedicalHistory = ({ data, isShowProfile }: DataProps) => {
             size={20}
           />
           <p className='font-semibold text-2xl'>{data?.length}</p>
-          <span className='text-gray-600 text-sm xl:text-base'>total records</span>
+          <span className='text-gray-600 text-sm xl:text-base'>
+            total records
+          </span>
         </div>
       </div>
       <Table
@@ -137,5 +150,5 @@ export const MedicalHistory = ({ data, isShowProfile }: DataProps) => {
         renderRow={renderRow}
       />
     </div>
-  );
-};
+  )
+}

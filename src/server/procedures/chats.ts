@@ -1,128 +1,128 @@
-import type { Prisma } from '@prisma/client';
-import { TRPCError } from '@trpc/server';
-import { UTApi } from 'uploadthing/server';
-import { z } from 'zod';
+import type { Prisma } from '@prisma/client'
+import { TRPCError } from '@trpc/server'
+import { UTApi } from 'uploadthing/server'
+import { z } from 'zod'
 
-import { db } from '@/db';
-import { chatRenameSchema } from '@/schemas';
-import { createTRPCRouter, publicProcedure } from '@/trpc/init';
+import { db } from '@/db'
+import { chatRenameSchema } from '@/schemas'
+import { createTRPCRouter, publicProcedure } from '@/trpc/init'
 
 export const chatsRouter = createTRPCRouter({
   restore: publicProcedure
     .input(
       z.object({
-        chatId: z.uuid()
-      })
+        chatId: z.uuid(),
+      }),
     )
     .mutation(async ({ ctx, input }) => {
-      const { chatId } = input;
+      const { chatId } = input
 
-      const { user } = ctx;
+      const { user } = ctx
 
       if (!user) {
-        throw new TRPCError({ code: 'UNAUTHORIZED' });
+        throw new TRPCError({ code: 'UNAUTHORIZED' })
       }
 
       const restoredChat = await db.chat.update({
         where: {
           id: chatId,
-          userId: user.id
+          userId: user.id,
         },
         data: {
-          archived: false
-        }
-      });
+          archived: false,
+        },
+      })
 
-      if (!restoredChat) throw new TRPCError({ code: 'NOT_FOUND' });
+      if (!restoredChat) throw new TRPCError({ code: 'NOT_FOUND' })
 
-      return restoredChat;
+      return restoredChat
     }),
   archive: publicProcedure
     .input(
       z.object({
-        chatId: z.string().uuid()
-      })
+        chatId: z.string().uuid(),
+      }),
     )
     .mutation(async ({ ctx, input }) => {
-      const { chatId } = input;
+      const { chatId } = input
 
-      const { user } = ctx;
+      const { user } = ctx
 
       if (!user) {
-        throw new TRPCError({ code: 'UNAUTHORIZED' });
+        throw new TRPCError({ code: 'UNAUTHORIZED' })
       }
 
       const archivedChat = await db.chat.update({
         where: {
           id: chatId,
-          userId: user.id
+          userId: user.id,
         },
         data: {
-          archived: true
-        }
-      });
+          archived: true,
+        },
+      })
 
-      if (!archivedChat) throw new TRPCError({ code: 'NOT_FOUND' });
+      if (!archivedChat) throw new TRPCError({ code: 'NOT_FOUND' })
 
-      return archivedChat;
+      return archivedChat
     }),
   rename: publicProcedure
     .input(
       z.object({
         chatId: z.uuid(),
-        title: z.string().min(1)
-      })
+        title: z.string().min(1),
+      }),
     )
     .mutation(async ({ ctx, input }) => {
-      const { chatId, title } = input;
+      const { chatId, title } = input
 
-      const validatedFields = chatRenameSchema.safeParse({ title });
+      const validatedFields = chatRenameSchema.safeParse({ title })
 
-      if (!validatedFields.success) throw new TRPCError({ code: 'BAD_REQUEST' });
+      if (!validatedFields.success) throw new TRPCError({ code: 'BAD_REQUEST' })
 
-      const { user } = ctx;
+      const { user } = ctx
 
       if (!user) {
-        throw new TRPCError({ code: 'UNAUTHORIZED' });
+        throw new TRPCError({ code: 'UNAUTHORIZED' })
       }
 
       const updatedChat = await db.chat.update({
         where: {
           id: chatId,
-          userId: user.id
+          userId: user.id,
         },
         data: {
-          title
-        }
-      });
+          title,
+        },
+      })
 
-      if (!updatedChat) throw new TRPCError({ code: 'NOT_FOUND' });
+      if (!updatedChat) throw new TRPCError({ code: 'NOT_FOUND' })
 
-      return updatedChat;
+      return updatedChat
     }),
   deleteOne: publicProcedure
     .input(
       z.object({
-        chatId: z.uuid()
-      })
+        chatId: z.uuid(),
+      }),
     )
     .mutation(async ({ ctx, input }) => {
-      const { chatId } = input;
+      const { chatId } = input
 
-      const { user } = ctx;
+      const { user } = ctx
 
       if (!user) {
-        throw new TRPCError({ code: 'UNAUTHORIZED' });
+        throw new TRPCError({ code: 'UNAUTHORIZED' })
       }
 
       const existingChat = await db.chat.findUnique({
         where: {
           id: chatId,
-          userId: user.id
-        }
-      });
+          userId: user.id,
+        },
+      })
 
-      if (!existingChat) throw new TRPCError({ code: 'NOT_FOUND' });
+      if (!existingChat) throw new TRPCError({ code: 'NOT_FOUND' })
 
       // all the messages with images
       const messages = await db.message.findMany({
@@ -131,38 +131,38 @@ export const chatsRouter = createTRPCRouter({
           AND: [
             {
               imageKey: {
-                not: null
-              }
+                not: null,
+              },
             },
             {
               imageUrl: {
-                not: null
-              }
-            }
-          ]
-        }
-      });
+                not: null,
+              },
+            },
+          ],
+        },
+      })
 
       if (messages.length > 0) {
         const images = messages
-          .map(message => message.imageKey)
-          .filter((key): key is string => Boolean(key));
+          .map((message) => message.imageKey)
+          .filter((key): key is string => Boolean(key))
 
         try {
-          const utiapi = new UTApi();
-          await utiapi.deleteFiles(images);
+          const utiapi = new UTApi()
+          await utiapi.deleteFiles(images)
         } catch (error) {
-          console.error('UploadThing cleanup failed:', error);
+          console.error('UploadThing cleanup failed:', error)
         }
       }
 
       const deletedChat = await db.chat.delete({
         where: {
-          id: existingChat.id
-        }
-      });
+          id: existingChat.id,
+        },
+      })
 
-      return deletedChat;
+      return deletedChat
     }),
   search: publicProcedure
     .input(
@@ -170,21 +170,21 @@ export const chatsRouter = createTRPCRouter({
         cursor: z
           .object({
             id: z.string().uuid(),
-            updatedAt: z.date()
+            updatedAt: z.date(),
           })
           .nullish(),
         query: z.string().nullish(),
-        limit: z.number().min(1).max(100)
-      })
+        limit: z.number().min(1).max(100),
+      }),
     )
     .query(async ({ ctx, input }) => {
-      const { cursor, limit, query } = input;
+      const { cursor, limit, query } = input
 
       if (!ctx.user)
         return {
           chats: [],
-          nextCursor: null
-        };
+          nextCursor: null,
+        }
 
       const data = await db.chat.findMany({
         where: {
@@ -193,75 +193,75 @@ export const chatsRouter = createTRPCRouter({
           ...(query && {
             title: {
               contains: query,
-              mode: 'insensitive'
-            }
+              mode: 'insensitive',
+            },
           }),
           ...(cursor && {
             OR: [
               {
                 updatedAt: {
-                  lt: cursor.updatedAt
-                }
+                  lt: cursor.updatedAt,
+                },
               },
               {
                 updatedAt: cursor.updatedAt,
                 id: {
-                  lt: cursor.id
-                }
-              }
-            ]
-          })
+                  lt: cursor.id,
+                },
+              },
+            ],
+          }),
         },
         orderBy: [{ updatedAt: 'desc' }, { id: 'desc' }],
         include: {
-          user: true
+          user: true,
         },
-        take: limit + 1
-      });
+        take: limit + 1,
+      })
 
-      const hasMore = data.length > limit;
+      const hasMore = data.length > limit
 
-      const chats = hasMore ? data.slice(0, -1) : data;
+      const chats = hasMore ? data.slice(0, -1) : data
 
-      const lastChat = chats[chats.length - 1];
+      const lastChat = chats[chats.length - 1]
 
       const nextCursor = hasMore
         ? {
             id: lastChat?.id,
-            updatedAt: lastChat?.updatedAt
+            updatedAt: lastChat?.updatedAt,
           }
-        : null;
+        : null
 
       return {
         chats,
-        nextCursor
-      };
+        nextCursor,
+      }
     }),
   getOne: publicProcedure
     .input(
       z.object({
-        chatId: z.uuid()
-      })
+        chatId: z.uuid(),
+      }),
     )
     .query(async ({ ctx, input }) => {
-      const { chatId } = input;
+      const { chatId } = input
 
-      const { user } = ctx;
+      const { user } = ctx
 
       if (!user) {
-        throw new TRPCError({ code: 'UNAUTHORIZED' });
+        throw new TRPCError({ code: 'UNAUTHORIZED' })
       }
 
       const existingChat = await db.chat.findUnique({
         where: {
           id: chatId,
-          userId: user.id
-        }
-      });
+          userId: user.id,
+        },
+      })
 
-      if (!existingChat) throw new TRPCError({ code: 'NOT_FOUND' });
+      if (!existingChat) throw new TRPCError({ code: 'NOT_FOUND' })
 
-      return existingChat;
+      return existingChat
     }),
   getMany: publicProcedure
     .input(
@@ -269,21 +269,21 @@ export const chatsRouter = createTRPCRouter({
         cursor: z
           .object({
             id: z.uuid(),
-            updatedAt: z.date()
+            updatedAt: z.date(),
           })
           .nullish(),
         isArchived: z.boolean().default(false),
-        limit: z.number().min(1).max(100)
-      })
+        limit: z.number().min(1).max(100),
+      }),
     )
     .query(async ({ ctx, input }) => {
-      const { cursor, limit, isArchived } = input;
+      const { cursor, limit, isArchived } = input
 
       if (!ctx.user)
         return {
           chats: { today: [], last7Days: [], older: [] },
-          nextCursor: null
-        };
+          nextCursor: null,
+        }
 
       const data = await db.chat.findMany({
         where: {
@@ -293,94 +293,97 @@ export const chatsRouter = createTRPCRouter({
             OR: [
               {
                 updatedAt: {
-                  lt: cursor.updatedAt
-                }
+                  lt: cursor.updatedAt,
+                },
               },
               {
                 updatedAt: cursor.updatedAt,
                 id: {
-                  lt: cursor.id
-                }
-              }
-            ]
-          })
+                  lt: cursor.id,
+                },
+              },
+            ],
+          }),
         },
         orderBy: [{ updatedAt: 'desc' }, { id: 'desc' }],
         include: {
-          user: true
+          user: true,
         },
-        take: limit + 1
-      });
+        take: limit + 1,
+      })
 
-      const hasMore = data.length > limit;
+      const hasMore = data.length > limit
 
-      const chats = hasMore ? data.slice(0, -1) : data;
+      const chats = hasMore ? data.slice(0, -1) : data
 
-      const now = new Date();
-      const startOfToday = new Date(now);
-      startOfToday.setHours(0, 0, 0, 0);
+      const now = new Date()
+      const startOfToday = new Date(now)
+      startOfToday.setHours(0, 0, 0, 0)
 
-      const sevenDaysAgo = new Date(now);
-      sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+      const sevenDaysAgo = new Date(now)
+      sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7)
 
       const categorized = {
         today: [] as typeof chats,
         last7Days: [] as typeof chats,
-        older: [] as typeof chats
-      };
+        older: [] as typeof chats,
+      }
 
       for (const chat of chats) {
         if (chat.updatedAt >= startOfToday) {
-          categorized.today.push(chat);
+          categorized.today.push(chat)
         } else if (chat.updatedAt >= sevenDaysAgo) {
-          categorized.last7Days.push(chat);
+          categorized.last7Days.push(chat)
         } else {
-          categorized.older.push(chat);
+          categorized.older.push(chat)
         }
       }
 
-      const lastChat = chats[chats.length - 1];
+      const lastChat = chats[chats.length - 1]
 
       const nextCursor = hasMore
         ? {
             id: lastChat?.id,
-            updatedAt: lastChat?.updatedAt
+            updatedAt: lastChat?.updatedAt,
           }
-        : null;
+        : null
 
       return {
         chats: categorized,
-        nextCursor
-      };
+        nextCursor,
+      }
     }),
   createOne: publicProcedure
     .input(
       z.object({
-        id: z.uuid()
-      })
+        id: z.uuid(),
+      }),
     )
     .mutation(async ({ input, ctx }) => {
       if (!ctx.user?.id) {
-        throw new TRPCError({ code: 'UNAUTHORIZED', message: 'User not authenticated' });
+        throw new TRPCError({
+          code: 'UNAUTHORIZED',
+          message: 'User not authenticated',
+        })
       }
 
       const existingChat = await db.chat.findUnique({
-        where: { id: input.id }
-      });
+        where: { id: input.id },
+      })
 
       if (existingChat) {
-        return existingChat;
+        return existingChat
       }
 
       const data: Prisma.ChatUncheckedCreateInput = {
         id: input.id,
         title: 'New Chat',
         archived: false,
-        userId: ctx.user.id
-      };
+        userId: ctx.user.id,
+      }
 
-      const chat = await db.chat.create({ data });
+      const chat = await db.chat.create({ data })
 
-      return chat;
-    })
-});
+      return chat
+    }),
+})

@@ -1,14 +1,14 @@
-import type * as React from 'react';
+import type * as React from 'react'
 
-import { DatePicker } from '@/components/date-picker';
-import { NavUser } from '@/components/nav-user';
+import { DatePicker } from '@/components/date-picker'
+import { NavUser } from '@/components/nav-user'
 import {
   Sidebar,
   SidebarContent,
   SidebarFooter,
   SidebarGroup,
-  SidebarGroupContent
-} from '@/components/ui/sidebar';
+  SidebarGroupContent,
+} from '@/components/ui/sidebar'
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
@@ -24,5 +24,5 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <NavUser />
       </SidebarFooter>
     </Sidebar>
-  );
+  )
 }

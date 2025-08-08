@@ -1,7 +1,7 @@
-import type React from 'react';
+import type React from 'react'
 
-import { Navbar } from '@/components/navbar';
-import { Sidebar } from '@/components/sidebar';
+import { Navbar } from '@/components/navbar'
+import { Sidebar } from '@/components/sidebar'
 
 const ProtectedLayout = ({ children }: { children: React.ReactNode }) => {
   return (
@@ -16,7 +16,7 @@ const ProtectedLayout = ({ children }: { children: React.ReactNode }) => {
         <div className='h-full w-full overflow-y-scroll p-2'>{children}</div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default ProtectedLayout;
+export default ProtectedLayout

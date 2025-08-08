@@ -1,11 +1,11 @@
-import type { Patient } from '@prisma/client';
-import { format } from 'date-fns';
-import { Calendar, Home, Info, Mail, Phone } from 'lucide-react';
-import Image from 'next/image';
+import type { Patient } from '@prisma/client'
+import { format } from 'date-fns'
+import { Calendar, Home, Info, Mail, Phone } from 'lucide-react'
+import Image from 'next/image'
 
-import { calculateAge } from '@/utils';
+import { calculateAge } from '@/utils'
 
-import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '../ui/card'
 
 export const PatientDetailsCard = ({ data }: { data: Patient }) => {
   return (
@@ -55,7 +55,9 @@ export const PatientDetailsCard = ({ data }: { data: Patient }) => {
           />
           <div>
             <p className='text-gray-500 text-sm'>Address</p>
-            <p className='font-medium text-base text-muted-foreground'>{data?.address}</p>
+            <p className='font-medium text-base text-muted-foreground'>
+              {data?.address}
+            </p>
           </div>
         </div>
         <div className='flex items-start gap-3'>
@@ -65,7 +67,9 @@ export const PatientDetailsCard = ({ data }: { data: Patient }) => {
           />
           <div>
             <p className='text-gray-500 text-sm'>Email</p>
-            <p className='font-medium text-base text-muted-foreground'>{data?.email}</p>
+            <p className='font-medium text-base text-muted-foreground'>
+              {data?.email}
+            </p>
           </div>
         </div>
         <div className='flex items-start gap-3'>
@@ -75,7 +79,9 @@ export const PatientDetailsCard = ({ data }: { data: Patient }) => {
           />
           <div>
             <p className='text-gray-500 text-sm'>Phone</p>
-            <p className='font-medium text-base text-muted-foreground'>{data?.phone}</p>
+            <p className='font-medium text-base text-muted-foreground'>
+              {data?.phone}
+            </p>
           </div>
         </div>
         <div className='flex items-start gap-3'>
@@ -85,22 +91,28 @@ export const PatientDetailsCard = ({ data }: { data: Patient }) => {
           />
           <div>
             <p className='text-gray-500 text-sm'>Physician</p>
-            <p className='font-medium text-base text-muted-foreground'>Dr Codewave, MBBS, FCPS</p>
+            <p className='font-medium text-base text-muted-foreground'>
+              Dr Codewave, MBBS, FCPS
+            </p>
           </div>
         </div>
         <div className='flex items-start gap-3'>
           <div>
             <p className='text-gray-500 text-sm'>Active Conditions</p>
-            <p className='font-medium text-base text-muted-foreground'>{data?.medicalConditions}</p>
+            <p className='font-medium text-base text-muted-foreground'>
+              {data?.medicalConditions}
+            </p>
           </div>
         </div>
         <div className='flex items-start gap-3'>
           <div>
             <p className='text-gray-500 text-sm'>Allergies</p>
-            <p className='font-medium text-base text-muted-foreground'>{data?.allergies}</p>
+            <p className='font-medium text-base text-muted-foreground'>
+              {data?.allergies}
+            </p>
           </div>
         </div>
       </CardContent>
     </Card>
-  );
-};
+  )
+}

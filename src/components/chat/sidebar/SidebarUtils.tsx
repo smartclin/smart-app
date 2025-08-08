@@ -1,38 +1,38 @@
-'use client';
+'use client'
 
-import { RefreshCw, Search } from 'lucide-react';
-import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { RefreshCw, Search } from 'lucide-react'
+import Link from 'next/link'
+import { useRouter } from 'next/navigation'
+import { useState } from 'react'
 
-import { Button } from '@/components/ui/button';
+import { Button } from '@/components/ui/button'
 import {
   SidebarGroup,
   SidebarGroupContent,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-  useSidebar
-} from '@/components/ui/sidebar';
+  useSidebar,
+} from '@/components/ui/sidebar'
 
-import ArchivedChatsModal from '../modals/archive-chat/ArchivedChatsModal';
-import SearchCommand from '../modals/SearchCommand';
+import ArchivedChatsModal from '../modals/archive-chat/ArchivedChatsModal'
+import SearchCommand from '../modals/SearchCommand'
 
 const SidebarUtils = () => {
-  const router = useRouter();
+  const router = useRouter()
 
-  const [openArchivedChats, setOpenArchivedChats] = useState(false);
-  const [openSearch, setOpenSearch] = useState(false);
+  const [openArchivedChats, setOpenArchivedChats] = useState(false)
+  const [openSearch, setOpenSearch] = useState(false)
 
-  const { isMobile, setOpenMobile } = useSidebar();
+  const { isMobile, setOpenMobile } = useSidebar()
 
   const handleChatClick = () => {
     if (isMobile) {
-      setOpenMobile(false);
+      setOpenMobile(false)
     }
 
-    router.refresh();
-  };
+    router.refresh()
+  }
 
   return (
     <>
@@ -81,7 +81,7 @@ const SidebarUtils = () => {
         </SidebarGroupContent>
       </SidebarGroup>
     </>
-  );
-};
+  )
+}
 
-export default SidebarUtils;
+export default SidebarUtils

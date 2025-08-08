@@ -1,24 +1,30 @@
-'use client';
+'use client'
 
-import { useAutoAnimate } from '@formkit/auto-animate/react';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { Ellipsis, Eye, EyeOff, Loader } from 'lucide-react';
-import { useRouter } from 'next/navigation';
-import { useState } from 'react';
-import { useForm } from 'react-hook-form';
-import QrCode from 'react-qr-code';
-import * as z from 'zod';
+import { useAutoAnimate } from '@formkit/auto-animate/react'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { Ellipsis, Eye, EyeOff, Loader } from 'lucide-react'
+import { useRouter } from 'next/navigation'
+import { useState } from 'react'
+import { useForm } from 'react-hook-form'
+import QrCode from 'react-qr-code'
+import * as z from 'zod'
 
-import { ErrorCard } from '@/components/auth/error-card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { ErrorCard } from '@/components/auth/error-card'
+import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card'
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuTrigger
-} from '@/components/ui/dropdown-menu';
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu'
 import {
   Form,
   FormControl,
@@ -26,136 +32,141 @@ import {
   FormField,
   FormItem,
   FormLabel,
-  FormMessage
-} from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
-import type { AuthUser } from '@/hooks/use-auth';
-import { useAutoSubmit } from '@/hooks/use-auto-submit';
-import { authClient } from '@/lib/auth/auth-client';
+  FormMessage,
+} from '@/components/ui/form'
+import { Input } from '@/components/ui/input'
+import type { AuthUser } from '@/hooks/use-auth'
+import { useAutoSubmit } from '@/hooks/use-auto-submit'
+import { authClient } from '@/lib/auth/auth-client'
 
-import { SplitOTP } from '../split-otp';
+import { SplitOTP } from '../split-otp'
 
 const twoFactorPasswordSchema = z.object({
-  currentPassword: z.string().min(8)
-});
+  currentPassword: z.string().min(8),
+})
 
 const totpCodeSchema = z.object({
   otp: z.string().min(6, {
-    message: 'Code must be 6 digits long'
-  })
-});
+    message: 'Code must be 6 digits long',
+  }),
+})
 
 const removeTwoFactorSchema = z.object({
-  currentPassword: z.string().min(8)
-});
+  currentPassword: z.string().min(8),
+})
 
 export const TwoFactorSection = ({ user }: { user: AuthUser }) => {
-  const [animate] = useAutoAnimate();
-  const router = useRouter();
-  const [isTwoFactorBoxOpen, setIsTwoFactorBoxOpen] = useState(false);
-  const [isRemoveTwoFactorBoxOpen, setIsRemoveTwoFactorBoxOpen] = useState(false);
-  const [twoFactorStage, setTwoFactorStage] = useState(1);
-  const [error, setError] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
-  const [totpUri, setTotpUri] = useState('');
-  const toggleVisibility = () => setIsPasswordVisible(prevState => !prevState);
-  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+  const [animate] = useAutoAnimate()
+  const router = useRouter()
+  const [isTwoFactorBoxOpen, setIsTwoFactorBoxOpen] = useState(false)
+  const [isRemoveTwoFactorBoxOpen, setIsRemoveTwoFactorBoxOpen] =
+    useState(false)
+  const [twoFactorStage, setTwoFactorStage] = useState(1)
+  const [error, setError] = useState('')
+  const [isLoading, setIsLoading] = useState(false)
+  const [totpUri, setTotpUri] = useState('')
+  const toggleVisibility = () => setIsPasswordVisible((prevState) => !prevState)
+  const [isPasswordVisible, setIsPasswordVisible] = useState(false)
 
-  const is2FAEnabled = user.twoFactorEnabled;
+  const is2FAEnabled = user.twoFactorEnabled
 
   const twoFactorForm = useForm<z.infer<typeof twoFactorPasswordSchema>>({
     resolver: zodResolver(twoFactorPasswordSchema),
     defaultValues: {
-      currentPassword: ''
-    }
-  });
+      currentPassword: '',
+    },
+  })
 
   const totpCodeForm = useForm<z.infer<typeof totpCodeSchema>>({
     resolver: zodResolver(totpCodeSchema),
     defaultValues: {
-      otp: ''
-    }
-  });
+      otp: '',
+    },
+  })
 
   const removeTwoFactorForm = useForm<z.infer<typeof removeTwoFactorSchema>>({
     resolver: zodResolver(removeTwoFactorSchema),
     defaultValues: {
-      currentPassword: ''
-    }
-  });
+      currentPassword: '',
+    },
+  })
 
-  const onTwoFactorPasswordSubmit = async (data: z.infer<typeof twoFactorPasswordSchema>) => {
+  const onTwoFactorPasswordSubmit = async (
+    data: z.infer<typeof twoFactorPasswordSchema>,
+  ) => {
     const { data: totpUri } = await authClient.twoFactor.enable(
       {
-        password: data.currentPassword
+        password: data.currentPassword,
       },
       {
         onRequest: () => {
-          setIsLoading(true);
+          setIsLoading(true)
         },
         onSuccess: async () => {
-          setIsLoading(false);
-          setTwoFactorStage(2);
+          setIsLoading(false)
+          setTwoFactorStage(2)
         },
-        onError: ctx => {
-          setError(ctx.error.message);
-          setIsLoading(false);
-        }
-      }
-    );
+        onError: (ctx) => {
+          setError(ctx.error.message)
+          setIsLoading(false)
+        },
+      },
+    )
 
-    setTotpUri(totpUri?.totpURI ?? '');
-  };
+    setTotpUri(totpUri?.totpURI ?? '')
+  }
 
   const onTotpCodeSubmit = async (data: z.infer<typeof totpCodeSchema>) => {
     await authClient.twoFactor.verifyTotp(
       {
-        code: data.otp
+        code: data.otp,
       },
       {
         onRequest: () => {
-          setIsLoading(true);
+          setIsLoading(true)
         },
         onSuccess: async () => {
-          setIsLoading(false);
-          setTwoFactorStage(4);
+          setIsLoading(false)
+          setTwoFactorStage(4)
         },
-        onError: ctx => {
-          setError(ctx.error.message);
-          setIsLoading(false);
-        }
-      }
-    );
-  };
+        onError: (ctx) => {
+          setError(ctx.error.message)
+          setIsLoading(false)
+        },
+      },
+    )
+  }
 
   useAutoSubmit({
     trigger: totpCodeForm.trigger,
     watch: totpCodeForm.watch,
-    onSubmit: totpCodeForm.handleSubmit(onTotpCodeSubmit)
-  });
+    onSubmit: totpCodeForm.handleSubmit(onTotpCodeSubmit),
+  })
 
-  const onRemoveTwoFactorSubmit = async (data: z.infer<typeof removeTwoFactorSchema>) => {
+  const onRemoveTwoFactorSubmit = async (
+    data: z.infer<typeof removeTwoFactorSchema>,
+  ) => {
     await authClient.twoFactor.disable(
       {
-        password: data.currentPassword
+        password: data.currentPassword,
       },
       {
         onRequest: () => {
-          setIsLoading(true);
+          setIsLoading(true)
         },
         onSuccess: async () => {
-          setIsLoading(false);
-          setIsRemoveTwoFactorBoxOpen(false);
-          setTwoFactorStage(1);
-          router.refresh();
+          setIsLoading(false)
+          setIsRemoveTwoFactorBoxOpen(false)
+          setTwoFactorStage(1)
+          router.refresh()
         },
-        onError: ctx => {
-          setError(ctx.error.message);
-          setIsLoading(false);
-        }
-      }
-    );
-  };
+        onError: (ctx) => {
+          setError(ctx.error.message)
+          setIsLoading(false)
+        },
+      },
+    )
+  }
 
   return (
     <div className='flex flex-col gap-10 md:w-[72%]'>
@@ -191,7 +202,9 @@ export const TwoFactorSection = ({ user }: { user: AuthUser }) => {
                         fillRule='evenodd'
                       />
                     </svg>
-                    <p className='mr-2 text-xs text-zinc-600'>Authenticator app</p>
+                    <p className='mr-2 text-xs text-zinc-600'>
+                      Authenticator app
+                    </p>
                     <Badge variant={'outline'}>Default</Badge>
                   </div>
                 )}
@@ -213,8 +226,8 @@ export const TwoFactorSection = ({ user }: { user: AuthUser }) => {
                       <DropdownMenuItem
                         className='cursor-pointer p-0'
                         onClick={() => {
-                          setIsRemoveTwoFactorBoxOpen(true);
-                          setTwoFactorStage(10);
+                          setIsRemoveTwoFactorBoxOpen(true)
+                          setTwoFactorStage(10)
                         }}
                       >
                         <p className='text-destructive text-sm'>Remove</p>
@@ -226,7 +239,7 @@ export const TwoFactorSection = ({ user }: { user: AuthUser }) => {
                   align='center'
                   className='rounded-lg shadow-lg'
                   onClick={() => {
-                    setIsTwoFactorBoxOpen(true);
+                    setIsTwoFactorBoxOpen(true)
                   }}
                 >
                   <DropdownMenuItem className='cursor-pointer'>
@@ -262,13 +275,14 @@ export const TwoFactorSection = ({ user }: { user: AuthUser }) => {
               </CardTitle>
               {twoFactorStage === 2 && (
                 <CardDescription className='text-xs'>
-                  Set up a new signin method in your authenticator app and scan the following QR
-                  code to link it to your account.
+                  Set up a new signin method in your authenticator app and scan
+                  the following QR code to link it to your account.
                 </CardDescription>
               )}
               {twoFactorStage === 10 && (
                 <CardDescription className='text-xs'>
-                  To remove two-factor authentication, enter your current password.
+                  To remove two-factor authentication, enter your current
+                  password.
                 </CardDescription>
               )}
             </CardHeader>
@@ -286,14 +300,18 @@ export const TwoFactorSection = ({ user }: { user: AuthUser }) => {
                   <Form {...twoFactorForm}>
                     <form
                       className='space-y-6'
-                      onSubmit={twoFactorForm.handleSubmit(onTwoFactorPasswordSubmit)}
+                      onSubmit={twoFactorForm.handleSubmit(
+                        onTwoFactorPasswordSubmit,
+                      )}
                     >
                       <FormField
                         control={twoFactorForm.control}
                         name='currentPassword'
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel className='text-sm'>Current Password</FormLabel>
+                            <FormLabel className='text-sm'>
+                              Current Password
+                            </FormLabel>
                             <FormControl>
                               <div className='relative'>
                                 <Input
@@ -306,7 +324,11 @@ export const TwoFactorSection = ({ user }: { user: AuthUser }) => {
                                 />
                                 <button
                                   aria-controls='password'
-                                  aria-label={isPasswordVisible ? 'Hide password' : 'Show password'}
+                                  aria-label={
+                                    isPasswordVisible
+                                      ? 'Hide password'
+                                      : 'Show password'
+                                  }
                                   aria-pressed={isPasswordVisible}
                                   className='absolute inset-y-0 end-0 flex h-full w-9 items-center justify-center rounded-e-lg text-muted-foreground/80 outline-offset-2 transition-colors hover:text-foreground focus:z-10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-ring/70 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50'
                                   onClick={toggleVisibility}
@@ -336,10 +358,10 @@ export const TwoFactorSection = ({ user }: { user: AuthUser }) => {
                         className='mt-4 mr-2'
                         disabled={isLoading}
                         onClick={() => {
-                          setIsTwoFactorBoxOpen(false);
-                          setIsRemoveTwoFactorBoxOpen(false);
-                          twoFactorForm.reset();
-                          setError('');
+                          setIsTwoFactorBoxOpen(false)
+                          setIsRemoveTwoFactorBoxOpen(false)
+                          twoFactorForm.reset()
+                          setError('')
                         }}
                         size={'sm'}
                         type='button'
@@ -374,9 +396,9 @@ export const TwoFactorSection = ({ user }: { user: AuthUser }) => {
                     className='mt-10 mr-2'
                     disabled={isLoading}
                     onClick={() => {
-                      setIsTwoFactorBoxOpen(false);
-                      twoFactorForm.reset();
-                      setError('');
+                      setIsTwoFactorBoxOpen(false)
+                      twoFactorForm.reset()
+                      setError('')
                     }}
                     size={'sm'}
                     type='button'
@@ -388,7 +410,7 @@ export const TwoFactorSection = ({ user }: { user: AuthUser }) => {
                     className='mt-10'
                     disabled={isLoading}
                     onClick={() => {
-                      setTwoFactorStage(3);
+                      setTwoFactorStage(3)
                     }}
                     size={'sm'}
                     type='button'
@@ -413,7 +435,9 @@ export const TwoFactorSection = ({ user }: { user: AuthUser }) => {
                   <Form {...totpCodeForm}>
                     <form
                       className='flex flex-col items-center justify-center space-y-6'
-                      onSubmit={totpCodeForm.handleSubmit(() => onTotpCodeSubmit)}
+                      onSubmit={totpCodeForm.handleSubmit(
+                        () => onTotpCodeSubmit,
+                      )}
                     >
                       <FormField
                         control={totpCodeForm.control}
@@ -440,11 +464,11 @@ export const TwoFactorSection = ({ user }: { user: AuthUser }) => {
                           className='mt-4 mr-2'
                           disabled={isLoading}
                           onClick={() => {
-                            setIsTwoFactorBoxOpen(false);
-                            twoFactorForm.reset();
-                            totpCodeForm.reset();
-                            setTwoFactorStage(1);
-                            setError('');
+                            setIsTwoFactorBoxOpen(false)
+                            twoFactorForm.reset()
+                            totpCodeForm.reset()
+                            setTwoFactorStage(1)
+                            setError('')
                           }}
                           size={'sm'}
                           type='button'
@@ -457,8 +481,8 @@ export const TwoFactorSection = ({ user }: { user: AuthUser }) => {
                           disabled={isLoading}
                           onClick={() => {
                             onTotpCodeSubmit({
-                              otp: totpCodeForm.getValues().otp
-                            });
+                              otp: totpCodeForm.getValues().otp,
+                            })
                           }}
                           size={'sm'}
                           type='button'
@@ -476,17 +500,18 @@ export const TwoFactorSection = ({ user }: { user: AuthUser }) => {
               {twoFactorStage === 4 && (
                 <div className='flex flex-col'>
                   <CardDescription className='text-xs'>
-                    Two-step verification is now enabled. When signing in, you will need to enter a
-                    verification code from this authenticator as an additional step.
+                    Two-step verification is now enabled. When signing in, you
+                    will need to enter a verification code from this
+                    authenticator as an additional step.
                   </CardDescription>
                   <Button
                     className='mt-4 self-end'
                     disabled={isLoading}
                     onClick={() => {
-                      setIsTwoFactorBoxOpen(false);
-                      twoFactorForm.reset();
-                      totpCodeForm.reset();
-                      setError('');
+                      setIsTwoFactorBoxOpen(false)
+                      twoFactorForm.reset()
+                      totpCodeForm.reset()
+                      setError('')
                     }}
                     size={'sm'}
                     type='button'
@@ -508,14 +533,18 @@ export const TwoFactorSection = ({ user }: { user: AuthUser }) => {
                   <Form {...removeTwoFactorForm}>
                     <form
                       className='space-y-6'
-                      onSubmit={removeTwoFactorForm.handleSubmit(onRemoveTwoFactorSubmit)}
+                      onSubmit={removeTwoFactorForm.handleSubmit(
+                        onRemoveTwoFactorSubmit,
+                      )}
                     >
                       <FormField
                         control={removeTwoFactorForm.control}
                         name='currentPassword'
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel className='text-sm'>Current Password</FormLabel>
+                            <FormLabel className='text-sm'>
+                              Current Password
+                            </FormLabel>
                             <FormControl>
                               <div className='relative'>
                                 <Input
@@ -528,7 +557,11 @@ export const TwoFactorSection = ({ user }: { user: AuthUser }) => {
                                 />
                                 <button
                                   aria-controls='password'
-                                  aria-label={isPasswordVisible ? 'Hide password' : 'Show password'}
+                                  aria-label={
+                                    isPasswordVisible
+                                      ? 'Hide password'
+                                      : 'Show password'
+                                  }
                                   aria-pressed={isPasswordVisible}
                                   className='absolute inset-y-0 end-0 flex h-full w-9 items-center justify-center rounded-e-lg text-muted-foreground/80 outline-offset-2 transition-colors hover:text-foreground focus:z-10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-ring/70 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50'
                                   onClick={toggleVisibility}
@@ -558,10 +591,10 @@ export const TwoFactorSection = ({ user }: { user: AuthUser }) => {
                         className='mt-4 mr-2'
                         disabled={isLoading}
                         onClick={() => {
-                          setIsTwoFactorBoxOpen(false);
-                          setIsRemoveTwoFactorBoxOpen(false);
-                          twoFactorForm.reset();
-                          setError('');
+                          setIsTwoFactorBoxOpen(false)
+                          setIsRemoveTwoFactorBoxOpen(false)
+                          twoFactorForm.reset()
+                          setError('')
                         }}
                         size={'sm'}
                         type='button'
@@ -589,5 +622,5 @@ export const TwoFactorSection = ({ user }: { user: AuthUser }) => {
         )}
       </div>
     </div>
-  );
-};
+  )
+}

@@ -1,35 +1,35 @@
-import type { AppointmentStatus } from '@prisma/client';
-import { format } from 'date-fns';
-import { Calendar, Phone } from 'lucide-react';
+import type { AppointmentStatus } from '@prisma/client'
+import { format } from 'date-fns'
+import { Calendar, Phone } from 'lucide-react'
 
-import { getSession } from '@/lib/auth';
-import { trpc } from '@/trpc/server';
-import { calculateAge, formatDateTime } from '@/utils';
-import { checkRole } from '@/utils/roles';
+import { getSession } from '@/lib/auth'
+import { trpc } from '@/trpc/server'
+import { calculateAge, formatDateTime } from '@/utils'
+import { checkRole } from '@/utils/roles'
 
-import { AppointmentAction } from './appointment-action';
-import { AppointmentStatusIndicator } from './appointment-status-indicator';
-import { ProfileImage } from './profile-image';
-import { Button } from './ui/button';
+import { AppointmentAction } from './appointment-action'
+import { AppointmentStatusIndicator } from './appointment-status-indicator'
+import { ProfileImage } from './profile-image'
+import { Button } from './ui/button'
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogHeader,
   DialogTitle,
-  DialogTrigger
-} from './ui/dialog';
+  DialogTrigger,
+} from './ui/dialog'
 
 interface ViewAppointmentProps {
-  id?: number;
+  id?: number
 }
 export const ViewAppointment = async ({ id }: ViewAppointmentProps) => {
-  if (!id) return null;
-  const session = await getSession();
-  if (!session) return null;
-  const userId = session?.user.id;
-  const data = await trpc.appointment.getAppointmentById({ id });
-  if (!data) return null;
+  if (!id) return null
+  const session = await getSession()
+  if (!session) return null
+  const userId = session?.user.id
+  const data = await trpc.appointment.getAppointmentById({ id })
+  if (!data) return null
 
   return (
     <Dialog>
@@ -53,7 +53,9 @@ export const ViewAppointment = async ({ id }: ViewAppointmentProps) => {
 
         {data?.data?.status === 'CANCELLED' && (
           <div className='mt-4 rounded-md bg-yellow-100 p-4'>
-            <span className='font-semibold text-sm'>This appointment has been cancelled</span>
+            <span className='font-semibold text-sm'>
+              This appointment has been cancelled
+            </span>
             <p className='text-sm'>
               <strong>Reason</strong>: {data?.data?.reason}
             </p>
@@ -99,7 +101,9 @@ export const ViewAppointment = async ({ id }: ViewAppointmentProps) => {
 
             <div>
               <span className='text-gray-500 text-sm'>Address</span>
-              <p className='text-gray-600 capitalize'>{data?.data?.patient?.address}</p>
+              <p className='text-gray-600 capitalize'>
+                {data?.data?.patient?.address}
+              </p>
             </div>
           </div>
 
@@ -124,7 +128,9 @@ export const ViewAppointment = async ({ id }: ViewAppointmentProps) => {
             </div>
             <div>
               <span className='text-gray-500 text-sm'>Status</span>
-              <AppointmentStatusIndicator status={data?.data?.status as AppointmentStatus} />
+              <AppointmentStatusIndicator
+                status={data?.data?.status as AppointmentStatus}
+              />
             </div>
           </div>
 
@@ -147,7 +153,9 @@ export const ViewAppointment = async ({ id }: ViewAppointmentProps) => {
                 url={data?.data?.doctor?.img ?? ''}
               />
               <div className=''>
-                <h2 className='font-medium text-lg uppercase'>{data?.data?.doctor?.name}</h2>
+                <h2 className='font-medium text-lg uppercase'>
+                  {data?.data?.doctor?.name}
+                </h2>
                 <p className='flex items-center gap-2 text-gray-600 capitalize'>
                   {data?.data?.doctor?.specialization}
                 </p>
@@ -155,7 +163,8 @@ export const ViewAppointment = async ({ id }: ViewAppointmentProps) => {
             </div>
           </div>
 
-          {(await checkRole(session, 'ADMIN')) || data?.data?.doctorId === userId ? (
+          {(await checkRole(session, 'ADMIN')) ||
+          data?.data?.doctorId === userId ? (
             <>
               <p className='mt-4 w-fit rounded bg-blue-100 px-2 py-1 text-blue-600 text-xs md:text-sm'>
                 Perform Action
@@ -169,5 +178,5 @@ export const ViewAppointment = async ({ id }: ViewAppointmentProps) => {
         </div>
       </DialogContent>
     </Dialog>
-  );
-};
+  )
+}

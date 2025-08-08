@@ -1,27 +1,33 @@
-import { Briefcase, BriefcaseBusiness, BriefcaseMedical } from 'lucide-react';
-import Link from 'next/link';
-import { redirect } from 'next/navigation';
+import { Briefcase, BriefcaseBusiness, BriefcaseMedical } from 'lucide-react'
+import Link from 'next/link'
+import { redirect } from 'next/navigation'
 
-import { AvailableDoctors } from '@/components/available-doctor';
-import { AppointmentChart } from '@/components/charts/appointment-chart';
-import { StatSummary } from '@/components/charts/stat-summary';
-import { PatientRatingContainer } from '@/components/patient-rating-container';
-import { StatCard } from '@/components/stat-card';
-import { RecentAppointments } from '@/components/tables/recent-appointment';
-import { Button } from '@/components/ui/button';
-import { getSession } from '@/lib/auth';
-import { trpc } from '@/trpc/server';
-import type { AvailableDoctorProps } from '@/types/data-types';
+import { AvailableDoctors } from '@/components/available-doctor'
+import { AppointmentChart } from '@/components/charts/appointment-chart'
+import { StatSummary } from '@/components/charts/stat-summary'
+import { PatientRatingContainer } from '@/components/patient-rating-container'
+import { StatCard } from '@/components/stat-card'
+import { RecentAppointments } from '@/components/tables/recent-appointment'
+import { Button } from '@/components/ui/button'
+import { getSession } from '@/lib/auth'
+import { trpc } from '@/trpc/server'
+import type { AvailableDoctorProps } from '@/types/data-types'
 
 const PatientDashboard = async () => {
-  const session = await getSession();
-  const user = session?.user;
-  if (!user?.id) redirect('/signin');
+  const session = await getSession()
+  const user = session?.user
+  if (!user?.id) redirect('/signin')
 
-  const { data, appointmentCounts, last5Records, totalAppointments, availableDoctor, monthlyData } =
-    await trpc.patient.getPatientDashboardStatistics(user.id);
+  const {
+    data,
+    appointmentCounts,
+    last5Records,
+    totalAppointments,
+    availableDoctor,
+    monthlyData,
+  } = await trpc.patient.getPatientDashboardStatistics(user.id)
 
-  if (!data) redirect('/patient/registration');
+  if (!data) redirect('/patient/registration')
 
   const cardData = [
     {
@@ -30,7 +36,7 @@ const PatientDashboard = async () => {
       icon: Briefcase,
       className: 'bg-blue-600/15',
       iconClassName: 'bg-blue-600/25 text-blue-600',
-      note: 'Total appointments'
+      note: 'Total appointments',
     },
     {
       title: 'cancelled',
@@ -38,15 +44,16 @@ const PatientDashboard = async () => {
       icon: Briefcase,
       className: 'bg-rose-600/15',
       iconClassName: 'bg-rose-600/25 text-rose-600',
-      note: 'Cancelled Appointments'
+      note: 'Cancelled Appointments',
     },
     {
       title: 'pending',
-      value: (appointmentCounts?.PENDING ?? 0) + (appointmentCounts?.SCHEDULED ?? 0),
+      value:
+        (appointmentCounts?.PENDING ?? 0) + (appointmentCounts?.SCHEDULED ?? 0),
       icon: BriefcaseBusiness,
       className: 'bg-yellow-600/15',
       iconClassName: 'bg-yellow-600/25 text-yellow-600',
-      note: 'Pending Appointments'
+      note: 'Pending Appointments',
     },
     {
       title: 'completed',
@@ -54,9 +61,9 @@ const PatientDashboard = async () => {
       icon: BriefcaseMedical,
       className: 'bg-emerald-600/15',
       iconClassName: 'bg-emerald-600/25 text-emerald-600',
-      note: 'Successfully appointments'
-    }
-  ];
+      note: 'Successfully appointments',
+    },
+  ]
 
   return (
     <div className='flex flex-col gap-6 rounded-xl px-3 py-6 xl:flex-row'>
@@ -81,7 +88,7 @@ const PatientDashboard = async () => {
           </div>
 
           <div className='flex w-full flex-wrap gap-5'>
-            {cardData.map(el => (
+            {cardData.map((el) => (
               <StatCard
                 key={el.title}
                 {...el}
@@ -113,7 +120,7 @@ const PatientDashboard = async () => {
         <PatientRatingContainer />
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default PatientDashboard;
+export default PatientDashboard

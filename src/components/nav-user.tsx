@@ -1,12 +1,12 @@
-'use client';
+'use client'
 
-import { useQueryClient } from '@tanstack/react-query';
-import { ChevronsUpDown, LogOut, Settings } from 'lucide-react';
-import { useRouter } from 'next/navigation';
-import { useTheme } from 'next-themes';
-import { toast } from 'sonner';
+import { useQueryClient } from '@tanstack/react-query'
+import { ChevronsUpDown, LogOut, Settings } from 'lucide-react'
+import { useRouter } from 'next/navigation'
+import { useTheme } from 'next-themes'
+import { toast } from 'sonner'
 
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -20,41 +20,45 @@ import {
   DropdownMenuSub,
   DropdownMenuSubContent,
   DropdownMenuSubTrigger,
-  DropdownMenuTrigger
-} from '@/components/ui/dropdown-menu';
-import { SidebarMenu, SidebarMenuButton, SidebarMenuItem } from '@/components/ui/sidebar';
-import { useCurrentUser } from '@/hooks/use-auth';
-import { authClient } from '@/lib/auth/auth-client';
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu'
+import {
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+} from '@/components/ui/sidebar'
+import { useCurrentUser } from '@/hooks/use-auth'
+import { authClient } from '@/lib/auth/auth-client'
 
-import { Skeleton } from './ui/skeleton';
+import { Skeleton } from './ui/skeleton'
 
 export function NavUser() {
-  const router = useRouter();
-  const queryClient = useQueryClient();
-  const user = useCurrentUser();
-  const isLoading = !user;
-  const { theme = 'system', setTheme } = useTheme();
+  const router = useRouter()
+  const queryClient = useQueryClient()
+  const user = useCurrentUser()
+  const isLoading = !user
+  const { theme = 'system', setTheme } = useTheme()
 
   if (isLoading || !user) {
-    return <NavUserSkeleton />;
+    return <NavUserSkeleton />
   }
 
   const initials =
     user.name
       ?.split(' ')
-      .map(n => n[0]?.toUpperCase())
-      .join('') ?? 'U';
+      .map((n) => n[0]?.toUpperCase())
+      .join('') ?? 'U'
 
   const handleLogout = async () => {
     try {
-      await authClient.signOut();
-      queryClient.clear();
-      router.push('/login');
-      toast.success('You have been logged out.');
+      await authClient.signOut()
+      queryClient.clear()
+      router.push('/login')
+      toast.success('You have been logged out.')
     } catch {
-      toast.error('Logout failed. Please try again.');
+      toast.error('Logout failed. Please try again.')
     }
-  };
+  }
 
   return (
     <SidebarMenu>
@@ -76,7 +80,9 @@ export function NavUser() {
               </Avatar>
               <div className='grid flex-1 text-left text-sm leading-tight'>
                 <span className='truncate font-medium'>{user.name}</span>
-                <span className='truncate text-muted-foreground text-xs'>{user.email}</span>
+                <span className='truncate text-muted-foreground text-xs'>
+                  {user.email}
+                </span>
               </div>
               <ChevronsUpDown className='ml-auto size-4' />
             </SidebarMenuButton>
@@ -95,11 +101,15 @@ export function NavUser() {
                     alt={user.name ?? ''}
                     src={user.avatar ?? ''}
                   />
-                  <AvatarFallback className='rounded-lg'>{initials}</AvatarFallback>
+                  <AvatarFallback className='rounded-lg'>
+                    {initials}
+                  </AvatarFallback>
                 </Avatar>
                 <div className='grid flex-1 text-left text-sm leading-tight'>
                   <span className='truncate font-medium'>{user.name}</span>
-                  <span className='truncate text-muted-foreground text-xs'>{user.email}</span>
+                  <span className='truncate text-muted-foreground text-xs'>
+                    {user.email}
+                  </span>
                 </div>
               </div>
             </DropdownMenuLabel>
@@ -107,7 +117,7 @@ export function NavUser() {
             <DropdownMenuSeparator />
 
             <DropdownMenuGroup>
-              <DropdownMenuItem onSelect={e => e.preventDefault()}>
+              <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
                 <Settings className='mr-2 h-4 w-4' />
                 Settings
               </DropdownMenuItem>
@@ -116,16 +126,24 @@ export function NavUser() {
             <DropdownMenuSeparator />
 
             <DropdownMenuSub>
-              <DropdownMenuSubTrigger className='ps-8'>Theme</DropdownMenuSubTrigger>
+              <DropdownMenuSubTrigger className='ps-8'>
+                Theme
+              </DropdownMenuSubTrigger>
               <DropdownMenuPortal>
                 <DropdownMenuSubContent className='min-w-64'>
                   <DropdownMenuRadioGroup
                     onValueChange={setTheme}
                     value={theme}
                   >
-                    <DropdownMenuRadioItem value='system'>System</DropdownMenuRadioItem>
-                    <DropdownMenuRadioItem value='light'>Light</DropdownMenuRadioItem>
-                    <DropdownMenuRadioItem value='dark'>Dark</DropdownMenuRadioItem>
+                    <DropdownMenuRadioItem value='system'>
+                      System
+                    </DropdownMenuRadioItem>
+                    <DropdownMenuRadioItem value='light'>
+                      Light
+                    </DropdownMenuRadioItem>
+                    <DropdownMenuRadioItem value='dark'>
+                      Dark
+                    </DropdownMenuRadioItem>
                   </DropdownMenuRadioGroup>
                 </DropdownMenuSubContent>
               </DropdownMenuPortal>
@@ -141,7 +159,7 @@ export function NavUser() {
         </DropdownMenu>
       </SidebarMenuItem>
     </SidebarMenu>
-  );
+  )
 }
 
 export function NavUserSkeleton() {
@@ -157,5 +175,5 @@ export function NavUserSkeleton() {
         </div>
       </SidebarMenuItem>
     </SidebarMenu>
-  );
+  )
 }

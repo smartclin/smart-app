@@ -1,60 +1,60 @@
-import type { PatientBills } from '@prisma/client';
-import { format } from 'date-fns';
-import { ReceiptText } from 'lucide-react';
+import type { PatientBills } from '@prisma/client'
+import { format } from 'date-fns'
+import { ReceiptText } from 'lucide-react'
 
-import db from '@/db';
-import { getSession } from '@/lib/auth';
-import { calculateDiscount } from '@/utils';
-import { checkRole } from '@/utils/roles';
+import db from '@/db'
+import { getSession } from '@/lib/auth'
+import { calculateDiscount } from '@/utils'
+import { checkRole } from '@/utils/roles'
 
-import { ActionDialog } from '../action-dialog';
-import { AddBills } from '../dialogs/add-bills';
-import { Table } from '../tables/table';
-import { Separator } from '../ui/separator';
-import { GenerateFinalBills } from './generate-final-bill';
+import { ActionDialog } from '../action-dialog'
+import { AddBills } from '../dialogs/add-bills'
+import { Table } from '../tables/table'
+import { Separator } from '../ui/separator'
+import { GenerateFinalBills } from './generateFinalBill'
 
 const columns = [
   {
     header: 'No',
     key: 'no',
-    className: 'hidden md:table-cell'
+    className: 'hidden md:table-cell',
   },
   {
     header: 'Service',
-    key: 'service'
+    key: 'service',
   },
   {
     header: 'Date',
     key: 'date',
-    className: ''
+    className: '',
   },
   {
     header: 'Quantity',
     key: 'qnty',
-    className: 'hidden md:table-cell'
+    className: 'hidden md:table-cell',
   },
   {
     header: 'Unit Price',
     key: 'price',
-    className: 'hidden md:table-cell'
+    className: 'hidden md:table-cell',
   },
   {
     header: 'Total Cost',
     key: 'total',
-    className: ''
+    className: '',
   },
   {
     header: 'Action',
     key: 'action',
-    className: 'hidden xl:table-cell'
-  }
-];
+    className: 'hidden xl:table-cell',
+  },
+]
 
 interface ExtendedBillProps extends PatientBills {
   service: {
-    serviceName: string;
-    id: number;
-  };
+    serviceName: string
+    id: number
+  }
 }
 export const BillsContainer = async ({ id }: { id: number }) => {
   const [data, servicesData] = await Promise.all([
@@ -63,30 +63,30 @@ export const BillsContainer = async ({ id }: { id: number }) => {
       include: {
         bills: {
           include: {
-            service: { select: { serviceName: true, id: true } }
+            service: { select: { serviceName: true, id: true } },
           },
 
-          orderBy: { createdAt: 'asc' }
-        }
-      }
+          orderBy: { createdAt: 'asc' },
+        },
+      },
     }),
-    db.services.findMany()
-  ]);
+    db.services.findMany(),
+  ])
 
-  let totalBills = 0;
+  let totalBills = 0
 
-  const billData = data?.bills || [];
+  const billData = data?.bills || []
   const discount = data
     ? calculateDiscount({
         amount: data?.totalAmount,
-        discount: data?.discount
+        discount: data?.discount,
       })
-    : null;
+    : null
 
   if (billData) {
-    totalBills = billData.reduce((sum, acc) => sum + acc.totalCost, 0);
+    totalBills = billData.reduce((sum, acc) => sum + acc.totalCost, 0)
   }
-  const session = await getSession();
+  const session = await getSession()
   const renderRow = (item: ExtendedBillProps) => {
     return (
       <tr
@@ -99,7 +99,9 @@ export const BillsContainer = async ({ id }: { id: number }) => {
 
         <td className=''>{format(item?.serviceDate, 'MMM d, yyyy')}</td>
 
-        <td className='hidden items-center py-2 md:table-cell'>{item?.quantity}</td>
+        <td className='hidden items-center py-2 md:table-cell'>
+          {item?.quantity}
+        </td>
         <td className='hidden lg:table-cell'>{item?.unitCost.toFixed(2)}</td>
         <td>{item?.totalCost.toFixed(2)}</td>
 
@@ -111,8 +113,8 @@ export const BillsContainer = async ({ id }: { id: number }) => {
           />
         </td>
       </tr>
-    );
-  };
+    )
+  }
 
   return (
     <div className='rounded-xl bg-white p-2 2xl:p-4'>
@@ -125,11 +127,14 @@ export const BillsContainer = async ({ id }: { id: number }) => {
               size={20}
             />
             <p className='font-semibold text-2xl'>{billData?.length}</p>
-            <span className='text-gray-600 text-sm xl:text-base'>total records</span>
+            <span className='text-gray-600 text-sm xl:text-base'>
+              total records
+            </span>
           </div>
         </div>
 
-        {((await checkRole(session, 'ADMIN')) || (await checkRole(session, 'DOCTOR'))) && (
+        {((await checkRole(session, 'ADMIN')) ||
+          (await checkRole(session, 'DOCTOR'))) && (
           <div className='mt-5 flex items-center justify-end'>
             <AddBills
               appId={id}
@@ -156,7 +161,9 @@ export const BillsContainer = async ({ id }: { id: number }) => {
       <div className='flex flex-wrap items-center justify-between space-y-6 py-2 md:text-center lg:flex-nowrap'>
         <div className='w-[120px]'>
           <span className='text-gray-500'>Total Bill</span>
-          <p className='font-semibold text-xl'>{(data?.totalAmount || totalBills).toFixed(2)}</p>
+          <p className='font-semibold text-xl'>
+            {(data?.totalAmount || totalBills).toFixed(2)}
+          </p>
         </div>
         <div className='w-[120px]'>
           <span className='text-gray-500'>Discount</span>
@@ -170,7 +177,9 @@ export const BillsContainer = async ({ id }: { id: number }) => {
         </div>
         <div className='w-[120px]'>
           <span className='text-gray-500'>Payable</span>
-          <p className='font-semibold text-xl'>{(discount?.finalAmount || 0.0).toFixed(2)}</p>
+          <p className='font-semibold text-xl'>
+            {(discount?.finalAmount || 0.0).toFixed(2)}
+          </p>
         </div>
         <div className='w-[120px]'>
           <span className='text-gray-500'>Amount Paid</span>
@@ -181,10 +190,12 @@ export const BillsContainer = async ({ id }: { id: number }) => {
         <div className='w-[120px]'>
           <span className='text-gray-500'>Unpaid Amount</span>
           <p className='font-semibold text-red-600 text-xl'>
-            {((discount?.finalAmount ?? 0) - (data?.amountPaid ?? 0)).toFixed(2)}
+            {((discount?.finalAmount ?? 0) - (data?.amountPaid ?? 0)).toFixed(
+              2,
+            )}
           </p>
         </div>
       </div>
     </div>
-  );
-};
+  )
+}

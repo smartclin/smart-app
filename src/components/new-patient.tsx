@@ -1,29 +1,35 @@
-'use client';
+'use client'
 
-import { zodResolver } from '@hookform/resolvers/zod';
-import type { Patient } from '@prisma/client';
-import { Loader2 } from 'lucide-react';
-import { useRouter } from 'next/navigation';
-import { useCallback, useEffect, useState } from 'react';
-import { type Resolver, useForm } from 'react-hook-form';
-import { toast } from 'sonner';
-import type { z } from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod'
+import type { Patient } from '@prisma/client'
+import { Loader2 } from 'lucide-react'
+import { useRouter } from 'next/navigation'
+import { useCallback, useEffect, useState } from 'react'
+import { type Resolver, useForm } from 'react-hook-form'
+import { toast } from 'sonner'
+import type { z } from 'zod'
 
-import { type AuthUser, useUser } from '@/hooks/use-auth';
-import { GENDER, MARITAL_STATUS, NUTRITIONAL_STATUS, RELATION } from '@/lib';
-import { PatientFormSchema } from '@/lib/schema';
-import { trpc } from '@/trpc/client'; // Correct tRPC client import
+import { type AuthUser, useUser } from '@/hooks/use-auth'
+import { GENDER, MARITAL_STATUS, NUTRITIONAL_STATUS, RELATION } from '@/lib'
+import { PatientFormSchema } from '@/lib/schema'
+import { trpc } from '@/trpc/client' // Correct tRPC client import
 
-import { CustomInput } from './custom-input';
-import { Button } from './ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './ui/card';
-import { Form } from './ui/form';
+import { CustomInput } from './custom-input'
+import { Button } from './ui/button'
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from './ui/card'
+import { Form } from './ui/form'
 
-type PatientFormValues = z.infer<typeof PatientFormSchema>;
+type PatientFormValues = z.infer<typeof PatientFormSchema>
 
 interface DataProps {
-  data?: Patient;
-  type: 'create' | 'update';
+  data?: Patient
+  type: 'create' | 'update'
 }
 
 const defaultValues: PatientFormValues = {
@@ -47,73 +53,80 @@ const defaultValues: PatientFormValues = {
   medicalHistory: '',
   medicalConsent: false,
   privacyConsent: false,
-  serviceConsent: false
-};
+  serviceConsent: false,
+}
 
 export const NewPatient = ({ data, type }: DataProps) => {
-  const router = useRouter();
-  const { user, isLoading: isUserLoading } = useUser();
-  const [loading, setLoading] = useState(false);
+  const router = useRouter()
+  const { user, isLoading: isUserLoading } = useUser()
+  const [loading, setLoading] = useState(false)
 
   const form = useForm<PatientFormValues>({
     resolver: zodResolver(PatientFormSchema) as Resolver<PatientFormValues>,
     defaultValues,
-    mode: 'onBlur'
-  });
+    mode: 'onBlur',
+  })
 
   // --- tRPC Mutations ---
   // Create patient mutation
   const createPatientMutation = trpc.patient.createNewPatient.useMutation({
-    onSuccess: res => {
+    onSuccess: (res) => {
       if (res.success) {
-        toast.success(res.msg);
-        form.reset();
-        router.push('/patient');
+        toast.success(res.msg)
+        form.reset()
+        router.push('/patient')
       } else {
-        toast.error(res.msg || 'Patient creation failed.');
+        toast.error(res.msg || 'Patient creation failed.')
       }
     },
-    onError: error => {
-      console.error('Error creating patient:', error);
-      toast.error(error.message || 'An unexpected error occurred during creation.');
+    onError: (error) => {
+      console.error('Error creating patient:', error)
+      toast.error(
+        error.message || 'An unexpected error occurred during creation.',
+      )
     },
     onMutate: () => {
-      setLoading(true);
+      setLoading(true)
     },
     onSettled: () => {
-      setLoading(false);
-    }
-  });
+      setLoading(false)
+    },
+  })
 
   const updatePatientMutation = trpc.patient.updatePatient.useMutation({
-    onSuccess: res => {
+    onSuccess: (res) => {
       if (res.success) {
-        toast.success(res.msg);
-        router.push('/patient');
+        toast.success(res.msg)
+        router.push('/patient')
       } else {
-        toast.error(res.msg || 'Patient update failed.');
+        toast.error(res.msg || 'Patient update failed.')
       }
     },
-    onError: error => {
-      console.error('Error updating patient:', error);
-      toast.error(error.message || 'An unexpected error occurred during update.');
+    onError: (error) => {
+      console.error('Error updating patient:', error)
+      toast.error(
+        error.message || 'An unexpected error occurred during update.',
+      )
     },
     onMutate: () => {
-      setLoading(true);
+      setLoading(true)
     },
     onSettled: () => {
-      setLoading(false);
-    }
-  });
+      setLoading(false)
+    },
+  })
 
-  const getCreateDefaultValues = useCallback((user: AuthUser): PatientFormValues => {
-    return {
-      ...defaultValues,
-      firstName: user?.firstName ?? '',
-      lastName: user?.lastName ?? '',
-      email: user?.email ?? ''
-    };
-  }, []);
+  const getCreateDefaultValues = useCallback(
+    (user: AuthUser): PatientFormValues => {
+      return {
+        ...defaultValues,
+        firstName: user?.firstName ?? '',
+        lastName: user?.lastName ?? '',
+        email: user?.email ?? '',
+      }
+    },
+    [],
+  )
 
   const getPersonalInfo = useCallback((data: Patient) => {
     return {
@@ -124,18 +137,19 @@ export const NewPatient = ({ data, type }: DataProps) => {
       dateOfBirth: data.dateOfBirth ? new Date(data.dateOfBirth) : new Date(),
       gender: data.gender,
       maritalStatus: data.maritalStatus as PatientFormValues['maritalStatus'],
-      nutritionalStatus: data.nutritionalStatus as PatientFormValues['nutritionalStatus'],
-      address: data.address ?? ''
-    };
-  }, []);
+      nutritionalStatus:
+        data.nutritionalStatus as PatientFormValues['nutritionalStatus'],
+      address: data.address ?? '',
+    }
+  }, [])
 
   const getFamilyInfo = useCallback((data: Patient) => {
     return {
       emergencyContactName: data.emergencyContactName ?? '',
       emergencyContactNumber: data.emergencyContactNumber ?? '',
-      relation: data.relation as PatientFormValues['relation']
-    };
-  }, []);
+      relation: data.relation as PatientFormValues['relation'],
+    }
+  }, [])
 
   const getMedicalInfo = useCallback((data: Patient) => {
     return {
@@ -144,17 +158,17 @@ export const NewPatient = ({ data, type }: DataProps) => {
       medicalConditions: data.medicalConditions ?? '',
       insuranceNumber: data.insuranceNumber ?? '',
       insuranceProvider: data.insuranceProvider ?? '',
-      medicalHistory: data.medicalHistory ?? ''
-    };
-  }, []);
+      medicalHistory: data.medicalHistory ?? '',
+    }
+  }, [])
 
   const getConsentInfo = useCallback((data: Patient) => {
     return {
       medicalConsent: data.medicalConsent ?? false,
       privacyConsent: data.privacyConsent ?? false,
-      serviceConsent: data.serviceConsent ?? false
-    };
-  }, []);
+      serviceConsent: data.serviceConsent ?? false,
+    }
+  }, [])
 
   const getUpdateDefaultValues = useCallback(
     (data: Patient): PatientFormValues => {
@@ -162,30 +176,38 @@ export const NewPatient = ({ data, type }: DataProps) => {
         ...getPersonalInfo(data),
         ...getFamilyInfo(data),
         ...getMedicalInfo(data),
-        ...getConsentInfo(data)
-      };
+        ...getConsentInfo(data),
+      }
     },
-    [getPersonalInfo, getFamilyInfo, getMedicalInfo, getConsentInfo]
-  );
+    [getPersonalInfo, getFamilyInfo, getMedicalInfo, getConsentInfo],
+  )
 
   useEffect(() => {
-    if (isUserLoading) return;
+    if (isUserLoading) return
 
     if (type === 'create') {
       if (user) {
-        form.reset(getCreateDefaultValues(user));
+        form.reset(getCreateDefaultValues(user))
       }
     } else if (type === 'update' && data) {
-      form.reset(getUpdateDefaultValues(data));
+      form.reset(getUpdateDefaultValues(data))
     }
-  }, [isUserLoading, user, data, type, form, getCreateDefaultValues, getUpdateDefaultValues]);
+  }, [
+    isUserLoading,
+    user,
+    data,
+    type,
+    form,
+    getCreateDefaultValues,
+    getUpdateDefaultValues,
+  ])
 
   const onSubmit = async (values: PatientFormValues) => {
-    const userId = user?.id;
+    const userId = user?.id
 
     if (!userId) {
-      toast.error('User not authenticated.');
-      return;
+      toast.error('User not authenticated.')
+      return
     }
 
     try {
@@ -195,13 +217,13 @@ export const NewPatient = ({ data, type }: DataProps) => {
         // z.object({...PatientFormSchema, userId: z.string()})
         await createPatientMutation.mutateAsync({
           pid: data?.id ?? '', // The patient ID
-          data: values
-        });
+          data: values,
+        })
       } else {
         // type === 'update'
         if (!data?.id) {
-          toast.error('Patient ID is missing for update.');
-          return;
+          toast.error('Patient ID is missing for update.')
+          return
         }
         // The error message indicates 'userId' is not a top-level property
         // for `updatePatient`, and it expects a `data` object for the patient details.
@@ -211,23 +233,26 @@ export const NewPatient = ({ data, type }: DataProps) => {
         // The `userId` is likely being pulled from the session/context on the server.
         await updatePatientMutation.mutateAsync({
           pid: data.id, // The patient ID
-          data: values // All the form values under a 'data' key
-        });
+          data: values, // All the form values under a 'data' key
+        })
       }
     } catch (error) {
-      console.error('Submission error:', error);
-      const message = error instanceof Error ? error.message : 'An unexpected error occurred.';
-      toast.error(message);
+      console.error('Submission error:', error)
+      const message =
+        error instanceof Error ? error.message : 'An unexpected error occurred.'
+      toast.error(message)
     }
-  };
+  }
 
   if (isUserLoading) {
     return (
       <div className='flex h-64 items-center justify-center'>
         <Loader2 className='h-8 w-8 animate-spin text-primary' />
-        <p className='ml-2 text-muted-foreground'>Loading user information...</p>
+        <p className='ml-2 text-muted-foreground'>
+          Loading user information...
+        </p>
       </div>
-    );
+    )
   }
 
   return (
@@ -235,8 +260,8 @@ export const NewPatient = ({ data, type }: DataProps) => {
       <CardHeader>
         <CardTitle>Patient Registration</CardTitle>
         <CardDescription>
-          Please provide all the information below to help us understand better and provide good and
-          quality service to you.
+          Please provide all the information below to help us understand better
+          and provide good and quality service to you.
         </CardDescription>
       </CardHeader>
 
@@ -446,5 +471,5 @@ export const NewPatient = ({ data, type }: DataProps) => {
         </Form>
       </CardContent>
     </Card>
-  );
-};
+  )
+}

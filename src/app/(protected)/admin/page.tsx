@@ -1,13 +1,16 @@
-import { BriefcaseBusiness, BriefcaseMedical, User, Users } from 'lucide-react';
+import { BriefcaseBusiness, BriefcaseMedical, User, Users } from 'lucide-react'
 
-import { AvailableDoctors } from '@/components/available-doctor';
-import { AppointmentChart } from '@/components/charts/appointment-chart';
-import { emptyAppointmentCounts, StatSummary } from '@/components/charts/stat-summary';
-import { StatCard } from '@/components/stat-card';
-import { RecentAppointments } from '@/components/tables/recent-appointment';
-import { Button } from '@/components/ui/button';
-import { HydrateClient, trpc } from '@/trpc/server'; // Import server-side tRPC client and HydrateClient
-import type { AvailableDoctorProps } from '@/types/data-types';
+import { AvailableDoctors } from '@/components/available-doctor'
+import { AppointmentChart } from '@/components/charts/appointment-chart'
+import {
+  emptyAppointmentCounts,
+  StatSummary,
+} from '@/components/charts/stat-summary'
+import { StatCard } from '@/components/stat-card'
+import { RecentAppointments } from '@/components/tables/recent-appointment'
+import { Button } from '@/components/ui/button'
+import { HydrateClient, trpc } from '@/trpc/server' // Import server-side tRPC client and HydrateClient
+import type { AvailableDoctorProps } from '@/types/data-types'
 
 const AdminDashboard = async () => {
   const {
@@ -17,8 +20,8 @@ const AdminDashboard = async () => {
     monthlyData,
     totalDoctors,
     totalPatient,
-    totalAppointments
-  } = await trpc.admin.getAdminDashboardStats();
+    totalAppointments,
+  } = await trpc.admin.getAdminDashboardStats()
 
   const cardData = [
     {
@@ -28,7 +31,7 @@ const AdminDashboard = async () => {
       className: 'bg-blue-600/15',
       iconClassName: 'bg-blue-600/25 text-blue-600',
       note: 'Total patients',
-      link: '/manage-patients'
+      link: '/manage-patients',
     },
     {
       title: 'Doctors',
@@ -37,7 +40,7 @@ const AdminDashboard = async () => {
       className: 'bg-rose-600/15',
       iconClassName: 'bg-rose-600/25 text-rose-600',
       note: 'Total doctors',
-      link: '/manage-doctors'
+      link: '/manage-doctors',
     },
     {
       title: 'Appointments',
@@ -46,7 +49,7 @@ const AdminDashboard = async () => {
       className: 'bg-yellow-600/15',
       iconClassName: 'bg-yellow-600/25 text-yellow-600',
       note: 'Total appointments',
-      link: '/manage-appointments'
+      link: '/manage-appointments',
     },
     {
       title: 'Consultation',
@@ -55,9 +58,9 @@ const AdminDashboard = async () => {
       className: 'bg-emerald-600/15',
       iconClassName: 'bg-emerald-600/25 text-emerald-600',
       note: 'Total consultation',
-      link: '/manage-appointments'
-    }
-  ];
+      link: '/manage-appointments',
+    },
+  ]
 
   return (
     <HydrateClient>
@@ -114,7 +117,7 @@ const AdminDashboard = async () => {
         </div>
       </div>
     </HydrateClient>
-  );
-};
+  )
+}
 
-export default AdminDashboard;
+export default AdminDashboard

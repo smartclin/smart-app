@@ -1,16 +1,16 @@
-export * from './attendees';
-export * from './discord';
-export * from './github';
-export * from './gmail';
-export * from './google';
-export * from './instagram';
-export * from './linkedin';
-export * from './logo';
-export * from './microsoft';
-export * from './notes';
-export * from './twitter';
-export * from './youtube';
-export * from './zoom';
+export * from './attendees'
+export * from './discord'
+export * from './github'
+export * from './gmail'
+export * from './google'
+export * from './instagram'
+export * from './linkedin'
+export * from './logo'
+export * from './microsoft'
+export * from './notes'
+export * from './twitter'
+export * from './youtube'
+export * from './zoom'
 
 export function RSS(props: React.SVGProps<SVGSVGElement>): React.ReactElement {
   return (
@@ -35,5 +35,5 @@ export function RSS(props: React.SVGProps<SVGSVGElement>): React.ReactElement {
         r='1'
       />
     </svg>
-  );
+  )
 }

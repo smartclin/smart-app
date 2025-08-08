@@ -1,67 +1,73 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react'
 
-import InfiniteScroll from '@/components/InfiniteScroll';
+import InfiniteScroll from '@/components/InfiniteScroll'
 import {
   SidebarGroup,
   SidebarGroupContent,
   SidebarGroupLabel,
   SidebarMenu,
-  useSidebar
-} from '@/components/ui/sidebar';
-import { DEFAULT_LIMIT } from '@/config';
-import { trpc } from '@/trpc/client';
+  useSidebar,
+} from '@/components/ui/sidebar'
+import { DEFAULT_LIMIT } from '@/config'
+import { trpc } from '@/trpc/client'
 
-import ChatItem, { ChatItemSkeleton } from './ChatItem';
+import ChatItem, { ChatItemSkeleton } from './ChatItem'
 
 const ChatListSkeleton = () => {
   return (
     <div className='flex flex-col gap-3 px-2'>
-      {[...new Array(25)].fill(0).map(_ => (
+      {[...new Array(25)].fill(0).map((_) => (
         <ChatItemSkeleton key={_} />
       ))}
     </div>
-  );
-};
+  )
+}
 
 const ChatList = () => {
-  const { openMobile } = useSidebar();
+  const { openMobile } = useSidebar()
 
-  const { data, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage, refetch } =
-    trpc.chats.getMany.useInfiniteQuery(
-      {
-        limit: DEFAULT_LIMIT,
-        isArchived: false
-      },
-      {
-        getNextPageParam: lastPage => {
-          const cursor = lastPage.nextCursor;
-          if (cursor?.id && cursor?.updatedAt) {
-            return {
-              id: cursor.id,
-              updatedAt: cursor.updatedAt
-            };
+  const {
+    data,
+    isLoading,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+    refetch,
+  } = trpc.chats.getMany.useInfiniteQuery(
+    {
+      limit: DEFAULT_LIMIT,
+      isArchived: false,
+    },
+    {
+      getNextPageParam: (lastPage) => {
+        const cursor = lastPage.nextCursor
+        if (cursor?.id && cursor?.updatedAt) {
+          return {
+            id: cursor.id,
+            updatedAt: cursor.updatedAt,
           }
-          return null;
-        },
-        refetchOnWindowFocus: false,
-        refetchOnMount: true,
-        staleTime: 0,
-        placeholderData: prev => prev
-      }
-    );
+        }
+        return null
+      },
+      refetchOnWindowFocus: false,
+      refetchOnMount: true,
+      staleTime: 0,
+      placeholderData: (prev) => prev,
+    },
+  )
 
   useEffect(() => {
     if (openMobile) {
-      refetch();
+      refetch()
     }
-  }, [openMobile, refetch]);
+  }, [openMobile, refetch])
 
   const merged = {
-    today: data?.pages.flatMap(p => p.chats.today) ?? [],
-    last7Days: data?.pages.flatMap(p => p.chats.last7Days) ?? [],
-    older: data?.pages.flatMap(p => p.chats.older) ?? []
-  };
-  const scrollTargetRef = useRef<HTMLDivElement>(null);
+    today: data?.pages.flatMap((p) => p.chats.today) ?? [],
+    last7Days: data?.pages.flatMap((p) => p.chats.last7Days) ?? [],
+    older: data?.pages.flatMap((p) => p.chats.older) ?? [],
+  }
+  const scrollTargetRef = useRef<HTMLDivElement>(null)
 
   return (
     <div className='overflow-y-auto pb-20'>
@@ -73,7 +79,7 @@ const ChatList = () => {
           <SidebarGroupLabel>Today</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              {merged.today.map(chat => (
+              {merged.today.map((chat) => (
                 <ChatItem
                   chat={chat}
                   key={chat.id}
@@ -90,7 +96,7 @@ const ChatList = () => {
           <SidebarGroupLabel>Last 7 Days</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              {merged.last7Days.map(chat => (
+              {merged.last7Days.map((chat) => (
                 <ChatItem
                   chat={chat}
                   key={chat.id}
@@ -107,7 +113,7 @@ const ChatList = () => {
           <SidebarGroupLabel>Older</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              {merged.older.map(chat => (
+              {merged.older.map((chat) => (
                 <ChatItem
                   chat={chat}
                   key={chat.id}
@@ -131,7 +137,7 @@ const ChatList = () => {
           />
         )}
     </div>
-  );
-};
+  )
+}
 
-export default ChatList;
+export default ChatList

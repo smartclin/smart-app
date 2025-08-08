@@ -1,5 +1,5 @@
-import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 
 import {
   DropdownMenu,
@@ -7,19 +7,19 @@ import {
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
-  DropdownMenuTrigger
-} from '@/components/ui/dropdown-menu';
-import { authClient } from '@/lib/auth/auth-client';
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu'
+import { authClient } from '@/lib/auth/auth-client'
 
-import { Button } from './ui/button';
-import { Skeleton } from './ui/skeleton';
+import { Button } from './ui/button'
+import { Skeleton } from './ui/skeleton'
 
 export default function UserMenu() {
-  const router = useRouter();
-  const { data: session, isPending } = authClient.useSession();
+  const router = useRouter()
+  const { data: session, isPending } = authClient.useSession()
 
   if (isPending) {
-    return <Skeleton className='h-9 w-24' />;
+    return <Skeleton className='h-9 w-24' />
   }
 
   if (!session) {
@@ -30,7 +30,7 @@ export default function UserMenu() {
       >
         <Link href='/login'>Sign In</Link>
       </Button>
-    );
+    )
   }
 
   return (
@@ -49,10 +49,10 @@ export default function UserMenu() {
               authClient.signOut({
                 fetchOptions: {
                   onSuccess: () => {
-                    router.push('/');
-                  }
-                }
-              });
+                    router.push('/')
+                  },
+                },
+              })
             }}
             variant='destructive'
           >
@@ -61,5 +61,5 @@ export default function UserMenu() {
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
-  );
+  )
 }

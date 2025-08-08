@@ -1,12 +1,12 @@
-import AuthGate from '@/components/chat/auth/AuthGate';
-import ChatHeader from '@/components/chat/ChatHeader';
-import ChatSidebar from '@/components/chat/sidebar/ChatSidebar';
-import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar';
+import AuthGate from '@/components/chat/auth/AuthGate'
+import ChatHeader from '@/components/chat/ChatHeader'
+import ChatSidebar from '@/components/chat/sidebar/ChatSidebar'
+import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar'
 
 export default function ChatLayout({
-  children
+  children,
 }: Readonly<{
-  children: React.ReactNode;
+  children: React.ReactNode
 }>) {
   return (
     <main className='h-dvh'>
@@ -15,7 +15,7 @@ export default function ChatLayout({
           style={
             {
               '--sidebar-width': 'calc(var(--spacing) * 62)',
-              '--header-height': 'calc(var(--spacing) * 12)'
+              '--header-height': 'calc(var(--spacing) * 12)',
             } as React.CSSProperties
           }
         >
@@ -27,5 +27,5 @@ export default function ChatLayout({
         </SidebarProvider>
       </AuthGate>
     </main>
-  );
+  )
 }

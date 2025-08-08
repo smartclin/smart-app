@@ -1,24 +1,24 @@
-'use client';
+'use client'
 
-import { Bell, Home, UserCheck } from 'lucide-react';
-import { usePathname } from 'next/navigation';
+import { Bell, Home, UserCheck } from 'lucide-react'
+import { usePathname } from 'next/navigation'
 
-import { useAuth } from '@/hooks/use-auth';
+import { useAuth } from '@/hooks/use-auth'
 
-import { UserButton } from './auth/user-button';
+import { UserButton } from './auth/user-button'
 
 export const Navbar = () => {
-  const { user, status } = useAuth();
-  const pathname = usePathname();
+  const { user, status } = useAuth()
+  const pathname = usePathname()
 
   function formatPathName(pathname: string | null): string {
-    if (!pathname || pathname === '/') return 'Home';
-    const segments = pathname.toLowerCase().split('/').filter(Boolean);
-    const segment = segments[0] || 'Overview';
-    return segment.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+    if (!pathname || pathname === '/') return 'Home'
+    const segments = pathname.toLowerCase().split('/').filter(Boolean)
+    const segment = segments[0] || 'Overview'
+    return segment.replace(/-/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase())
   }
 
-  const pathLabel = formatPathName(pathname);
+  const pathLabel = formatPathName(pathname)
 
   return (
     <nav className='flex items-center justify-between bg-white px-6 py-4 shadow-md'>
@@ -27,7 +27,9 @@ export const Navbar = () => {
           aria-hidden='true'
           className='h-8 w-8 text-primary-600'
         />
-        <h1 className='font-semibold text-primary-700 text-xl capitalize'>{pathLabel}</h1>
+        <h1 className='font-semibold text-primary-700 text-xl capitalize'>
+          {pathLabel}
+        </h1>
       </div>
 
       <div className='flex items-center gap-6'>
@@ -54,5 +56,5 @@ export const Navbar = () => {
         )}
       </div>
     </nav>
-  );
-};
+  )
+}

@@ -1,12 +1,12 @@
-'use client';
+'use client'
 
-import { motion } from 'motion/react';
-import { memo } from 'react';
+import { motion } from 'motion/react'
+import { memo } from 'react'
 
-import { Button } from '../ui/button';
+import { Button } from '../ui/button'
 
 interface SuggestedPromptsProps {
-  sendMessage: (input: string) => void;
+  sendMessage: (input: string) => void
 }
 
 function PureSuggestedPrompts({ sendMessage }: SuggestedPromptsProps) {
@@ -14,14 +14,14 @@ function PureSuggestedPrompts({ sendMessage }: SuggestedPromptsProps) {
     {
       title: 'What are the advantages',
       label: 'of using Next.js?',
-      action: 'What are the advantages of using Next.js?'
+      action: 'What are the advantages of using Next.js?',
     },
     {
       title: 'What is the weather',
       label: 'in San Francisco?',
-      action: 'What is the weather in San Francisco?'
-    }
-  ];
+      action: 'What is the weather in San Francisco?',
+    },
+  ]
 
   return (
     <div
@@ -40,17 +40,19 @@ function PureSuggestedPrompts({ sendMessage }: SuggestedPromptsProps) {
           <Button
             className='h-auto w-full flex-1 items-start justify-start gap-1 rounded-xl border px-4 py-3.5 text-left text-sm sm:flex-col'
             onClick={async () => {
-              sendMessage(suggestedAction.action);
+              sendMessage(suggestedAction.action)
             }}
             variant='ghost'
           >
             <span className='font-medium'>{suggestedAction.title}</span>
-            <span className='text-muted-foreground'>{suggestedAction.label}</span>
+            <span className='text-muted-foreground'>
+              {suggestedAction.label}
+            </span>
           </Button>
         </motion.div>
       ))}
     </div>
-  );
+  )
 }
 
-export const SuggestedPrompts = memo(PureSuggestedPrompts, () => true);
+export const SuggestedPrompts = memo(PureSuggestedPrompts, () => true)

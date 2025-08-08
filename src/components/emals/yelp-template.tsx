@@ -10,15 +10,15 @@ import {
   Preview,
   Row,
   Section,
-  Text
-} from '@react-email/components';
+  Text,
+} from '@react-email/components'
 
 interface YelpRecentLoginEmailProps {
-  userFirstName?: string;
-  loginDate?: Date;
-  loginDevice?: string;
-  loginLocation?: string;
-  loginIp?: string;
+  userFirstName?: string
+  loginDate?: Date
+  loginDevice?: string
+  loginLocation?: string
+  loginIp?: string
 }
 
 export const YelpRecentLoginEmail = ({
@@ -26,12 +26,12 @@ export const YelpRecentLoginEmail = ({
   loginDate,
   loginDevice,
   loginLocation,
-  loginIp
+  loginIp,
 }: YelpRecentLoginEmailProps) => {
   const formattedDate = new Intl.DateTimeFormat('en', {
     dateStyle: 'long',
-    timeStyle: 'short'
-  }).format(loginDate);
+    timeStyle: 'short',
+  }).format(loginDate)
 
   return (
     <Html>
@@ -58,7 +58,7 @@ export const YelpRecentLoginEmail = ({
                   style={{
                     fontSize: 32,
                     fontWeight: 'bold',
-                    textAlign: 'center'
+                    textAlign: 'center',
                   }}
                 >
                   Hi {userFirstName},
@@ -68,7 +68,7 @@ export const YelpRecentLoginEmail = ({
                   style={{
                     fontSize: 26,
                     fontWeight: 'bold',
-                    textAlign: 'center'
+                    textAlign: 'center',
                   }}
                 >
                   We noticed a recent login to your Yelp account.
@@ -90,7 +90,7 @@ export const YelpRecentLoginEmail = ({
                   style={{
                     color: 'rgb(0,0,0, 0.5)',
                     fontSize: 14,
-                    marginTop: -5
+                    marginTop: -5,
                   }}
                 >
                   *Approximate geographic location based on IP address:
@@ -101,8 +101,8 @@ export const YelpRecentLoginEmail = ({
                   If this was you, there&apos;s nothing else you need to do.
                 </Text>
                 <Text style={{ ...paragraph, marginTop: -5 }}>
-                  If this wasn&apos;t you or if you have additional questions, please see our
-                  support page.
+                  If this wasn&apos;t you or if you have additional questions,
+                  please see our support page.
                 </Text>
               </Column>
             </Row>
@@ -128,46 +128,47 @@ export const YelpRecentLoginEmail = ({
             style={{
               textAlign: 'center',
               fontSize: 12,
-              color: 'rgb(0,0,0, 0.7)'
+              color: 'rgb(0,0,0, 0.7)',
             }}
           >
-            © 2022 | Yelp Inc., 350 Mission Street, San Francisco, CA 94105, U.S.A. | www.yelp.com
+            © 2022 | Yelp Inc., 350 Mission Street, San Francisco, CA 94105,
+            U.S.A. | www.yelp.com
           </Text>
         </Container>
       </Body>
     </Html>
-  );
-};
+  )
+}
 
 YelpRecentLoginEmail.PreviewProps = {
   userFirstName: 'Alan',
   loginDate: new Date('September 7, 2022, 10:58 am'),
   loginDevice: 'Chrome on Mac OS X',
   loginLocation: 'Upland, California, United States',
-  loginIp: '47.149.53.167'
-} as YelpRecentLoginEmailProps;
+  loginIp: '47.149.53.167',
+} as YelpRecentLoginEmailProps
 
-export default YelpRecentLoginEmail;
+export default YelpRecentLoginEmail
 
 const main = {
   backgroundColor: '#fff',
   fontFamily:
-    '-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen-Sans,Ubuntu,Cantarell,"Helvetica Neue",sans-serif'
-};
+    '-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen-Sans,Ubuntu,Cantarell,"Helvetica Neue",sans-serif',
+}
 
 const paragraph = {
-  fontSize: 16
-};
+  fontSize: 16,
+}
 
 const logo = {
-  padding: '30px 20px'
-};
+  padding: '30px 20px',
+}
 
 const containerButton = {
   display: 'flex',
   justifyContent: 'center',
-  width: '100%'
-};
+  width: '100%',
+}
 
 const button = {
   backgroundColor: '#e00707',
@@ -176,23 +177,23 @@ const button = {
   fontWeight: 'bold',
   border: '1px solid rgb(0,0,0, 0.1)',
   cursor: 'pointer',
-  padding: '12px 30px'
-};
+  padding: '12px 30px',
+}
 
 const content = {
   border: '1px solid rgb(0,0,0, 0.1)',
   borderRadius: '3px',
-  overflow: 'hidden'
-};
+  overflow: 'hidden',
+}
 
 const image = {
-  maxWidth: '100%'
-};
+  maxWidth: '100%',
+}
 
 const boxInfos = {
-  padding: '20px'
-};
+  padding: '20px',
+}
 
 const containerImageFooter = {
-  padding: '45px 0 0 0'
-};
+  padding: '45px 0 0 0',
+}

@@ -1,67 +1,67 @@
-'use client';
+'use client'
 
-import { IconDots, IconTrash } from '@tabler/icons-react';
-import { Edit, RefreshCcw } from 'lucide-react';
-import Link from 'next/link';
-import { usePathname, useRouter } from 'next/navigation';
-import { useState } from 'react';
-import { toast } from 'sonner';
+import { IconDots, IconTrash } from '@tabler/icons-react'
+import { Edit, RefreshCcw } from 'lucide-react'
+import Link from 'next/link'
+import { usePathname, useRouter } from 'next/navigation'
+import { useState } from 'react'
+import { toast } from 'sonner'
 
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
-  DropdownMenuTrigger
-} from '@/components/ui/dropdown-menu';
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu'
 import {
   SidebarMenuAction,
   SidebarMenuButton,
   SidebarMenuItem,
-  useSidebar
-} from '@/components/ui/sidebar';
-import { Skeleton } from '@/components/ui/skeleton';
-import { trpc } from '@/trpc/client';
-import type { ChatGetOneOutput } from '@/types';
+  useSidebar,
+} from '@/components/ui/sidebar'
+import { Skeleton } from '@/components/ui/skeleton'
+import { trpc } from '@/trpc/client'
+import type { ChatGetOneOutput } from '@/types'
 
-import ChatRenameModal from '../modals/ChatRenameModal';
-import DeleteChatModal from '../modals/DeleteChatModal';
+import ChatRenameModal from '../modals/ChatRenameModal'
+import DeleteChatModal from '../modals/DeleteChatModal'
 
 export const ChatItemSkeleton = () => {
-  return <Skeleton className='h-6 w-full rounded-md' />;
-};
+  return <Skeleton className='h-6 w-full rounded-md' />
+}
 
 interface Props {
-  chat: ChatGetOneOutput;
+  chat: ChatGetOneOutput
 }
 
 const ChatItem = ({ chat }: Props) => {
-  const [openDeleteModal, setOpenDeleteModal] = useState(false);
-  const [openRenameModal, setOpenRenameModal] = useState(false);
-  const { isMobile, setOpenMobile } = useSidebar();
+  const [openDeleteModal, setOpenDeleteModal] = useState(false)
+  const [openRenameModal, setOpenRenameModal] = useState(false)
+  const { isMobile, setOpenMobile } = useSidebar()
 
-  const pathname = usePathname();
-  const router = useRouter();
+  const pathname = usePathname()
+  const router = useRouter()
 
-  const utils = trpc.useUtils();
+  const utils = trpc.useUtils()
   const archiveChat = trpc.chats.archive.useMutation({
     onSuccess: () => {
-      toast.success('Chat Archived');
-      utils.chats.getMany.invalidate();
-      router.push('/');
+      toast.success('Chat Archived')
+      utils.chats.getMany.invalidate()
+      router.push('/')
     },
-    onError: error => {
+    onError: (error) => {
       toast.error('Failed to archive chat', {
-        description: error.message || 'Something went wrong. Please try again.'
-      });
-    }
-  });
+        description: error.message || 'Something went wrong. Please try again.',
+      })
+    },
+  })
 
   const handleChatClick = () => {
     if (isMobile) {
-      setOpenMobile(false);
+      setOpenMobile(false)
     }
-  };
+  }
 
   return (
     <>
@@ -107,7 +107,7 @@ const ChatItem = ({ chat }: Props) => {
           >
             <DropdownMenuItem
               onClick={() => {
-                archiveChat.mutate({ chatId: chat.id });
+                archiveChat.mutate({ chatId: chat.id })
               }}
             >
               <RefreshCcw />
@@ -129,7 +129,7 @@ const ChatItem = ({ chat }: Props) => {
         </DropdownMenu>
       </SidebarMenuItem>
     </>
-  );
-};
+  )
+}
 
-export default ChatItem;
+export default ChatItem

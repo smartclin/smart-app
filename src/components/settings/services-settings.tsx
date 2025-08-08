@@ -1,40 +1,40 @@
-import type { Services } from '@prisma/client';
+import type { Services } from '@prisma/client'
 
-import { trpc } from '@/trpc/server';
+import { trpc } from '@/trpc/server'
 
-import { AddService } from '../dialogs/add-service';
-import { Table } from '../tables/table';
-import { CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card';
+import { AddService } from '../dialogs/add-service'
+import { Table } from '../tables/table'
+import { CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card'
 
 const columns = [
   {
     header: 'ID',
     key: 'id',
-    className: 'hidden md:table-cell'
+    className: 'hidden md:table-cell',
   },
   {
     header: 'Service Name',
     key: 'name',
-    className: 'hidden md:table-cell'
+    className: 'hidden md:table-cell',
   },
   {
     header: 'Price',
     key: 'price',
-    className: 'hidden md:table-cell'
+    className: 'hidden md:table-cell',
   },
   {
     header: 'Description',
     key: 'description',
-    className: 'hidden xl:table-cell'
-  }
+    className: 'hidden xl:table-cell',
+  },
   // {
   //   header: "Actions",
   //   key: "action",
   // },
-];
+]
 
 export const ServiceSettings = async () => {
-  const { data } = await trpc.admin.getServices();
+  const { data } = await trpc.admin.getServices()
 
   const renderRow = (item: Services) => (
     <tr
@@ -44,7 +44,9 @@ export const ServiceSettings = async () => {
       <td className='flex items-center gap-2 py-4 md:gap-4'>{item?.id}</td>
 
       <td className='hidden md:table-cell'>{item.serviceName}</td>
-      <td className='hidden capitalize md:table-cell'>{item?.price?.toFixed(2)}</td>
+      <td className='hidden capitalize md:table-cell'>
+        {item?.price?.toFixed(2)}
+      </td>
 
       <td className='hidden w-[50%] xl:table-cell'>
         <p className='line-clamp-1'>{item.description ?? ''}</p>
@@ -67,7 +69,7 @@ export const ServiceSettings = async () => {
             </div> */}
       </td>
     </tr>
-  );
+  )
 
   return (
     <>
@@ -75,7 +77,8 @@ export const ServiceSettings = async () => {
         <div>
           <CardTitle className='capitalize'>Services</CardTitle>
           <CardDescription>
-            Perform all settings and other parameters of the system from this section .
+            Perform all settings and other parameters of the system from this
+            section .
           </CardDescription>
         </div>
         <AddService />
@@ -91,5 +94,5 @@ export const ServiceSettings = async () => {
         )}
       </CardContent>
     </>
-  );
-};
+  )
+}

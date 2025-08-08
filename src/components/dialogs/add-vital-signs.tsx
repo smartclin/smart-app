@@ -1,48 +1,48 @@
-'use client';
+'use client'
 
-import { zodResolver } from '@hookform/resolvers/zod';
-import { Plus } from 'lucide-react';
-import { useRouter } from 'next/navigation';
-import { useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { toast } from 'sonner';
-import type { z } from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod'
+import { Plus } from 'lucide-react'
+import { useRouter } from 'next/navigation'
+import { useState } from 'react'
+import { useForm } from 'react-hook-form'
+import { toast } from 'sonner'
+import type { z } from 'zod'
 
-import { VitalSignsSchema } from '@/lib/schema'; // VERIFY THIS IS THE LATEST VERSION
-import { trpc } from '@/trpc/client';
+import { VitalSignsSchema } from '@/lib/schema' // VERIFY THIS IS THE LATEST VERSION
+import { trpc } from '@/trpc/client'
 
-import { CustomInput } from '../custom-input';
-import { Button } from '../ui/button';
+import { CustomInput } from '../custom-input'
+import { Button } from '../ui/button'
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogHeader,
   DialogTitle,
-  DialogTrigger
-} from '../ui/dialog';
-import { Form } from '../ui/form';
+  DialogTrigger,
+} from '../ui/dialog'
+import { Form } from '../ui/form'
 
 interface AddVitalSignsProps {
-  patientId: string;
-  doctorId: string;
-  appointmentId: number;
-  medicalId?: number; // medicalId can be optional from props
+  patientId: string
+  doctorId: string
+  appointmentId: number
+  medicalId?: number // medicalId can be optional from props
 }
 
 // Infer the type directly from the schema.
 // This means if VitalSignsSchema defines fields as .optional(),
 // VitalSignsFormData will reflect that (e.g., bodyTemperature?: number | undefined).
-export type VitalSignsFormData = z.infer<typeof VitalSignsSchema>;
+export type VitalSignsFormData = z.infer<typeof VitalSignsSchema>
 
 export const AddVitalSigns = ({
   patientId,
   doctorId,
   appointmentId,
-  medicalId
+  medicalId,
 }: AddVitalSignsProps) => {
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const router = useRouter();
+  const [isDialogOpen, setIsDialogOpen] = useState(false)
+  const router = useRouter()
 
   const form = useForm<VitalSignsFormData>({
     resolver: zodResolver(VitalSignsSchema),
@@ -60,33 +60,38 @@ export const AddVitalSigns = ({
       respiratoryRate: undefined,
       oxygenSaturation: undefined,
       weight: 5,
-      height: 59
-    } as VitalSignsFormData // Explicitly cast to VitalSignsFormData to help TypeScript.
-  });
+      height: 59,
+    } as VitalSignsFormData, // Explicitly cast to VitalSignsFormData to help TypeScript.
+  })
 
   const { mutateAsync: addVitalSignsMutation, isPending: isSubmitting } =
     trpc.appointment.addVitalSigns.useMutation({
-      onSuccess: res => {
+      onSuccess: (res) => {
         if (res.success) {
-          toast.success(res.msg || 'Vital signs added successfully!');
-          form.reset();
-          setIsDialogOpen(false);
-          router.refresh();
+          toast.success(res.msg || 'Vital signs added successfully!')
+          form.reset()
+          setIsDialogOpen(false)
+          router.refresh()
         } else {
-          toast.error(res.msg || 'Failed to add vital signs.');
+          toast.error(res.msg || 'Failed to add vital signs.')
         }
       },
-      onError: error => {
-        console.error('Error adding vital signs:', error);
-        toast.error(error.message || 'Something went wrong. Please try again.');
-      }
-    });
+      onError: (error) => {
+        console.error('Error adding vital signs:', error)
+        toast.error(error.message || 'Something went wrong. Please try again.')
+      },
+    })
 
   const handleOnSubmit = async (data: VitalSignsFormData) => {
     try {
-      if (!patientId || !doctorId || appointmentId === undefined || appointmentId === null) {
-        toast.error('Missing required IDs (Patient, Doctor, or Appointment).');
-        return;
+      if (
+        !patientId ||
+        !doctorId ||
+        appointmentId === undefined ||
+        appointmentId === null
+      ) {
+        toast.error('Missing required IDs (Patient, Doctor, or Appointment).')
+        return
       }
 
       // Create a new object with fallback values for optional fields
@@ -98,13 +103,15 @@ export const AddVitalSigns = ({
         doctorId: doctorId,
         patientId: '',
         medicalId: 0,
-        weight: 0
-      });
+        weight: 0,
+      })
     } catch (error) {
-      console.error('Unexpected error during vital signs submission:', error);
-      toast.error('An unexpected error occurred during submission. Please try again.');
+      console.error('Unexpected error during vital signs submission:', error)
+      toast.error(
+        'An unexpected error occurred during submission. Please try again.',
+      )
     }
-  };
+  }
 
   return (
     <Dialog
@@ -215,5 +222,5 @@ export const AddVitalSigns = ({
         </Form>
       </DialogContent>
     </Dialog>
-  );
-};
+  )
+}

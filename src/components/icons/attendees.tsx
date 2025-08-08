@@ -1,4 +1,4 @@
-import type * as React from 'react';
+import type * as React from 'react'
 
 export function Attendees(props: React.ComponentProps<'svg'>) {
   return (
@@ -16,5 +16,5 @@ export function Attendees(props: React.ComponentProps<'svg'>) {
         fill='#A3A3A3'
       />
     </svg>
-  );
+  )
 }

@@ -1,28 +1,34 @@
-'use client';
+'use client'
 
-import { zodResolver } from '@hookform/resolvers/zod';
-import { Plus } from 'lucide-react';
-import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { toast } from 'sonner';
-import type { z } from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod'
+import { Plus } from 'lucide-react'
+import { useRouter } from 'next/navigation'
+import { useEffect, useState } from 'react'
+import { useForm } from 'react-hook-form'
+import { toast } from 'sonner'
+import type { z } from 'zod'
 
-import { DoctorSchema, type workingDaySchema } from '@/lib/schema';
-import { trpc } from '@/trpc/client';
-import type { Weekday } from '@/types/data-types';
-import { SPECIALIZATION } from '@/utils/seetings';
+import { DoctorSchema, type workingDaySchema } from '@/lib/schema'
+import { trpc } from '@/trpc/client'
+import type { Weekday } from '@/types/data-types'
+import { SPECIALIZATION } from '@/utils/seetings'
 
-import { CustomInput, SwitchInput } from '../custom-input';
-import { Button } from '../ui/button';
-import { Form } from '../ui/form';
-import { Label } from '../ui/label';
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '../ui/sheet';
+import { CustomInput, SwitchInput } from '../custom-input'
+import { Button } from '../ui/button'
+import { Form } from '../ui/form'
+import { Label } from '../ui/label'
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from '../ui/sheet'
 
 const TYPES = [
   { label: 'Full-Time', value: 'FULL' },
-  { label: 'Part-Time', value: 'PART' }
-];
+  { label: 'Part-Time', value: 'PART' },
+]
 
 const WORKINGDAYS: { label: string; value: Weekday }[] = [
   { label: 'Sunday', value: 'sunday' },
@@ -31,15 +37,15 @@ const WORKINGDAYS: { label: string; value: Weekday }[] = [
   { label: 'Wednesday', value: 'wednesday' },
   { label: 'Thursday', value: 'thursday' },
   { label: 'Friday', value: 'friday' },
-  { label: 'Saturday', value: 'saturday' }
-];
+  { label: 'Saturday', value: 'saturday' },
+]
 
-type Day = z.infer<typeof workingDaySchema>;
+type Day = z.infer<typeof workingDaySchema>
 
 export const DoctorForm = () => {
-  const router = useRouter();
+  const router = useRouter()
 
-  const [workSchedule, setWorkSchedule] = useState<Day[]>([]);
+  const [workSchedule, setWorkSchedule] = useState<Day[]>([])
 
   const form = useForm<z.infer<typeof DoctorSchema>>({
     resolver: zodResolver(DoctorSchema),
@@ -53,56 +59,58 @@ export const DoctorForm = () => {
       department: '',
       img: '',
       password: '',
-      licenseNumber: ''
-    }
-  });
+      licenseNumber: '',
+    },
+  })
 
   const createDoctorMutation = trpc.admin.createNewDoctor.useMutation({
-    onSuccess: resp => {
+    onSuccess: (resp) => {
       if (resp.success) {
-        toast.success('Doctor added successfully!');
-        setWorkSchedule([]);
-        form.reset();
-        router.refresh();
+        toast.success('Doctor added successfully!')
+        setWorkSchedule([])
+        form.reset()
+        router.refresh()
       } else if (resp.error) {
-        toast.error(resp.message);
+        toast.error(resp.message)
       }
     },
     onError: (error: unknown) => {
-      const e = error as Error;
-      console.error('Error creating doctor:', e);
-      toast.error(e.message || 'Something went wrong');
-    }
-  });
+      const e = error as Error
+      console.error('Error creating doctor:', e)
+      toast.error(e.message || 'Something went wrong')
+    },
+  })
 
-  const { isPending } = createDoctorMutation;
+  const { isPending } = createDoctorMutation
 
   const handleSubmit = async (values: z.infer<typeof DoctorSchema>) => {
     if (workSchedule.length === 0) {
-      toast.error('Please select working days');
-      return;
+      toast.error('Please select working days')
+      return
     }
 
     try {
       await createDoctorMutation.mutateAsync({
         ...values,
         password: values.password ?? '',
-        workSchedule
-      });
+        workSchedule,
+      })
     } catch (error) {
-      console.error('Unhandled error in handleSubmit:', error);
+      console.error('Unhandled error in handleSubmit:', error)
     }
-  };
+  }
 
-  const selectedSpecialization = form.watch('specialization');
+  const selectedSpecialization = form.watch('specialization')
   useEffect(() => {
     if (selectedSpecialization) {
-      const department = SPECIALIZATION.find(el => el.value === selectedSpecialization);
+      const department = SPECIALIZATION.find(
+        (el) => el.value === selectedSpecialization,
+      )
       if (department) {
-        form.setValue('department', department.department);
+        form.setValue('department', department.department)
       }
     }
-  }, [selectedSpecialization, form.setValue]);
+  }, [selectedSpecialization, form.setValue])
 
   return (
     <Sheet>
@@ -189,5 +197,5 @@ export const DoctorForm = () => {
         </div>
       </SheetContent>
     </Sheet>
-  );
-};
+  )
+}

@@ -1,13 +1,16 @@
-'use client';
+'use client'
 
-import dynamic from 'next/dynamic';
+import dynamic from 'next/dynamic'
 
-import type { ParticleEmitterConfig } from './particle-emitter';
+import type { ParticleEmitterConfig } from './particle-emitter'
 
 // Dynamic import with no SSR for the particle effect
-const ParticleEmitter = dynamic(() => import('@/components/effects/particle-emitter'), {
-  ssr: false
-});
+const ParticleEmitter = dynamic(
+  () => import('@/components/effects/particle-emitter'),
+  {
+    ssr: false,
+  },
+)
 
 // Custom configuration for the particle emitter
 const particleConfig: ParticleEmitterConfig = {
@@ -29,13 +32,13 @@ const particleConfig: ParticleEmitterConfig = {
   dampingCoefficient: 0.85,
 
   // Colors - you can customize these to match your site theme
-  colors: ['#9ab9ff', '#ffffff', '#8A9A5B', '#FFF9B0']
-};
+  colors: ['#9ab9ff', '#ffffff', '#8A9A5B', '#FFF9B0'],
+}
 
 export default function ParticleEmitterWrapper() {
   return (
     <div className='hidden sm:block'>
       <ParticleEmitter config={particleConfig} />
     </div>
-  );
+  )
 }

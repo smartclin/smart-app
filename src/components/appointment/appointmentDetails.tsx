@@ -1,20 +1,20 @@
-import { format } from 'date-fns';
+import { format } from 'date-fns'
 
-import { SmallCard } from '../small-card';
-import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
+import { SmallCard } from '../small-card'
+import { Card, CardContent, CardHeader, CardTitle } from '../ui/card'
 
 interface AppointmentDetailsProps {
-  id: number | string;
-  patientId: string;
-  appointmentDate: Date;
-  time: string;
-  notes?: string;
+  id: number | string
+  patientId: string
+  appointmentDate: Date
+  time: string
+  notes?: string
 }
 export const AppointmentDetails = ({
   id,
   appointmentDate,
   time,
-  notes
+  notes,
 }: AppointmentDetailsProps) => {
   return (
     <Card className='shadow-none'>
@@ -44,5 +44,5 @@ export const AppointmentDetails = ({
         </div>
       </CardContent>
     </Card>
-  );
-};
+  )
+}

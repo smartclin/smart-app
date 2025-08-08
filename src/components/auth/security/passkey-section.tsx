@@ -1,45 +1,61 @@
-'use client';
+'use client'
 
-import { useAutoAnimate } from '@formkit/auto-animate/react';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { Ellipsis, Loader } from 'lucide-react';
-import { Fragment, useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { toast } from 'sonner';
-import { UAParser } from 'ua-parser-js';
-import * as z from 'zod';
+import { useAutoAnimate } from '@formkit/auto-animate/react'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { Ellipsis, Loader } from 'lucide-react'
+import { Fragment, useState } from 'react'
+import { useForm } from 'react-hook-form'
+import { toast } from 'sonner'
+import { UAParser } from 'ua-parser-js'
+import * as z from 'zod'
 
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button'
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card'
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuTrigger
-} from '@/components/ui/dropdown-menu';
-import { Form, FormControl, FormField, FormItem, FormMessage } from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
-import { authClient } from '@/lib/auth/auth-client';
-import { cn } from '@/lib/utils';
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu'
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormMessage,
+} from '@/components/ui/form'
+import { Input } from '@/components/ui/input'
+import { authClient } from '@/lib/auth/auth-client'
+import { cn } from '@/lib/utils'
 
 const renamePasskeySchema = z.object({
   name: z
     .string()
     .min(2, {
-      message: 'Name is required'
+      message: 'Name is required',
     })
     .max(25, {
-      message: 'Name must be less than 25 characters'
-    })
-});
+      message: 'Name must be less than 25 characters',
+    }),
+})
 
 export const PasskeySection = () => {
-  const [animate] = useAutoAnimate();
-  const [isRenamePasskeyBoxOpen, setIsRenamePasskeyBoxOpen] = useState<string | boolean>(false);
-  const [isDeletePasskeyBoxOpen, setIsDeletePasskeyBoxOpen] = useState<string | boolean>(false);
-  const [_error, setError] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
-  const passkeys = authClient.useListPasskeys();
+  const [animate] = useAutoAnimate()
+  const [isRenamePasskeyBoxOpen, setIsRenamePasskeyBoxOpen] = useState<
+    string | boolean
+  >(false)
+  const [isDeletePasskeyBoxOpen, setIsDeletePasskeyBoxOpen] = useState<
+    string | boolean
+  >(false)
+  const [_error, setError] = useState('')
+  const [isLoading, setIsLoading] = useState(false)
+  const passkeys = authClient.useListPasskeys()
 
   // if (passkeys.isPending) {
   //   setIsLoading(true);
@@ -50,47 +66,50 @@ export const PasskeySection = () => {
   const renamePasskeyForm = useForm<z.infer<typeof renamePasskeySchema>>({
     resolver: zodResolver(renamePasskeySchema),
     defaultValues: {
-      name: ''
-    }
-  });
+      name: '',
+    },
+  })
 
-  const parsedAgent = UAParser(window.navigator.userAgent?.toString());
+  const parsedAgent = UAParser(window.navigator.userAgent?.toString())
 
-  const onRenamePasskeySubmit = async (data: z.infer<typeof renamePasskeySchema>, id: string) => {
+  const onRenamePasskeySubmit = async (
+    data: z.infer<typeof renamePasskeySchema>,
+    id: string,
+  ) => {
     if (data.name.length < 2) {
-      setError('Name is required');
+      setError('Name is required')
     }
 
     await authClient.passkey.updatePasskey(
       {
         id,
-        name: data.name
+        name: data.name,
       },
       {
         onRequest: () => {
-          setIsLoading(true);
+          setIsLoading(true)
         },
         onSuccess: () => {
-          setIsLoading(false);
-          setIsRenamePasskeyBoxOpen(false);
-          window.location.reload();
+          setIsLoading(false)
+          setIsRenamePasskeyBoxOpen(false)
+          window.location.reload()
           setTimeout(() => {
-            toast.success('Successfully renamed');
-          }, 1000);
+            toast.success('Successfully renamed')
+          }, 1000)
         },
-        onError: ctx => {
-          setError(ctx.error.message);
-          setIsLoading(false);
-        }
-      }
-    );
-  };
+        onError: (ctx) => {
+          setError(ctx.error.message)
+          setIsLoading(false)
+        },
+      },
+    )
+  }
 
   const onAddPasskey = async () => {
     await authClient.passkey.addPasskey({
-      name: `${parsedAgent.os.name}, ${parsedAgent.browser.name}`
-    });
-  };
+      name: `${parsedAgent.os.name}, ${parsedAgent.browser.name}`,
+    })
+  }
 
   return (
     <div className='flex flex-col gap-10 md:w-[72%]'>
@@ -108,30 +127,32 @@ export const PasskeySection = () => {
             <div>Loading</div>
           ) : (
             <div className='flex flex-col gap-4'>
-              {passkeys.data?.map(passkey => {
-                const now = new Date();
-                const createdAt = new Date(passkey.createdAt);
-                const diffInMs = now.getTime() - createdAt.getTime();
-                const diffInDays = diffInMs / (1000 * 60 * 60 * 24);
-                const hours = createdAt.getHours();
-                const minutes = createdAt.getMinutes();
-                const amPm = hours >= 12 ? 'PM' : 'AM';
-                const formattedHours = hours % 12 || 12;
-                const formattedMinutes = minutes.toString().padStart(2, '0');
+              {passkeys.data?.map((passkey) => {
+                const now = new Date()
+                const createdAt = new Date(passkey.createdAt)
+                const diffInMs = now.getTime() - createdAt.getTime()
+                const diffInDays = diffInMs / (1000 * 60 * 60 * 24)
+                const hours = createdAt.getHours()
+                const minutes = createdAt.getMinutes()
+                const amPm = hours >= 12 ? 'PM' : 'AM'
+                const formattedHours = hours % 12 || 12
+                const formattedMinutes = minutes.toString().padStart(2, '0')
 
                 const formattedDate =
                   diffInDays < 1
                     ? `Today at ${formattedHours}:${formattedMinutes}${amPm}`
                     : diffInDays < 2
                       ? `Yesterday at ${formattedHours}:${formattedMinutes}${amPm}`
-                      : `${createdAt.getDate()} ${createdAt.toLocaleString('default', { month: 'short' })} at ${formattedHours}:${formattedMinutes}${amPm}`;
+                      : `${createdAt.getDate()} ${createdAt.toLocaleString('default', { month: 'short' })} at ${formattedHours}:${formattedMinutes}${amPm}`
 
                 return (
                   <Fragment key={passkey.id}>
                     <div className='flex w-full items-center justify-between gap-4 self-start'>
                       <div className='flex flex-col gap-2'>
                         <p className='font-medium text-sm'>{passkey.name}</p>
-                        <p className='text-xs text-zinc-500'>Created: {formattedDate}</p>
+                        <p className='text-xs text-zinc-500'>
+                          Created: {formattedDate}
+                        </p>
                       </div>
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
@@ -149,13 +170,17 @@ export const PasskeySection = () => {
                         >
                           <DropdownMenuItem
                             className='cursor-pointer px-3 py-1 text-zinc-600 transition-all focus:text-zinc-800'
-                            onClick={() => setIsRenamePasskeyBoxOpen(passkey.id)}
+                            onClick={() =>
+                              setIsRenamePasskeyBoxOpen(passkey.id)
+                            }
                           >
                             <p className='text-sm'>Rename</p>
                           </DropdownMenuItem>
                           <DropdownMenuItem
                             className='cursor-pointer px-3 py-1 text-destructive/80 focus:bg-destructive/5 focus:text-red-500'
-                            onClick={() => setIsDeletePasskeyBoxOpen(passkey.id)}
+                            onClick={() =>
+                              setIsDeletePasskeyBoxOpen(passkey.id)
+                            }
                           >
                             <p className='text-sm'>Remove</p>
                           </DropdownMenuItem>
@@ -167,9 +192,12 @@ export const PasskeySection = () => {
                     {isRenamePasskeyBoxOpen === passkey.id && (
                       <Card className='w-full shadow-md md:max-w-[350px]'>
                         <CardHeader className='flex w-full flex-col'>
-                          <CardTitle className='text-sm tracking-tight'>Rename Passkey</CardTitle>
+                          <CardTitle className='text-sm tracking-tight'>
+                            Rename Passkey
+                          </CardTitle>
                           <CardDescription className='text-xs'>
-                            You can change the passkey name to make it easier to find.
+                            You can change the passkey name to make it easier to
+                            find.
                           </CardDescription>
                         </CardHeader>
                         <CardContent>
@@ -198,8 +226,8 @@ export const PasskeySection = () => {
                                   className='mt-4 mr-2 text-xs'
                                   disabled={isLoading}
                                   onClick={() => {
-                                    setIsRenamePasskeyBoxOpen(false);
-                                    setError('');
+                                    setIsRenamePasskeyBoxOpen(false)
+                                    setError('')
                                   }}
                                   size='sm'
                                   type='button'
@@ -213,8 +241,8 @@ export const PasskeySection = () => {
                                   onClick={() => {
                                     onRenamePasskeySubmit(
                                       renamePasskeyForm.getValues(),
-                                      passkey.id
-                                    );
+                                      passkey.id,
+                                    )
                                   }}
                                   size='sm'
                                   type='button'
@@ -235,7 +263,9 @@ export const PasskeySection = () => {
                     {isDeletePasskeyBoxOpen === passkey.id && (
                       <Card className='w-full border-zinc-600/15 bg-muted-foreground/5 shadow-md md:max-w-[350px]'>
                         <CardHeader className='flex w-full flex-col'>
-                          <CardTitle className='text-sm tracking-tight'>Delete Passkey</CardTitle>
+                          <CardTitle className='text-sm tracking-tight'>
+                            Delete Passkey
+                          </CardTitle>
                           <CardDescription className='text-xs'>
                             Are you sure you want to delete this passkey?
                             <br />
@@ -261,17 +291,21 @@ export const PasskeySection = () => {
                                 {
                                   onRequest: () => setIsLoading(true),
                                   onSuccess: () => {
-                                    setIsLoading(false);
-                                    setIsDeletePasskeyBoxOpen(false);
-                                    window.location.reload();
-                                    setTimeout(() => toast.success('Successfully deleted'), 1000);
+                                    setIsLoading(false)
+                                    setIsDeletePasskeyBoxOpen(false)
+                                    window.location.reload()
+                                    setTimeout(
+                                      () =>
+                                        toast.success('Successfully deleted'),
+                                      1000,
+                                    )
                                   },
-                                  onError: ctx => {
-                                    setError(ctx.error.message);
-                                    setIsLoading(false);
-                                  }
-                                }
-                              );
+                                  onError: (ctx) => {
+                                    setError(ctx.error.message)
+                                    setIsLoading(false)
+                                  },
+                                },
+                              )
                             }}
                             ref={animate}
                             size='sm'
@@ -287,14 +321,14 @@ export const PasskeySection = () => {
                       </Card>
                     )}
                   </Fragment>
-                );
+                )
               })}
             </div>
           )}
           <Button
             className={cn(
               '-mt-[4px] self-start text-sm',
-              (passkeys.data?.length ?? 0) ? '-ml-3' : 'md:ml-auto'
+              (passkeys.data?.length ?? 0) ? '-ml-3' : 'md:ml-auto',
             )}
             onClick={onAddPasskey}
             size='sm'
@@ -305,5 +339,5 @@ export const PasskeySection = () => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}

@@ -1,23 +1,29 @@
-'use client';
+'use client'
 
-import { zodResolver } from '@hookform/resolvers/zod'; // Make sure this is installed: npm install @hookform/resolvers
-import type { TRPCClientErrorLike } from '@trpc/client';
-import { Plus } from 'lucide-react';
-import { useRouter } from 'next/navigation';
-import { useForm } from 'react-hook-form'; // Import useForm
-import { toast } from 'sonner';
-import type { z } from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod' // Make sure this is installed: npm install @hookform/resolvers
+import type { TRPCClientErrorLike } from '@trpc/client'
+import { Plus } from 'lucide-react'
+import { useRouter } from 'next/navigation'
+import { useForm } from 'react-hook-form' // Import useForm
+import { toast } from 'sonner'
+import type { z } from 'zod'
 
-import { StaffSchema as StaffFormSchema } from '@/lib/schema'; // Alias to avoid name conflict with local type
-import { trpc } from '@/trpc/client';
-import type { AppRouter } from '@/trpc/routers/_app';
+import { StaffSchema as StaffFormSchema } from '@/lib/schema' // Alias to avoid name conflict with local type
+import { trpc } from '@/trpc/client'
+import type { AppRouter } from '@/trpc/routers/_app'
 
-import { CustomInput } from '../custom-input';
-import { Button } from '../ui/button';
-import { Form } from '../ui/form';
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '../ui/sheet';
+import { CustomInput } from '../custom-input'
+import { Button } from '../ui/button'
+import { Form } from '../ui/form'
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from '../ui/sheet'
 
-const TYPES = [{ label: 'Nurse', value: 'NURSE' }];
+const TYPES = [{ label: 'Nurse', value: 'NURSE' }]
 
 // Define default values for the form
 const defaultValues: z.infer<typeof StaffFormSchema> = {
@@ -29,50 +35,52 @@ const defaultValues: z.infer<typeof StaffFormSchema> = {
   img: '',
   address: '',
   password: '',
-  role: 'STAFF' // Default role if not provided by the user
-};
+  role: 'STAFF', // Default role if not provided by the user
+}
 
 export const StaffForm = () => {
-  const router = useRouter();
+  const router = useRouter()
 
   // Initialize react-hook-form
   const form = useForm<z.infer<typeof StaffFormSchema>>({
     resolver: zodResolver(StaffFormSchema),
     defaultValues: defaultValues,
-    mode: 'onBlur' // Or 'onChange' or 'onSubmit'
-  });
+    mode: 'onBlur', // Or 'onChange' or 'onSubmit'
+  })
 
-  type CreateNewStaffError = TRPCClientErrorLike<AppRouter>;
+  type CreateNewStaffError = TRPCClientErrorLike<AppRouter>
 
   const { mutateAsync: createStaffMutation, isPending: isSubmitting } =
     trpc.admin.createNewStaff.useMutation({
-      onSuccess: res => {
+      onSuccess: (res) => {
         // Now 'res' will have the correct type, and type guards can be used
         if (res.success) {
           // This check should now be type-safe
-          toast.success('Staff added successfully!');
-          form.reset(); // Reset the form after successful submission
-          router.refresh(); // Refresh the page to show new staff
+          toast.success('Staff added successfully!')
+          form.reset() // Reset the form after successful submission
+          router.refresh() // Refresh the page to show new staff
         } else {
-          toast.error(res.message || res.msg || 'Failed to add staff.');
+          toast.error(res.message || res.msg || 'Failed to add staff.')
         }
       },
       onError: (error: CreateNewStaffError) => {
-        console.error('Error adding staff:', error);
-        toast.error(error.message || 'Something went wrong. Try again later.');
-      }
-    });
+        console.error('Error adding staff:', error)
+        toast.error(error.message || 'Something went wrong. Try again later.')
+      },
+    })
 
   const handleSubmit = async (values: z.infer<typeof StaffFormSchema>) => {
     try {
-      await createStaffMutation(values); // Pass the form values to the mutation
+      await createStaffMutation(values) // Pass the form values to the mutation
     } catch (error) {
       // Errors from tRPC mutations are generally caught by the onError callback,
       // but this outer catch can handle unexpected errors during the call itself.
-      console.error('Unexpected error during staff submission:', error);
-      toast.error('An unexpected error occurred during submission. Please try again.');
+      console.error('Unexpected error during staff submission:', error)
+      toast.error(
+        'An unexpected error occurred during submission. Please try again.',
+      )
     }
-  };
+  }
 
   return (
     <Sheet>
@@ -175,5 +183,5 @@ export const StaffForm = () => {
         </div>
       </SheetContent>
     </Sheet>
-  );
-};
+  )
+}

@@ -1,8 +1,8 @@
-'use client';
+'use client'
 
-import { motion } from 'framer-motion';
+import { motion } from 'framer-motion'
 
-import { SpinnerIcon } from './SpinnerIcon';
+import { SpinnerIcon } from './SpinnerIcon'
 
 const Thinking = () => {
   return (
@@ -11,8 +11,8 @@ const Thinking = () => {
         y: 0,
         opacity: 1,
         transition: {
-          ease: 'easeOut'
-        }
+          ease: 'easeOut',
+        },
       }}
       className='relative flex items-center space-x-2 text-muted-foreground'
       initial={{ y: 5, opacity: 0 }}
@@ -21,7 +21,7 @@ const Thinking = () => {
         <SpinnerIcon size={16} />
       </div>
     </motion.div>
-  );
-};
+  )
+}
 
-export default Thinking;
+export default Thinking

@@ -1,6 +1,6 @@
-import { Suspense } from 'react';
+import { Suspense } from 'react'
 
-import { ResetPasswordCard } from '@/components/auth/reset-password';
+import { ResetPasswordCard } from '@/components/auth/reset-password'
 
 const ResetPasswordPage = () => {
   return (
@@ -9,7 +9,7 @@ const ResetPasswordPage = () => {
         <ResetPasswordCard />
       </Suspense>
     </div>
-  );
-};
+  )
+}
 
-export default ResetPasswordPage;
+export default ResetPasswordPage

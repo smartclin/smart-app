@@ -1,41 +1,47 @@
-'use client';
+'use client'
 
-import type { AppointmentStatus } from '@prisma/client';
-import { Users } from 'lucide-react';
-import Link from 'next/link';
-import { RadialBar, RadialBarChart, ResponsiveContainer } from 'recharts';
+import type { AppointmentStatus } from '@prisma/client'
+import { Users } from 'lucide-react'
+import Link from 'next/link'
+import { RadialBar, RadialBarChart, ResponsiveContainer } from 'recharts'
 
-import { formatNumber } from '@/utils';
+import { formatNumber } from '@/utils'
 
-import { Button } from '../ui/button';
+import { Button } from '../ui/button'
 
 type StatSummaryData = {
-  PENDING?: number;
-  SCHEDULED?: number;
-  COMPLETED?: number;
-  CANCELLED?: number;
-};
+  PENDING?: number
+  SCHEDULED?: number
+  COMPLETED?: number
+  CANCELLED?: number
+}
 
 // Define a type for the items in the dataInfo array
 type ChartDataItem = {
-  name: string;
-  count: number;
-  fill: string;
-};
+  name: string
+  count: number
+  fill: string
+}
 
 export const emptyAppointmentCounts: Record<AppointmentStatus, number> = {
   PENDING: 0,
   SCHEDULED: 0,
   COMPLETED: 0,
-  CANCELLED: 0
+  CANCELLED: 0,
   // add any other statuses you have
-};
+}
 
-export const StatSummary = ({ data, total }: { data: StatSummaryData; total: number }) => {
+export const StatSummary = ({
+  data,
+  total,
+}: {
+  data: StatSummaryData
+  total: number
+}) => {
   // Ensure data properties are always numbers, defaulting to 0 if undefined
-  const pendingAppointments = data?.PENDING ?? 0;
-  const scheduledAppointments = data?.SCHEDULED ?? 0;
-  const completedConsultations = data?.COMPLETED ?? 0;
+  const pendingAppointments = data?.PENDING ?? 0
+  const scheduledAppointments = data?.SCHEDULED ?? 0
+  const completedConsultations = data?.COMPLETED ?? 0
 
   // Explicitly type dataInfo as an array of ChartDataItem
   const dataInfo: ChartDataItem[] = [
@@ -43,19 +49,19 @@ export const StatSummary = ({ data, total }: { data: StatSummaryData; total: num
     {
       name: 'Appointments',
       count: pendingAppointments + scheduledAppointments,
-      fill: '#000000'
+      fill: '#000000',
     },
-    { name: 'Consultation', count: completedConsultations, fill: '#2563eb' }
-  ];
+    { name: 'Consultation', count: completedConsultations, fill: '#2563eb' },
+  ]
 
   // Extract the specific data items to ensure TypeScript knows their type
-  const appointmentData = dataInfo[1];
-  const consultationData = dataInfo[2];
+  const appointmentData = dataInfo[1]
+  const consultationData = dataInfo[2]
 
-  const appointment = appointmentData?.count ?? 0; // This will now always be a number
-  const consultation = consultationData?.count ?? 0; // This will now always be a number
+  const appointment = appointmentData?.count ?? 0 // This will now always be a number
+  const consultation = consultationData?.count ?? 0 // This will now always be a number
 
-  const totalSum = appointment + consultation;
+  const totalSum = appointment + consultation
 
   return (
     <div className='h-full w-full rounded-xl bg-white p-4'>
@@ -103,8 +109,8 @@ export const StatSummary = ({ data, total }: { data: StatSummaryData; total: num
           </div>
           <h2 className='text-gray-400 text-xs'>
             {/* Use the explicitly typed appointmentData */}
-            {appointmentData?.name}({totalSum > 0 ? ((appointment / totalSum) * 100).toFixed(0) : 0}
-            % )
+            {appointmentData?.name}(
+            {totalSum > 0 ? ((appointment / totalSum) * 100).toFixed(0) : 0}% )
           </h2>
         </div>
 
@@ -122,5 +128,5 @@ export const StatSummary = ({ data, total }: { data: StatSummaryData; total: num
         </div>
       </div>
     </div>
-  );
-};
+  )
+}

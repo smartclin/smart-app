@@ -1,40 +1,43 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-'use client';
+'use client'
 
-import { Check, Copy } from 'lucide-react';
-import { useTheme } from 'next-themes';
-import type React from 'react';
-import { useState } from 'react';
-import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
-import { materialDark, materialLight } from 'react-syntax-highlighter/dist/esm/styles/prism';
+import { Check, Copy } from 'lucide-react'
+import { useTheme } from 'next-themes'
+import type React from 'react'
+import { useState } from 'react'
+import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
+import {
+  materialDark,
+  materialLight,
+} from 'react-syntax-highlighter/dist/esm/styles/prism'
 
-import { Button } from '../ui/button';
+import { Button } from '../ui/button'
 
 interface CodeBlockProps {
-  className?: string;
-  children: React.ReactNode;
-  inline?: boolean;
+  className?: string
+  children: React.ReactNode
+  inline?: boolean
 }
 
 const CodeBlock = ({ className = '', children, inline }: CodeBlockProps) => {
-  const { theme } = useTheme();
-  const isLight = theme === 'light';
-  const match = /language-(\w+)/.exec(className);
-  const lang = match?.[1] ?? 'text';
-  const [copied, setCopied] = useState(false);
+  const { theme } = useTheme()
+  const isLight = theme === 'light'
+  const match = /language-(\w+)/.exec(className)
+  const lang = match?.[1] ?? 'text'
+  const [copied, setCopied] = useState(false)
 
   const onCopy = () => {
-    navigator.clipboard.writeText(String(children)).catch(console.error);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
-  };
+    navigator.clipboard.writeText(String(children)).catch(console.error)
+    setCopied(true)
+    setTimeout(() => setCopied(false), 2000)
+  }
 
   if (inline) {
     return (
       <pre className='inline w-fit rounded bg-muted-foreground/10 px-1.5 py-0.5 font-mono text-foreground text-xs sm:text-sm'>
         {children}
       </pre>
-    );
+    )
   }
 
   return (
@@ -54,13 +57,13 @@ const CodeBlock = ({ className = '', children, inline }: CodeBlockProps) => {
           codeTagProps={{
             style: {
               whiteSpace: 'pre',
-              fontFamily: 'inherit'
-            }
+              fontFamily: 'inherit',
+            },
           }}
           customStyle={{
             margin: 0,
             whiteSpace: 'pre',
-            fontFamily: 'var(--font-geist-mono), monospace'
+            fontFamily: 'var(--font-geist-mono), monospace',
           }}
           language={lang}
           showLineNumbers={lang !== 'plaintext'}
@@ -72,7 +75,7 @@ const CodeBlock = ({ className = '', children, inline }: CodeBlockProps) => {
         </SyntaxHighlighter>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default CodeBlock;
+export default CodeBlock

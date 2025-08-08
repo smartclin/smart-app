@@ -1,37 +1,37 @@
-'use client';
+'use client'
 
-import { Search } from 'lucide-react';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { type FormEvent, useCallback, useEffect, useState } from 'react';
+import { Search } from 'lucide-react'
+import { usePathname, useRouter, useSearchParams } from 'next/navigation'
+import { type FormEvent, useCallback, useEffect, useState } from 'react'
 
 interface SearchInputProps {
-  defaultValue?: string;
+  defaultValue?: string
 }
 
 const SearchInput: React.FC<SearchInputProps> = ({ defaultValue = '' }) => {
-  const router = useRouter();
-  const searchParams = useSearchParams();
-  const pathname = usePathname();
-  const [searchValue, setSearchValue] = useState(defaultValue);
+  const router = useRouter()
+  const searchParams = useSearchParams()
+  const pathname = usePathname()
+  const [searchValue, setSearchValue] = useState(defaultValue)
 
   // Sync state if defaultValue prop changes (optional, useful if search params change externally)
   useEffect(() => {
-    setSearchValue(defaultValue);
-  }, [defaultValue]);
+    setSearchValue(defaultValue)
+  }, [defaultValue])
 
   const createQueryString = useCallback(
     (name: string, value: string) => {
-      const params = new URLSearchParams(searchParams.toString());
-      params.set(name, value);
-      return params.toString();
+      const params = new URLSearchParams(searchParams.toString())
+      params.set(name, value)
+      return params.toString()
     },
-    [searchParams]
-  );
+    [searchParams],
+  )
 
   const handleSearch = (e: FormEvent) => {
-    e.preventDefault();
-    router.push(`${pathname}?${createQueryString('q', searchValue)}`);
-  };
+    e.preventDefault()
+    router.push(`${pathname}?${createQueryString('q', searchValue)}`)
+  }
 
   return (
     <form onSubmit={handleSearch}>
@@ -42,14 +42,14 @@ const SearchInput: React.FC<SearchInputProps> = ({ defaultValue = '' }) => {
         />
         <input
           className='px-2 text-sm outline-hidden'
-          onChange={e => setSearchValue(e.target.value)}
+          onChange={(e) => setSearchValue(e.target.value)}
           placeholder='Search...'
           type='search'
           value={searchValue}
         />
       </div>
     </form>
-  );
-};
+  )
+}
 
-export default SearchInput;
+export default SearchInput

@@ -1,21 +1,21 @@
-'use client';
+'use client'
 
-import type React from 'react';
+import type React from 'react'
 
-import { suggestions } from '@/config';
+import { suggestions } from '@/config'
 
-import { Button } from '../ui/button';
+import { Button } from '../ui/button'
 
 interface Props {
-  setSuggestions: (suggestion: string) => void;
+  setSuggestions: (suggestion: string) => void
 }
 
 interface BlockProps {
-  title: string;
-  description: string;
-  icon: React.ElementType<{ className?: string }>;
-  tag: string;
-  setSuggestions: (suggestion: string) => void;
+  title: string
+  description: string
+  icon: React.ElementType<{ className?: string }>
+  tag: string
+  setSuggestions: (suggestion: string) => void
 }
 
 const Block = ({ title, icon: Icon, tag, setSuggestions }: BlockProps) => {
@@ -31,14 +31,14 @@ const Block = ({ title, icon: Icon, tag, setSuggestions }: BlockProps) => {
         <span className='inline text-sm'>{tag}</span>
       </div>
     </Button>
-  );
-};
+  )
+}
 
 const ChatSuggestions = ({ setSuggestions }: Props) => {
   return (
     <div className='flex items-center justify-center'>
       <ul className='mt-2 grid grid-cols-2 gap-4 sm:grid-cols-4'>
-        {suggestions.map(suggestion => (
+        {suggestions.map((suggestion) => (
           <li
             className='flex flex-col items-center justify-center'
             key={suggestion.title}
@@ -51,7 +51,7 @@ const ChatSuggestions = ({ setSuggestions }: Props) => {
         ))}
       </ul>
     </div>
-  );
-};
+  )
+}
 
-export default ChatSuggestions;
+export default ChatSuggestions

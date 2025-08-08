@@ -1,21 +1,21 @@
-import type { ImageModelId, ModelId } from '@/lib/chat/model-id';
+import type { ImageModelId, ModelId } from '@/lib/chat/model-id'
 
 export interface ModelFeatures {
-  reasoning: boolean;
-  functionCalling: boolean;
-  knowledgeCutoff?: Date;
+  reasoning: boolean
+  functionCalling: boolean
+  knowledgeCutoff?: Date
   input: {
-    image: boolean;
-    text: boolean;
-    pdf: boolean;
-    audio: boolean;
-  };
+    image: boolean
+    text: boolean
+    pdf: boolean
+    audio: boolean
+  }
   output: {
-    image: boolean;
-    text: boolean;
-    audio: boolean;
-  };
-  fixedTemperature?: number;
+    image: boolean
+    text: boolean
+    audio: boolean
+  }
+  fixedTemperature?: number
 }
 
 export const modelFeatures: Partial<Record<ModelId, ModelFeatures>> = {
@@ -26,13 +26,13 @@ export const modelFeatures: Partial<Record<ModelId, ModelFeatures>> = {
       image: true,
       text: true,
       pdf: true,
-      audio: false
+      audio: false,
     },
     output: {
       image: false,
       text: true,
-      audio: false
-    }
+      audio: false,
+    },
   },
   'anthropic/claude-3.5-sonnet': {
     reasoning: false,
@@ -41,13 +41,13 @@ export const modelFeatures: Partial<Record<ModelId, ModelFeatures>> = {
       image: true,
       text: true,
       pdf: true,
-      audio: false
+      audio: false,
     },
     output: {
       image: false,
       text: true,
-      audio: false
-    }
+      audio: false,
+    },
   },
   'anthropic/claude-3.5-haiku': {
     reasoning: false,
@@ -56,13 +56,13 @@ export const modelFeatures: Partial<Record<ModelId, ModelFeatures>> = {
       image: true,
       text: true,
       pdf: true,
-      audio: false
+      audio: false,
     },
     output: {
       image: false,
       text: true,
-      audio: false
-    }
+      audio: false,
+    },
   },
   'anthropic/claude-3.7-sonnet': {
     reasoning: true,
@@ -71,13 +71,13 @@ export const modelFeatures: Partial<Record<ModelId, ModelFeatures>> = {
       image: true,
       text: true,
       pdf: true,
-      audio: false
+      audio: false,
     },
     output: {
       image: false,
       text: true,
-      audio: false
-    }
+      audio: false,
+    },
   },
   'anthropic/claude-4-opus': {
     reasoning: true,
@@ -86,13 +86,13 @@ export const modelFeatures: Partial<Record<ModelId, ModelFeatures>> = {
       image: true,
       text: true,
       pdf: true,
-      audio: false
+      audio: false,
     },
     output: {
       image: false,
       text: true,
-      audio: false
-    }
+      audio: false,
+    },
   },
   'anthropic/claude-4-sonnet': {
     reasoning: true,
@@ -102,13 +102,13 @@ export const modelFeatures: Partial<Record<ModelId, ModelFeatures>> = {
       image: true,
       text: true,
       pdf: true,
-      audio: false
+      audio: false,
     },
     output: {
       image: false,
       text: true,
-      audio: false
-    }
+      audio: false,
+    },
   },
   'google/gemini-2.5-flash': {
     reasoning: true,
@@ -118,13 +118,13 @@ export const modelFeatures: Partial<Record<ModelId, ModelFeatures>> = {
       image: true,
       text: true,
       pdf: true,
-      audio: true
+      audio: true,
     },
     output: {
       image: false,
       text: true,
-      audio: false
-    }
+      audio: false,
+    },
   },
   'google/gemini-2.5-pro': {
     reasoning: true,
@@ -134,13 +134,13 @@ export const modelFeatures: Partial<Record<ModelId, ModelFeatures>> = {
       image: true,
       text: true,
       pdf: true,
-      audio: true
+      audio: true,
     },
     output: {
       image: false,
       text: true,
-      audio: false
-    }
+      audio: false,
+    },
   },
   'google/gemini-2.0-flash': {
     reasoning: false,
@@ -150,13 +150,13 @@ export const modelFeatures: Partial<Record<ModelId, ModelFeatures>> = {
       image: true,
       text: true,
       pdf: true,
-      audio: true
+      audio: true,
     },
     output: {
       image: false,
       text: true,
-      audio: false
-    }
+      audio: false,
+    },
   },
   'google/gemini-2.0-flash-lite': {
     reasoning: false,
@@ -166,13 +166,13 @@ export const modelFeatures: Partial<Record<ModelId, ModelFeatures>> = {
       image: true,
       text: true,
       pdf: true,
-      audio: true
+      audio: true,
     },
     output: {
       image: false,
       text: true,
-      audio: false
-    }
+      audio: false,
+    },
   },
 
   'openai/o3-mini': {
@@ -183,13 +183,13 @@ export const modelFeatures: Partial<Record<ModelId, ModelFeatures>> = {
       image: false,
       text: true,
       pdf: false,
-      audio: false
+      audio: false,
     },
     output: {
       image: false,
       text: true,
-      audio: false
-    }
+      audio: false,
+    },
   },
   'openai/o3': {
     reasoning: true,
@@ -199,13 +199,13 @@ export const modelFeatures: Partial<Record<ModelId, ModelFeatures>> = {
       image: true,
       text: true,
       pdf: true,
-      audio: false
+      audio: false,
     },
     output: {
       image: false,
       text: true,
-      audio: false
-    }
+      audio: false,
+    },
   },
   'openai/o4-mini': {
     reasoning: true,
@@ -215,14 +215,14 @@ export const modelFeatures: Partial<Record<ModelId, ModelFeatures>> = {
       image: true,
       text: true,
       pdf: true,
-      audio: false
+      audio: false,
     },
     output: {
       image: false,
       text: true,
-      audio: false
+      audio: false,
     },
-    fixedTemperature: 1
+    fixedTemperature: 1,
   },
   'openai/gpt-4.1': {
     reasoning: false,
@@ -232,13 +232,13 @@ export const modelFeatures: Partial<Record<ModelId, ModelFeatures>> = {
       image: true,
       text: true,
       pdf: true,
-      audio: false
+      audio: false,
     },
     output: {
       image: false,
       text: true,
-      audio: false
-    }
+      audio: false,
+    },
   },
   'openai/gpt-4.1-mini': {
     reasoning: false,
@@ -248,13 +248,13 @@ export const modelFeatures: Partial<Record<ModelId, ModelFeatures>> = {
       image: true,
       text: true,
       pdf: true,
-      audio: false
+      audio: false,
     },
     output: {
       image: false,
       text: true,
-      audio: false
-    }
+      audio: false,
+    },
   },
   'openai/gpt-4.1-nano': {
     reasoning: false,
@@ -263,13 +263,13 @@ export const modelFeatures: Partial<Record<ModelId, ModelFeatures>> = {
       image: true,
       text: true,
       pdf: true,
-      audio: false
+      audio: false,
     },
     output: {
       image: false,
       text: true,
-      audio: false
-    }
+      audio: false,
+    },
   },
   'openai/gpt-4o': {
     reasoning: false,
@@ -279,13 +279,13 @@ export const modelFeatures: Partial<Record<ModelId, ModelFeatures>> = {
       image: true,
       text: true,
       pdf: true,
-      audio: false
+      audio: false,
     },
     output: {
       image: false,
       text: true,
-      audio: false
-    }
+      audio: false,
+    },
   },
   'openai/gpt-4o-mini': {
     reasoning: false,
@@ -295,13 +295,13 @@ export const modelFeatures: Partial<Record<ModelId, ModelFeatures>> = {
       image: true,
       text: true,
       pdf: true,
-      audio: false
+      audio: false,
     },
     output: {
       image: false,
       text: true,
-      audio: false
-    }
+      audio: false,
+    },
   },
   'openai/gpt-4-turbo': {
     reasoning: false,
@@ -311,13 +311,13 @@ export const modelFeatures: Partial<Record<ModelId, ModelFeatures>> = {
       image: true,
       text: true,
       pdf: true,
-      audio: false
+      audio: false,
     },
     output: {
       image: false,
       text: true,
-      audio: false
-    }
+      audio: false,
+    },
   },
   'openai/gpt-3.5-turbo': {
     reasoning: false,
@@ -327,13 +327,13 @@ export const modelFeatures: Partial<Record<ModelId, ModelFeatures>> = {
       image: false,
       text: true,
       pdf: false,
-      audio: false
+      audio: false,
     },
     output: {
       image: false,
       text: true,
-      audio: false
-    }
+      audio: false,
+    },
   },
   'openai/gpt-3.5-turbo-instruct': {
     reasoning: false,
@@ -343,13 +343,13 @@ export const modelFeatures: Partial<Record<ModelId, ModelFeatures>> = {
       image: false,
       text: true,
       pdf: false,
-      audio: false
+      audio: false,
     },
     output: {
       image: false,
       text: true,
-      audio: false
-    }
+      audio: false,
+    },
   },
   'xai/grok-2': {
     reasoning: false,
@@ -358,13 +358,13 @@ export const modelFeatures: Partial<Record<ModelId, ModelFeatures>> = {
       image: false,
       text: true,
       pdf: false,
-      audio: false
+      audio: false,
     },
     output: {
       image: false,
       text: true,
-      audio: false
-    }
+      audio: false,
+    },
   },
   'xai/grok-2-vision': {
     reasoning: false,
@@ -373,13 +373,13 @@ export const modelFeatures: Partial<Record<ModelId, ModelFeatures>> = {
       image: true,
       text: true,
       pdf: false,
-      audio: false
+      audio: false,
     },
     output: {
       image: false,
       text: true,
-      audio: false
-    }
+      audio: false,
+    },
   },
   'xai/grok-3': {
     reasoning: true,
@@ -388,13 +388,13 @@ export const modelFeatures: Partial<Record<ModelId, ModelFeatures>> = {
       image: false,
       text: true,
       pdf: false,
-      audio: false
+      audio: false,
     },
     output: {
       image: false,
       text: true,
-      audio: false
-    }
+      audio: false,
+    },
   },
   'xai/grok-3-fast': {
     reasoning: true,
@@ -403,13 +403,13 @@ export const modelFeatures: Partial<Record<ModelId, ModelFeatures>> = {
       image: false,
       text: true,
       pdf: false,
-      audio: false
+      audio: false,
     },
     output: {
       image: false,
       text: true,
-      audio: false
-    }
+      audio: false,
+    },
   },
   'xai/grok-3-mini': {
     reasoning: true,
@@ -418,13 +418,13 @@ export const modelFeatures: Partial<Record<ModelId, ModelFeatures>> = {
       image: false,
       text: true,
       pdf: false,
-      audio: false
+      audio: false,
     },
     output: {
       image: false,
       text: true,
-      audio: false
-    }
+      audio: false,
+    },
   },
   'xai/grok-3-mini-fast': {
     reasoning: true,
@@ -433,31 +433,32 @@ export const modelFeatures: Partial<Record<ModelId, ModelFeatures>> = {
       image: false,
       text: true,
       pdf: false,
-      audio: false
+      audio: false,
     },
     output: {
       image: false,
       text: true,
-      audio: false
-    }
-  }
-};
-
-export const imageModelsFeatures: Partial<Record<ImageModelId, ModelFeatures>> = {
-  'openai/gpt-image-1': {
-    reasoning: false,
-    functionCalling: false,
-    knowledgeCutoff: new Date('2025-04-01'),
-    input: {
-      image: true,
-      text: true,
-      pdf: false,
-      audio: false
+      audio: false,
     },
-    output: {
-      image: true,
-      text: false,
-      audio: false
-    }
+  },
+}
+
+export const imageModelsFeatures: Partial<Record<ImageModelId, ModelFeatures>> =
+  {
+    'openai/gpt-image-1': {
+      reasoning: false,
+      functionCalling: false,
+      knowledgeCutoff: new Date('2025-04-01'),
+      input: {
+        image: true,
+        text: true,
+        pdf: false,
+        audio: false,
+      },
+      output: {
+        image: true,
+        text: false,
+        audio: false,
+      },
+    },
   }
-};

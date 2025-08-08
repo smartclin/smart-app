@@ -9,13 +9,13 @@ import {
   Preview,
   Row,
   Section,
-  Text
-} from '@react-email/components';
+  Text,
+} from '@react-email/components'
 
 interface Props {
-  userFirstName?: string;
-  resetLink?: string;
-  loginIp?: string;
+  userFirstName?: string
+  resetLink?: string
+  loginIp?: string
 }
 
 export const ResetPasswordEmail = ({ userFirstName, resetLink }: Props) => {
@@ -44,7 +44,7 @@ export const ResetPasswordEmail = ({ userFirstName, resetLink }: Props) => {
                   style={{
                     fontSize: 32,
                     fontWeight: 'bold',
-                    textAlign: 'center'
+                    textAlign: 'center',
                   }}
                 >
                   Hi {userFirstName},
@@ -54,7 +54,7 @@ export const ResetPasswordEmail = ({ userFirstName, resetLink }: Props) => {
                   style={{
                     fontSize: 26,
                     fontWeight: 'bold',
-                    textAlign: 'center'
+                    textAlign: 'center',
                   }}
                 >
                   you&apos;ve requested a password reset link
@@ -69,7 +69,8 @@ export const ResetPasswordEmail = ({ userFirstName, resetLink }: Props) => {
                   If this was you, click on the link to reset your password.
                 </Text>
                 <Text style={{ ...paragraph, marginTop: -5 }}>
-                  If this wasn&apos;t you please ignore this email and enable 2fa.
+                  If this wasn&apos;t you please ignore this email and enable
+                  2fa.
                 </Text>
               </Column>
             </Row>
@@ -87,7 +88,7 @@ export const ResetPasswordEmail = ({ userFirstName, resetLink }: Props) => {
             style={{
               textAlign: 'center',
               fontSize: 12,
-              color: 'rgb(0,0,0, 0.7)'
+              color: 'rgb(0,0,0, 0.7)',
             }}
           >
             © 2025 | APP_NAME | APP_WEBSITE
@@ -95,35 +96,35 @@ export const ResetPasswordEmail = ({ userFirstName, resetLink }: Props) => {
         </Container>
       </Body>
     </Html>
-  );
-};
+  )
+}
 
-export default ResetPasswordEmail;
+export default ResetPasswordEmail
 
 const main = {
   backgroundColor: '#fff',
   fontFamily:
-    '-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen-Sans,Ubuntu,Cantarell,"Helvetica Neue",sans-serif'
-};
+    '-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen-Sans,Ubuntu,Cantarell,"Helvetica Neue",sans-serif',
+}
 
 const paragraph = {
-  fontSize: 16
-};
+  fontSize: 16,
+}
 
 const content = {
   border: '1px solid rgb(0,0,0, 0.1)',
   borderRadius: '3px',
-  overflow: 'hidden'
-};
+  overflow: 'hidden',
+}
 
 const image = {
-  maxWidth: '100%'
-};
+  maxWidth: '100%',
+}
 
 const boxInfos = {
-  padding: '20px'
-};
+  padding: '20px',
+}
 
 const containerImageFooter = {
-  padding: '45px 0 0 0'
-};
+  padding: '45px 0 0 0',
+}

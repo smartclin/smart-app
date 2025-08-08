@@ -1,23 +1,29 @@
 // app/components/dashboard/stat-card.tsx
 // No 'use client' directive needed for React Router applications
 
-import type { LucideIcon } from 'lucide-react';
-import React from 'react'; // Import React for React.memo
-import { Link } from 'react-router-dom'; // Import Link from react-router-dom
+import type { LucideIcon } from 'lucide-react'
+import React from 'react' // Import React for React.memo
+import { Link } from 'react-router-dom' // Import Link from react-router-dom
 
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { cn } from '@/lib/utils'; // Assuming these are correctly set up and optimized
-import { formatNumber } from '@/utils';
+import { Button } from '@/components/ui/button'
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card'
+import { cn } from '@/lib/utils' // Assuming these are correctly set up and optimized
+import { formatNumber } from '@/utils'
 
 interface StatCardProps {
-  title: string;
-  icon: LucideIcon;
-  note: string;
-  value: number;
-  link: string; // This will now be a React Router path
-  className?: string;
-  iconClassName?: string;
+  title: string
+  icon: LucideIcon
+  note: string
+  value: number
+  link: string // This will now be a React Router path
+  className?: string
+  iconClassName?: string
 }
 
 export const StatCard = React.memo(
@@ -28,7 +34,7 @@ export const StatCard = React.memo(
     value,
     link,
     className,
-    iconClassName
+    iconClassName,
   }: StatCardProps) => {
     // You might want to memoize formatNumber(value) if `value` changes very frequently
     // and formatNumber is computationally expensive, but for simple number formatting,
@@ -55,7 +61,7 @@ export const StatCard = React.memo(
             <div
               className={cn(
                 'flex h-10 w-10 items-center justify-center rounded-full bg-violet-100 text-violet-600 dark:bg-violet-900/20 dark:text-violet-400',
-                iconClassName
+                iconClassName,
               )}
             >
               {/* Render the LucideIcon component */}
@@ -71,9 +77,9 @@ export const StatCard = React.memo(
           <p className='text-muted-foreground text-sm'>{note}</p>
         </CardFooter>
       </Card>
-    );
-  }
-);
+    )
+  },
+)
 
 // Optional: Add a display name for easier debugging in React DevTools
-StatCard.displayName = 'StatCard';
+StatCard.displayName = 'StatCard'

@@ -1,9 +1,9 @@
-import type { AuthUser } from '@/hooks/use-auth';
+import type { AuthUser } from '@/hooks/use-auth'
 
-import { ConnectionsSection } from './connections-section';
-import { PasskeySection } from './passkey-section';
-import { PasswordSection } from './password-section';
-import { TwoFactorSection } from './two-factor-section';
+import { ConnectionsSection } from './connections-section'
+import { PasskeySection } from './passkey-section'
+import { PasswordSection } from './password-section'
+import { TwoFactorSection } from './two-factor-section'
 
 export const SecuritySection = ({ user }: { user: AuthUser }) => {
   return (
@@ -16,5 +16,5 @@ export const SecuritySection = ({ user }: { user: AuthUser }) => {
         <ConnectionsSection user={user} />
       </div>
     </div>
-  );
-};
+  )
+}

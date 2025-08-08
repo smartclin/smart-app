@@ -1,12 +1,20 @@
 // app/components/layout/sidebar.tsx
 
-import { motion } from 'framer-motion';
-import { Calendar, DollarSign, FileText, Home, LogOut, Settings, Users } from 'lucide-react';
-import { Link, useLocation } from 'react-router';
+import { motion } from 'framer-motion'
+import {
+  Calendar,
+  DollarSign,
+  FileText,
+  Home,
+  LogOut,
+  Settings,
+  Users,
+} from 'lucide-react'
+import { Link, useLocation } from 'react-router'
 
-import { cn } from '@/lib/utils';
+import { cn } from '@/lib/utils'
 
-import { Button } from '../ui/button';
+import { Button } from '../ui/button'
 
 const navItems = [
   { icon: Home, label: 'Dashboard', path: '/' },
@@ -14,11 +22,11 @@ const navItems = [
   { icon: Calendar, label: 'Appointments', path: '/appointments' },
   { icon: FileText, label: 'Medical Records', path: '/records' },
   { icon: DollarSign, label: 'Payments', path: '/payments' },
-  { icon: Settings, label: 'Settings', path: '/settings' }
-];
+  { icon: Settings, label: 'Settings', path: '/settings' },
+]
 
 export function Sidebar() {
-  const location = useLocation();
+  const location = useLocation()
 
   return (
     <div className='flex h-screen w-64 flex-col border-gray-200 border-r bg-white dark:border-gray-800 dark:bg-gray-900'>
@@ -27,8 +35,8 @@ export function Sidebar() {
       </div>
 
       <nav className='flex-1 space-y-1 p-4'>
-        {navItems.map(item => {
-          const isActive = location.pathname === item.path;
+        {navItems.map((item) => {
+          const isActive = location.pathname === item.path
 
           return (
             <Link
@@ -37,7 +45,10 @@ export function Sidebar() {
               to={item.path}
             >
               <Button
-                className={cn('w-full justify-start', isActive && 'bg-slate-100 dark:bg-slate-800')}
+                className={cn(
+                  'w-full justify-start',
+                  isActive && 'bg-slate-100 dark:bg-slate-800',
+                )}
                 variant='ghost'
               >
                 <item.icon className='mr-2 h-4 w-4' />
@@ -54,7 +65,7 @@ export function Sidebar() {
                 />
               )}
             </Link>
-          );
+          )
         })}
       </nav>
 
@@ -68,5 +79,5 @@ export function Sidebar() {
         </Button>
       </div>
     </div>
-  );
+  )
 }

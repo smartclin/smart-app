@@ -1,84 +1,84 @@
-'use client';
+'use client'
 
-import { useAutoAnimate } from '@formkit/auto-animate/react';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { Eye, EyeOff, Loader } from 'lucide-react';
-import { redirect, useRouter, useSearchParams } from 'next/navigation';
-import { type SetStateAction, useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { toast } from 'sonner';
-import * as z from 'zod';
+import { useAutoAnimate } from '@formkit/auto-animate/react'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { Eye, EyeOff, Loader } from 'lucide-react'
+import { redirect, useRouter, useSearchParams } from 'next/navigation'
+import { type SetStateAction, useState } from 'react'
+import { useForm } from 'react-hook-form'
+import { toast } from 'sonner'
+import * as z from 'zod'
 
-import { Button } from '@/components/ui/button';
+import { Button } from '@/components/ui/button'
 import {
   Form,
   FormControl,
   FormField,
   FormItem,
   FormLabel,
-  FormMessage
-} from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
-import { authClient } from '@/lib/auth/auth-client';
+  FormMessage,
+} from '@/components/ui/form'
+import { Input } from '@/components/ui/input'
+import { authClient } from '@/lib/auth/auth-client'
 
-import { CardWrapper } from './card-wrapper';
-import { ErrorCard } from './error-card';
+import { CardWrapper } from './card-wrapper'
+import { ErrorCard } from './error-card'
 
 const formSchema = z.object({
   password: z.string().min(8, {
-    message: 'Password must be at least 8 characters long'
-  })
-});
+    message: 'Password must be at least 8 characters long',
+  }),
+})
 
 export const ResetPasswordCard = () => {
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState('');
-  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
-  const params = useSearchParams();
-  const redirectParam = params.get('redirect');
+  const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState('')
+  const [isPasswordVisible, setIsPasswordVisible] = useState(false)
+  const params = useSearchParams()
+  const redirectParam = params.get('redirect')
 
-  const token = params.get('token');
+  const token = params.get('token')
 
-  const router = useRouter();
+  const router = useRouter()
 
-  const toggleVisibility = () => setIsPasswordVisible(prevState => !prevState);
+  const toggleVisibility = () => setIsPasswordVisible((prevState) => !prevState)
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      password: ''
-    }
-  });
+      password: '',
+    },
+  })
 
   if (!token) {
-    redirect('/login');
+    redirect('/login')
   }
 
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
     authClient.resetPassword(
       {
         newPassword: data.password,
-        token
+        token,
       },
       {
         onRequest: () => {
-          setIsLoading(true);
+          setIsLoading(true)
         },
         onSuccess: () => {
-          toast.success('Password reset successfully.');
+          toast.success('Password reset successfully.')
           setTimeout(() => {
-            router.push('/login');
-          }, 1000);
+            router.push('/login')
+          }, 1000)
         },
         onError: (ctx: { error: { message: SetStateAction<string> } }) => {
-          setError(ctx.error.message);
-          setIsLoading(false);
-        }
-      }
-    );
-  };
+          setError(ctx.error.message)
+          setIsLoading(false)
+        },
+      },
+    )
+  }
 
-  const [animateRef] = useAutoAnimate();
+  const [animateRef] = useAutoAnimate()
 
   return (
     <CardWrapper
@@ -114,7 +114,9 @@ export const ResetPasswordCard = () => {
                       />
                       <button
                         aria-controls='password'
-                        aria-label={isPasswordVisible ? 'Hide password' : 'Show password'}
+                        aria-label={
+                          isPasswordVisible ? 'Hide password' : 'Show password'
+                        }
                         aria-pressed={isPasswordVisible}
                         className='absolute inset-y-0 end-0 flex h-full w-9 items-center justify-center rounded-e-lg text-muted-foreground/80 outline-offset-2 transition-colors hover:text-foreground focus:z-10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-ring/70 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50'
                         onClick={toggleVisibility}
@@ -179,5 +181,5 @@ export const ResetPasswordCard = () => {
         </form>
       </Form>
     </CardWrapper>
-  );
-};
+  )
+}

@@ -1,36 +1,41 @@
-'use client';
+'use client'
 
-import { Download, Expand } from 'lucide-react';
-import Image from 'next/image';
-import { useState } from 'react';
+import { Download, Expand } from 'lucide-react'
+import Image from 'next/image'
+import { useState } from 'react'
 
-import { Button } from '@/components/ui/button';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Button } from '@/components/ui/button'
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog'
 
 interface ImageDisplayProps {
-  imageUrl: string;
-  prompt: string;
+  imageUrl: string
+  prompt: string
 }
 
 const ImageDisplay = ({ imageUrl, prompt }: ImageDisplayProps) => {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(false)
 
   const handleDownload = async () => {
     try {
-      const response = await fetch(imageUrl);
-      const blob = await response.blob();
-      const url = window.URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `generated-image-${Date.now()}.png`;
-      document.body.appendChild(a);
-      a.click();
-      window.URL.revokeObjectURL(url);
-      document.body.removeChild(a);
+      const response = await fetch(imageUrl)
+      const blob = await response.blob()
+      const url = window.URL.createObjectURL(blob)
+      const a = document.createElement('a')
+      a.href = url
+      a.download = `generated-image-${Date.now()}.png`
+      document.body.appendChild(a)
+      a.click()
+      window.URL.revokeObjectURL(url)
+      document.body.removeChild(a)
     } catch (error) {
-      console.error('Failed to download image:', error);
+      console.error('Failed to download image:', error)
     }
-  };
+  }
 
   return (
     <div className='max-w-sm space-y-3 max-md:max-w-full'>
@@ -102,7 +107,7 @@ const ImageDisplay = ({ imageUrl, prompt }: ImageDisplayProps) => {
         </DialogContent>
       </Dialog>
     </div>
-  );
-};
+  )
+}
 
-export default ImageDisplay;
+export default ImageDisplay

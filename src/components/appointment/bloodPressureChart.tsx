@@ -1,4 +1,4 @@
-'use client';
+'use client'
 
 import {
   Bar,
@@ -8,23 +8,23 @@ import {
   ResponsiveContainer,
   Tooltip,
   XAxis,
-  YAxis
-} from 'recharts';
+  YAxis,
+} from 'recharts'
 
-import { Button } from '../ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
+import { Button } from '../ui/button'
+import { Card, CardContent, CardHeader, CardTitle } from '../ui/card'
 
 interface BloodPressureChartProps {
-  average: string;
+  average: string
   data: {
-    label: string;
-    systolic: number | null;
-    diastolic: number | null;
-  }[];
+    label: string
+    systolic: number | null
+    diastolic: number | null
+  }[]
 }
 
 const BloodPressureChart = ({ data, average }: BloodPressureChartProps) => {
-  const lastData = data[data.length - 1];
+  const lastData = data[data.length - 1]
 
   return (
     <Card className='col-span-2 shadow-none'>
@@ -75,7 +75,9 @@ const BloodPressureChart = ({ data, average }: BloodPressureChartProps) => {
               tickLine={false}
             />
 
-            <Tooltip contentStyle={{ borderRadius: '10px', borderColor: '#fff' }} />
+            <Tooltip
+              contentStyle={{ borderRadius: '10px', borderColor: '#fff' }}
+            />
 
             <Legend
               align='left'
@@ -83,7 +85,7 @@ const BloodPressureChart = ({ data, average }: BloodPressureChartProps) => {
               wrapperStyle={{
                 paddingTop: '20px',
                 paddingBottom: '40px',
-                textTransform: 'capitalize'
+                textTransform: 'capitalize',
               }}
             />
 
@@ -103,7 +105,7 @@ const BloodPressureChart = ({ data, average }: BloodPressureChartProps) => {
         </ResponsiveContainer>
       </CardContent>
     </Card>
-  );
-};
+  )
+}
 
-export default BloodPressureChart;
+export default BloodPressureChart

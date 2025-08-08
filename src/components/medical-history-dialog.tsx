@@ -1,18 +1,23 @@
-import type React from 'react';
+import type React from 'react'
 
-import { Button } from '@/components/ui/button';
-import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
+import { Button } from '@/components/ui/button'
+import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog'
 
-import { DiagnosisContainer } from './appointment/diagnosis-container';
+import { DiagnosisContainer } from './appointment/diagnosisContainer'
 
 interface DataProps {
-  id: string | number;
-  patientId: string;
-  medicalId?: string;
-  doctorId: string | number;
-  label: React.ReactNode;
+  id: string | number
+  patientId: string
+  medicalId?: string
+  doctorId: string | number
+  label: React.ReactNode
 }
-export const MedicalHistoryDialog = async ({ id, patientId, doctorId, label }: DataProps) => {
+export const MedicalHistoryDialog = async ({
+  id,
+  patientId,
+  doctorId,
+  label,
+}: DataProps) => {
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -35,5 +40,5 @@ export const MedicalHistoryDialog = async ({ id, patientId, doctorId, label }: D
         <p>Diagnosis container form</p>
       </DialogContent>
     </Dialog>
-  );
-};
+  )
+}

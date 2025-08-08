@@ -1,20 +1,20 @@
-import { ArrowUp } from 'lucide-react';
-import type React from 'react'; // Make sure React is imported for ChangeEvent
+import { ArrowUp } from 'lucide-react'
+import type React from 'react' // Make sure React is imported for ChangeEvent
 
-import type { modelID } from '@/ai/providers';
-import { Textarea as ShadcnTextarea } from '@/components/ui/textarea';
+import type { modelID } from '@/ai/providers'
+import { Textarea as ShadcnTextarea } from '@/components/ui/textarea'
 
-import { ModelPicker } from './model-picker';
+import { ModelPicker } from './model-picker'
 
 // Correct the type for handleInputChange to expect HTMLTextAreaElement
 interface InputProps {
-  input: string;
-  handleInputChange: (event: React.ChangeEvent<HTMLTextAreaElement>) => void; // FIX 1: Changed HTMLInputElement to HTMLTextAreaElement
-  isLoading: boolean;
-  status: string;
-  stop: () => void;
-  selectedModel: modelID;
-  setSelectedModel: (model: modelID) => void;
+  input: string
+  handleInputChange: (event: React.ChangeEvent<HTMLTextAreaElement>) => void // FIX 1: Changed HTMLInputElement to HTMLTextAreaElement
+  isLoading: boolean
+  status: string
+  stop: () => void
+  selectedModel: modelID
+  setSelectedModel: (model: modelID) => void
 }
 
 export const Textarea = ({
@@ -24,7 +24,7 @@ export const Textarea = ({
   status,
   stop,
   selectedModel,
-  setSelectedModel
+  setSelectedModel,
 }: InputProps) => {
   // Removed the standalone handleInputChange and setInput from here
   // These should be managed in the parent component that uses <Textarea />
@@ -35,15 +35,15 @@ export const Textarea = ({
         autoFocus
         className='w-full resize-none rounded-2xl bg-secondary pt-4 pr-12 pb-16'
         onChange={handleInputChange} // This is now correctly typed
-        onKeyDown={e => {
+        onKeyDown={(e) => {
           if (e.key === 'Enter' && !e.shiftKey) {
-            e.preventDefault();
+            e.preventDefault()
             if (input.trim() && !isLoading) {
               // @ts-expect-error err - You might want to refine this type check
               // for 'closest' if you consistently get this error.
               // e.g., const form = (e.target as HTMLElement).closest('form');
-              const form = e.target.closest('form');
-              if (form) form.requestSubmit();
+              const form = e.target.closest('form')
+              if (form) form.requestSubmit()
             }
           }
         }}
@@ -94,8 +94,8 @@ export const Textarea = ({
         </button>
       )}
     </div>
-  );
-};
+  )
+}
 
 // Removed the problematic `function setInput(value: string)` from here.
 // This function must be part of a useState hook in the parent component.

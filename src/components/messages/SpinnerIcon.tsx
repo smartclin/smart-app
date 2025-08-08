@@ -79,4 +79,4 @@ export const SpinnerIcon = ({ size = 16 }: { size?: number }) => (
       </clipPath>
     </defs>
   </svg>
-);
+)

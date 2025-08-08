@@ -1,12 +1,11 @@
-import { trpc } from '@/trpc/server';
+import { trpc } from '@/trpc/server'
 
-import BloodPressureChart from './blood-pressure-chart';
-import { HeartRateChart } from './heart-rate-chart';
+import BloodPressureChart from './bloodPressureChart'
+import { HeartRateChart } from './heartRateChart'
 
 export default async function ChartContainer({ id }: { id: string }) {
-  const { data, average, heartRateData, averageHeartRate } = await trpc.vitalSigns.getVitalSignData(
-    id.toString()
-  );
+  const { data, average, heartRateData, averageHeartRate } =
+    await trpc.vitalSigns.getVitalSignData(id.toString())
 
   return (
     <>
@@ -19,5 +18,5 @@ export default async function ChartContainer({ id }: { id: string }) {
         data={heartRateData}
       />
     </>
-  );
+  )
 }

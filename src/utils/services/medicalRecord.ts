@@ -1,37 +1,37 @@
-import type { Prisma } from '@prisma/client';
+import type { Prisma } from '@prisma/client'
 
-import { db } from '@/db';
+import { db } from '@/db'
 
 export async function getMedicalRecords({
   page,
   limit,
-  search
+  search,
 }: {
-  page: number | string;
-  limit?: number | string;
-  search?: string;
+  page: number | string
+  limit?: number | string
+  search?: string
 }) {
   try {
-    const PAGE_NUMBER = Number(page) <= 0 ? 1 : Number(page);
-    const LIMIT = Number(limit) || 10;
+    const PAGE_NUMBER = Number(page) <= 0 ? 1 : Number(page)
+    const LIMIT = Number(limit) || 10
 
-    const SKIP = (PAGE_NUMBER - 1) * LIMIT;
+    const SKIP = (PAGE_NUMBER - 1) * LIMIT
 
     const where: Prisma.MedicalRecordsWhereInput = {
       OR: [
         {
           patient: {
-            firstName: { contains: search, mode: 'insensitive' }
-          }
+            firstName: { contains: search, mode: 'insensitive' },
+          },
         },
         {
           patient: {
-            lastName: { contains: search, mode: 'insensitive' }
-          }
+            lastName: { contains: search, mode: 'insensitive' },
+          },
         },
-        { patientId: { contains: search, mode: 'insensitive' } }
-      ]
-    };
+        { patientId: { contains: search, mode: 'insensitive' } },
+      ],
+    }
 
     const [data, totalRecords] = await Promise.all([
       db.medicalRecords.findMany({
@@ -44,8 +44,8 @@ export async function getMedicalRecords({
               dateOfBirth: true,
               img: true,
               colorCode: true,
-              gender: true
-            }
+              gender: true,
+            },
           },
 
           diagnosis: {
@@ -55,23 +55,23 @@ export async function getMedicalRecords({
                   name: true,
                   specialization: true,
                   img: true,
-                  colorCode: true
-                }
-              }
-            }
+                  colorCode: true,
+                },
+              },
+            },
           },
-          labTest: true
+          labTest: true,
         },
         skip: SKIP,
         take: LIMIT,
-        orderBy: { createdAt: 'desc' }
+        orderBy: { createdAt: 'desc' },
       }),
       db.medicalRecords.count({
-        where
-      })
-    ]);
+        where,
+      }),
+    ])
 
-    const totalPages = Math.ceil(totalRecords / LIMIT);
+    const totalPages = Math.ceil(totalRecords / LIMIT)
 
     return {
       success: true,
@@ -79,9 +79,9 @@ export async function getMedicalRecords({
       totalRecords,
       totalPages,
       currentPage: PAGE_NUMBER,
-      status: 200
-    };
+      status: 200,
+    }
   } catch (_error) {
-    return { success: false, message: 'Internal Server Error', status: 500 };
+    return { success: false, message: 'Internal Server Error', status: 500 }
   }
 }

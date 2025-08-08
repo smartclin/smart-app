@@ -1,83 +1,83 @@
-import type { Diagnosis, LabTest, MedicalRecords } from '@prisma/client';
-import { format } from 'date-fns';
-import { BriefcaseBusiness } from 'lucide-react';
+import type { Diagnosis, LabTest, MedicalRecords } from '@prisma/client'
+import { format } from 'date-fns'
+import { BriefcaseBusiness } from 'lucide-react'
 
-import { ViewAction } from '@/components/action-options';
-import { Pagination } from '@/components/pagination';
-import { ProfileImage } from '@/components/profile-image';
-import SearchInput from '@/components/search-input';
-import { Table } from '@/components/tables/table';
-import { trpc } from '@/trpc/server';
-import type { SearchParamsProps } from '@/types';
-import { DATA_LIMIT } from '@/utils/seetings';
+import { ViewAction } from '@/components/action-options'
+import { Pagination } from '@/components/pagination'
+import { ProfileImage } from '@/components/profile-image'
+import SearchInput from '@/components/search-input'
+import { Table } from '@/components/tables/table'
+import { trpc } from '@/trpc/server'
+import type { SearchParamsProps } from '@/types'
+import { DATA_LIMIT } from '@/utils/seetings'
 
 // import { getMedicalRecords } from '@/utils/services/medical-record'
 
 const columns = [
   {
     header: 'No',
-    key: 'no'
+    key: 'no',
   },
   {
     header: 'Info',
-    key: 'name'
+    key: 'name',
   },
   {
     header: 'Date & Time',
     key: 'medical_date',
-    className: 'hidden md:table-cell'
+    className: 'hidden md:table-cell',
   },
   {
     header: 'Doctor',
     key: 'doctor',
-    className: 'hidden 2xl:table-cell'
+    className: 'hidden 2xl:table-cell',
   },
   {
     header: 'Diagnosis',
     key: 'diagnosis',
-    className: 'hidden lg:table-cell'
+    className: 'hidden lg:table-cell',
   },
   {
     header: 'Lab Test',
     key: 'lab_test',
-    className: 'hidden 2xl:table-cell'
+    className: 'hidden 2xl:table-cell',
   },
   {
     header: 'Action',
     key: 'action',
-    className: ''
-  }
-];
+    className: '',
+  },
+]
 
 interface ExtendedProps extends MedicalRecords {
   patient: {
-    img: string | null;
-    firstName: string;
-    lastName: string;
-    dateOfBirth: Date;
-    gender: string;
-    colorCode: string | null;
-  };
-  diagnosis: Diagnosis[];
-  labTest: LabTest[];
+    img: string | null
+    firstName: string
+    lastName: string
+    dateOfBirth: Date
+    gender: string
+    colorCode: string | null
+  }
+  diagnosis: Diagnosis[]
+  labTest: LabTest[]
 }
 
 const MedicalRecordsPage = async (props: SearchParamsProps) => {
-  const searchParams = await props.searchParams;
-  const pageParam = typeof searchParams?.p === 'string' ? searchParams.p : '1';
-  const page = Number(pageParam);
-  const searchQuery = (searchParams?.q || '') as string;
+  const searchParams = await props.searchParams
+  const pageParam = typeof searchParams?.p === 'string' ? searchParams.p : '1'
+  const page = Number(pageParam)
+  const searchQuery = (searchParams?.q || '') as string
   const { data, totalPages, totalRecords, currentPage } =
     await trpc.medicalRecords.getMedicalRecords({
       page,
-      search: searchQuery
-    });
+      search: searchQuery,
+    })
 
-  if (!data) return null;
+  if (!data) return null
 
   const renderRow = (item: ExtendedProps) => {
-    const name = `${item?.patient?.firstName} ${item?.patient?.lastName}`;
-    const patient = item?.patient;
+    const name = `${item?.patient?.firstName} ${item?.patient?.lastName}`
+    const patient = item?.patient
 
     return (
       <tr
@@ -96,7 +96,9 @@ const MedicalRecordsPage = async (props: SearchParamsProps) => {
             <span className='text-sm capitalize'>{patient?.gender}</span>
           </div>
         </td>
-        <td className='hidden md:table-cell'>{format(item?.createdAt, 'yyyy-MM-dd HH:mm:ss')}</td>
+        <td className='hidden md:table-cell'>
+          {format(item?.createdAt, 'yyyy-MM-dd HH:mm:ss')}
+        </td>
         <td className='hidden 2xl:table-cell'>{item?.doctorId}</td>
         <td className='hidden lg:table-cell'>
           {item?.diagnosis?.length === 0 ? (
@@ -117,8 +119,8 @@ const MedicalRecordsPage = async (props: SearchParamsProps) => {
           <ViewAction href={`/appointments/${item?.appointmentId}`} />
         </td>
       </tr>
-    );
-  };
+    )
+  }
 
   return (
     <div className='rounded-xl bg-white px-3 py-6 2xl:px-6'>
@@ -130,7 +132,9 @@ const MedicalRecordsPage = async (props: SearchParamsProps) => {
           />
 
           <p className='font-semibold text-2xl'>{totalRecords}</p>
-          <span className='text-gray-600 text-sm xl:text-base'>total records</span>
+          <span className='text-gray-600 text-sm xl:text-base'>
+            total records
+          </span>
         </div>
         <div className='flex w-full items-center justify-between gap-2 lg:w-fit lg:justify-start'>
           <SearchInput />
@@ -152,7 +156,7 @@ const MedicalRecordsPage = async (props: SearchParamsProps) => {
         />
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default MedicalRecordsPage;
+export default MedicalRecordsPage

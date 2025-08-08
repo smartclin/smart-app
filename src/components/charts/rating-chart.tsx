@@ -1,20 +1,20 @@
-'use client';
+'use client'
 
-import { Pie, PieChart, ResponsiveContainer } from 'recharts';
+import { Pie, PieChart, ResponsiveContainer } from 'recharts'
 
 export const RatingChart = ({
   totalRatings,
-  averageRating
+  averageRating,
 }: {
-  totalRatings: number;
-  averageRating: number;
+  totalRatings: number
+  averageRating: number
 }) => {
-  const negative = 5 - averageRating;
+  const negative = 5 - averageRating
 
   const data = [
     { name: 'Positive', value: averageRating, fill: '#2ecc71' },
-    { name: 'Negative', value: negative, fill: '#e74c3c' }
-  ];
+    { name: 'Negative', value: negative, fill: '#e74c3c' },
+  ]
 
   return (
     <div className='relative h-80 rounded-md bg-white p-4'>
@@ -49,5 +49,5 @@ export const RatingChart = ({
         Rated by {totalRatings} patients
       </h2>
     </div>
-  );
-};
+  )
+}

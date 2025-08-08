@@ -1,47 +1,47 @@
 // app/components/dashboard/appointment-item.tsx
 
-import { format } from 'date-fns';
-import { motion } from 'framer-motion';
-import React from 'react';
-import { Link } from 'react-router-dom';
+import { format } from 'date-fns'
+import { motion } from 'framer-motion'
+import React from 'react'
+import { Link } from 'react-router-dom'
 
-import { cn } from '@/lib/utils';
+import { cn } from '@/lib/utils'
 
-import { Button } from '../ui/button';
-import { Image } from '../ui/image'; // <--- Import your new Image component here
+import { Button } from '../ui/button'
+import { Image } from '../ui/image' // <--- Import your new Image component here
 
 // Define the Appointment interface if it's not already globally available or shared
 interface Appointment {
-  id: number;
-  appointmentDate: Date | string;
-  time: string;
+  id: number
+  appointmentDate: Date | string
+  time: string
   patient: {
-    id: string; // Ensure patient has an ID for navigation
-    firstName: string;
-    lastName: string;
-    img?: string | null;
-    colorCode?: string | null;
-  };
+    id: string // Ensure patient has an ID for navigation
+    firstName: string
+    lastName: string
+    img?: string | null
+    colorCode?: string | null
+  }
   doctor: {
-    name: string;
-    specialization: string;
-  };
-  status: 'COMPLETED' | 'CANCELLED' | 'SCHEDULED' | string;
+    name: string
+    specialization: string
+  }
+  status: 'COMPLETED' | 'CANCELLED' | 'SCHEDULED' | string
 }
 
 interface AppointmentItemProps {
-  appointment: Appointment;
+  appointment: Appointment
   animationVariants: {
-    hidden: { opacity: number; y: number };
-    show: { opacity: number; y: number };
-  };
-  onViewDetails?: (id: number) => void;
+    hidden: { opacity: number; y: number }
+    show: { opacity: number; y: number }
+  }
+  onViewDetails?: (id: number) => void
 }
 
 const AppointmentItem: React.FC<AppointmentItemProps> = ({
   appointment,
   animationVariants,
-  onViewDetails
+  onViewDetails,
 }) => {
   const statusClasses = React.useMemo(() => {
     return cn('rounded-full px-2 py-1 text-xs', {
@@ -51,27 +51,24 @@ const AppointmentItem: React.FC<AppointmentItemProps> = ({
         appointment.status === 'CANCELLED',
       'bg-blue-100 text-blue-800 dark:bg-blue-900/20 dark:text-blue-400':
         appointment.status === 'SCHEDULED',
-      'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-400': ![
-        'COMPLETED',
-        'CANCELLED',
-        'SCHEDULED'
-      ].includes(appointment.status)
-    });
-  }, [appointment.status]);
+      'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-400':
+        !['COMPLETED', 'CANCELLED', 'SCHEDULED'].includes(appointment.status),
+    })
+  }, [appointment.status])
 
   const appointmentDateTime = React.useMemo(() => {
     return typeof appointment.appointmentDate === 'string'
       ? new Date(appointment.appointmentDate)
-      : appointment.appointmentDate;
-  }, [appointment.appointmentDate]);
+      : appointment.appointmentDate
+  }, [appointment.appointmentDate])
 
   const patientInitials = React.useMemo(() => {
-    return `${appointment.patient.firstName[0]?.toUpperCase()}${appointment.patient.lastName[0]?.toUpperCase()}`;
-  }, [appointment.patient.firstName, appointment.patient.lastName]);
+    return `${appointment.patient.firstName[0]?.toUpperCase()}${appointment.patient.lastName[0]?.toUpperCase()}`
+  }, [appointment.patient.firstName, appointment.patient.lastName])
 
   const handleViewDetailsClick = React.useCallback(() => {
-    onViewDetails?.(appointment.id);
-  }, [onViewDetails, appointment.id]);
+    onViewDetails?.(appointment.id)
+  }, [onViewDetails, appointment.id])
 
   return (
     <motion.div
@@ -86,7 +83,7 @@ const AppointmentItem: React.FC<AppointmentItemProps> = ({
           <div
             className='flex h-10 w-10 cursor-pointer items-center justify-center rounded-full text-white transition-colors group-hover:brightness-90'
             style={{
-              backgroundColor: appointment.patient.colorCode || '#6366F1'
+              backgroundColor: appointment.patient.colorCode || '#6366F1',
             }}
           >
             {appointment.patient.img ? (
@@ -127,7 +124,7 @@ const AppointmentItem: React.FC<AppointmentItemProps> = ({
         </Button>
       </div>
     </motion.div>
-  );
-};
+  )
+}
 
-export default React.memo(AppointmentItem);
+export default React.memo(AppointmentItem)

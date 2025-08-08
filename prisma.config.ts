@@ -1,7 +1,7 @@
-import path from 'node:path';
+import path from 'node:path'
 
-import { defineConfig } from 'prisma/config';
-import 'dotenv/config';
+import { defineConfig } from 'prisma/config'
+import 'dotenv/config'
 
 export default defineConfig({
   // Path to your main Prisma schema file (relative to this config file)
@@ -9,23 +9,23 @@ export default defineConfig({
 
   // Configuration for migrations (optional)
   migrations: {
-    path: path.join('prisma', 'migrations')
+    path: path.join('prisma', 'migrations'),
   },
 
   // Configuration for database views (optional)
   views: {
-    path: path.join('prisma', 'views')
+    path: path.join('prisma', 'views'),
   },
 
   // Configuration for TypedSQL queries (optional, preview feature)
   typedSql: {
-    path: path.join('prisma', 'queries')
+    path: path.join('prisma', 'queries'),
   },
 
   // Enable experimental features as needed (optional)
   experimental: {
     adapter: true,
     externalTables: true,
-    studio: true
-  }
-});
+    studio: true,
+  },
+})

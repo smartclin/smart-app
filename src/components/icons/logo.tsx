@@ -38,5 +38,5 @@ export function Logo(props: React.HTMLAttributes<SVGElement>) {
         fill='currentColor'
       />
     </svg>
-  );
+  )
 }

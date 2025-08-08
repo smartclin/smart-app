@@ -1,26 +1,26 @@
-import { Edit, FileText } from 'lucide-react';
-import Image from 'next/image';
-import Link from 'next/link';
-import { redirect } from 'next/navigation';
+import { Edit, FileText } from 'lucide-react'
+import Image from 'next/image'
+import Link from 'next/link'
+import { redirect } from 'next/navigation'
 
-import { getSession } from '@/lib/auth';
-import { cn } from '@/lib/utils';
+import { getSession } from '@/lib/auth'
+import { cn } from '@/lib/utils'
 
 interface AdminLayoutProps {
-  children: React.ReactNode;
+  children: React.ReactNode
 }
 
 export default async function AdminLayout({ children }: AdminLayoutProps) {
-  const session = await getSession();
+  const session = await getSession()
 
   // Redirect if not authenticated
   if (!session?.user) {
-    redirect('/api/auth/signin');
+    redirect('/api/auth/signin')
   }
 
   // Redirect if user is signed in but not an admin
   if (session.user.role !== 'admin') {
-    redirect('/');
+    redirect('/')
   }
 
   return (
@@ -59,13 +59,13 @@ export default async function AdminLayout({ children }: AdminLayoutProps) {
       </header>
       <main className='flex-1'>{children}</main>
     </div>
-  );
+  )
 }
 
 interface AdminNavLinkProps {
-  href: string;
-  children: React.ReactNode;
-  className?: string;
+  href: string
+  children: React.ReactNode
+  className?: string
 }
 
 function AdminNavLink({ href, children, className }: AdminNavLinkProps) {
@@ -73,11 +73,11 @@ function AdminNavLink({ href, children, className }: AdminNavLinkProps) {
     <Link
       className={cn(
         'flex items-center font-medium text-muted-foreground text-sm transition-colors hover:text-primary',
-        className
+        className,
       )}
       href={href}
     >
       {children}
     </Link>
-  );
+  )
 }

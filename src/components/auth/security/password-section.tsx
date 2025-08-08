@@ -1,16 +1,16 @@
-'use client';
+'use client'
 
-import { useAutoAnimate } from '@formkit/auto-animate/react';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { Eye, EyeOff, Loader } from 'lucide-react';
-import { useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { z } from 'zod';
+import { useAutoAnimate } from '@formkit/auto-animate/react'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { Eye, EyeOff, Loader } from 'lucide-react'
+import { useState } from 'react'
+import { useForm } from 'react-hook-form'
+import { z } from 'zod'
 
-import { ErrorCard } from '@/components/auth/error-card';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Checkbox } from '@/components/ui/checkbox';
+import { ErrorCard } from '@/components/auth/error-card'
+import { Button } from '@/components/ui/button'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Checkbox } from '@/components/ui/checkbox'
 import {
   Form,
   FormControl,
@@ -18,36 +18,39 @@ import {
   FormField,
   FormItem,
   FormLabel,
-  FormMessage
-} from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
-import { authClient } from '@/lib/auth/auth-client';
+  FormMessage,
+} from '@/components/ui/form'
+import { Input } from '@/components/ui/input'
+import { authClient } from '@/lib/auth/auth-client'
 
 // Define the Zod schema once, outside the component to prevent re-declaration
 
 export const PasswordSection = () => {
   // State for auto-animate, password box visibility, error messages,
   // password input visibility, and loading state
-  const [animate] = useAutoAnimate();
-  const [isPasswordBoxOpen, setIsPasswordBoxOpen] = useState(false);
-  const [error, setError] = useState('');
-  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
-  const [isNewPasswordVisible, setIsNewPasswordVisible] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+  const [animate] = useAutoAnimate()
+  const [isPasswordBoxOpen, setIsPasswordBoxOpen] = useState(false)
+  const [error, setError] = useState('')
+  const [isPasswordVisible, setIsPasswordVisible] = useState(false)
+  const [isNewPasswordVisible, setIsNewPasswordVisible] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
 
   // Toggle functions for password input visibility
-  const toggleVisibility = () => setIsPasswordVisible(prevState => !prevState);
-  const toggleNewVisibility = () => setIsNewPasswordVisible(prevState => !prevState);
+  const toggleVisibility = () => setIsPasswordVisible((prevState) => !prevState)
+  const toggleNewVisibility = () =>
+    setIsNewPasswordVisible((prevState) => !prevState)
 
   // Define your Zod schema (as you already have it)
   const newPasswordSchema = z.object({
     oldPassword: z.string().min(1, 'Old password is required'),
-    newPassword: z.string().min(8, 'New password must be at least 8 characters'),
-    revokeOtherSessions: z.boolean().default(false).optional() // This is correctly defined
-  });
+    newPassword: z
+      .string()
+      .min(8, 'New password must be at least 8 characters'),
+    revokeOtherSessions: z.boolean().default(false).optional(), // This is correctly defined
+  })
 
   // Infer the type from the Zod schema for strong typing
-  type NewPasswordFormValues = z.infer<typeof newPasswordSchema>;
+  type NewPasswordFormValues = z.infer<typeof newPasswordSchema>
 
   // Infer the type from the Zod schema
 
@@ -57,22 +60,22 @@ export const PasswordSection = () => {
   const defaultFormValues: NewPasswordFormValues = {
     oldPassword: '',
     newPassword: '',
-    revokeOtherSessions: false // Ensure this is just `false`
-  };
+    revokeOtherSessions: false, // Ensure this is just `false`
+  }
 
   // 3. Pass this explicitly typed object to useForm
   const form = useForm<NewPasswordFormValues>({
     resolver: zodResolver(newPasswordSchema),
-    defaultValues: defaultFormValues // Pass the pre-typed object
-  });
+    defaultValues: defaultFormValues, // Pass the pre-typed object
+  })
   // --- FIX ENDS HERE ---
   // Destructure control, handleSubmit, and reset from the form object
-  const { control, handleSubmit, reset } = form;
+  const { control, handleSubmit, reset } = form
 
   // Function to handle password submission
   const onPasswordSubmit = async (data: NewPasswordFormValues) => {
-    setIsLoading(true); // Set loading state to true
-    setError(''); // Clear any previous errors
+    setIsLoading(true) // Set loading state to true
+    setError('') // Clear any previous errors
 
     try {
       // Call the authClient to change password
@@ -80,29 +83,29 @@ export const PasswordSection = () => {
         {
           newPassword: data.newPassword,
           currentPassword: data.oldPassword,
-          revokeOtherSessions: data.revokeOtherSessions
-        }
+          revokeOtherSessions: data.revokeOtherSessions,
+        },
         // The original code had onRequest, onSuccess, onError callbacks here
         // For direct usage, handling loading/error states within the try-catch-finally block is common.
         // If authClient has specific callback options, they should be passed as per its API.
-      );
-      setIsPasswordBoxOpen(false); // Close the password box on successful submission
-      reset(); // Reset the form fields to their default values
+      )
+      setIsPasswordBoxOpen(false) // Close the password box on successful submission
+      reset() // Reset the form fields to their default values
     } catch (err: unknown) {
       // <-- FIX: Type 'err' as unknown
       // Log and set error message if an error occurs
       if (err instanceof Error) {
         // <-- FIX: Narrow type to Error
-        console.error(err.message);
-        setError(err.message);
+        console.error(err.message)
+        setError(err.message)
       } else {
-        console.error('An unexpected error occurred:', err);
-        setError('An unexpected error occurred.');
+        console.error('An unexpected error occurred:', err)
+        setError('An unexpected error occurred.')
       }
     } finally {
-      setIsLoading(false); // Always set loading state to false
+      setIsLoading(false) // Always set loading state to false
     }
-  };
+  }
 
   return (
     <div className='flex flex-col gap-10 md:w-[72%]'>
@@ -125,7 +128,9 @@ export const PasswordSection = () => {
           // Display password update form when box is open
           <Card className='shadow-md'>
             <CardHeader className='flex w-full flex-row items-center justify-between'>
-              <CardTitle className='text-sm tracking-tight'>Update password</CardTitle>
+              <CardTitle className='text-sm tracking-tight'>
+                Update password
+              </CardTitle>
             </CardHeader>
             <CardContent>
               {/* Display error card if there's an error */}
@@ -147,7 +152,9 @@ export const PasswordSection = () => {
                     name='oldPassword'
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className='text-sm'>Current Password</FormLabel>
+                        <FormLabel className='text-sm'>
+                          Current Password
+                        </FormLabel>
                         <FormControl>
                           <div className='relative'>
                             <Input
@@ -160,7 +167,11 @@ export const PasswordSection = () => {
                             />
                             <button
                               aria-controls='password'
-                              aria-label={isPasswordVisible ? 'Hide password' : 'Show password'}
+                              aria-label={
+                                isPasswordVisible
+                                  ? 'Hide password'
+                                  : 'Show password'
+                              }
                               aria-pressed={isPasswordVisible}
                               className='absolute inset-y-0 end-0 flex h-full w-9 items-center justify-center rounded-e-lg text-muted-foreground/80 outline-offset-2 transition-colors hover:text-foreground focus:z-10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-ring/70 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50'
                               onClick={toggleVisibility}
@@ -205,7 +216,11 @@ export const PasswordSection = () => {
                             />
                             <button
                               aria-controls='password'
-                              aria-label={isNewPasswordVisible ? 'Hide password' : 'Show password'}
+                              aria-label={
+                                isNewPasswordVisible
+                                  ? 'Hide password'
+                                  : 'Show password'
+                              }
                               aria-pressed={isNewPasswordVisible}
                               className='absolute inset-y-0 end-0 flex h-full w-9 items-center justify-center rounded-e-lg text-muted-foreground/80 outline-offset-2 transition-colors hover:text-foreground focus:z-10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-ring/70 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50'
                               onClick={toggleNewVisibility}
@@ -246,11 +261,12 @@ export const PasswordSection = () => {
                         <div className='space-y-1 leading-none'>
                           <FormLabel>Sign out of all other devices</FormLabel>
                           <FormDescription className='text-zinc-500'>
-                            It is recommended to sign out of all other devices which may have used
-                            your old password.
+                            It is recommended to sign out of all other devices
+                            which may have used your old password.
                           </FormDescription>
                         </div>
-                        <FormMessage /> {/* Display error message for checkbox */}
+                        <FormMessage />{' '}
+                        {/* Display error message for checkbox */}
                       </FormItem>
                     )}
                   />
@@ -259,11 +275,11 @@ export const PasswordSection = () => {
                     className='mt-4 mr-2'
                     disabled={isLoading}
                     onClick={() => {
-                      setIsPasswordBoxOpen(false);
-                      reset(); // Use reset from useForm to clear form fields
-                      setError('');
-                      setIsPasswordVisible(false);
-                      setIsNewPasswordVisible(false);
+                      setIsPasswordBoxOpen(false)
+                      reset() // Use reset from useForm to clear form fields
+                      setError('')
+                      setIsPasswordVisible(false)
+                      setIsNewPasswordVisible(false)
                     }}
                     size={'sm'}
                     type='button'
@@ -289,5 +305,5 @@ export const PasswordSection = () => {
         )}
       </div>
     </div>
-  );
-};
+  )
+}

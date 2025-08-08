@@ -1,20 +1,20 @@
-import { format } from 'date-fns';
+import { format } from 'date-fns'
 
-import db from '@/db';
-import { getSession } from '@/lib/auth';
-import { calculateBMI } from '@/utils';
-import { checkRole } from '@/utils/roles';
+import db from '@/db'
+import { getSession } from '@/lib/auth'
+import { calculateBMI } from '@/utils'
+import { checkRole } from '@/utils/roles'
 
-import { AddVitalSigns } from '../dialogs/add-vital-signs';
-import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
-import { Separator } from '../ui/separator';
+import { AddVitalSigns } from '../dialogs/add-vital-signs'
+import { Card, CardContent, CardHeader, CardTitle } from '../ui/card'
+import { Separator } from '../ui/separator'
 
 interface VitalSignsProps {
-  id: number;
-  patientId: string;
-  doctorId: string;
-  medicalId?: number;
-  appointmentId?: number;
+  id: number
+  patientId: string
+  doctorId: string
+  medicalId?: number
+  appointmentId?: number
 }
 
 const ItemCard = ({ label, value }: { label: string; value: string }) => {
@@ -23,22 +23,26 @@ const ItemCard = ({ label, value }: { label: string; value: string }) => {
       <p className='font-medium text-lg xl:text-xl'>{value}</p>
       <p className='text-gray-500 text-sm xl:text-base'>{label}</p>
     </div>
-  );
-};
-export const VitalSigns = async ({ id, patientId, doctorId }: VitalSignsProps) => {
+  )
+}
+export const VitalSigns = async ({
+  id,
+  patientId,
+  doctorId,
+}: VitalSignsProps) => {
   const data = await db.medicalRecords.findFirst({
     where: { appointmentId: Number(id) },
     include: {
       vitalSigns: {
-        orderBy: { createdAt: 'desc' }
-      }
+        orderBy: { createdAt: 'desc' },
+      },
     },
-    orderBy: { createdAt: 'desc' }
-  });
+    orderBy: { createdAt: 'desc' },
+  })
 
-  const vitals = data?.vitalSigns || null;
-  const session = await getSession();
-  const isPatient = await checkRole(session, 'PATIENT');
+  const vitals = data?.vitalSigns || null
+  const session = await getSession()
+  const isPatient = await checkRole(session, 'PATIENT')
 
   return (
     <section id='vital-signs'>
@@ -58,8 +62,11 @@ export const VitalSigns = async ({ id, patientId, doctorId }: VitalSignsProps) =
         </CardHeader>
 
         <CardContent className='space-y-4'>
-          {vitals?.map(el => {
-            const { bmi, status, colorCode } = calculateBMI(el.weight || 0, el.height || 0);
+          {vitals?.map((el) => {
+            const { bmi, status, colorCode } = calculateBMI(
+              el.weight || 0,
+              el.height || 0,
+            )
 
             return (
               <div
@@ -120,10 +127,10 @@ export const VitalSigns = async ({ id, patientId, doctorId }: VitalSignsProps) =
                 </div>
                 <Separator className='mt-4' />
               </div>
-            );
+            )
           })}
         </CardContent>
       </Card>
     </section>
-  );
-};
+  )
+}

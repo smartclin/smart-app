@@ -1,11 +1,11 @@
-'use client';
+'use client'
 
-import ResponsiveModal from '../ResponsiveModal';
-import ArchivedChatList from './ArchivedChatList';
+import ResponsiveModal from '../ResponsiveModal'
+import ArchivedChatList from './ArchivedChatList'
 
 interface Props {
-  open: boolean;
-  onOpenChange: (open: boolean) => void;
+  open: boolean
+  onOpenChange: (open: boolean) => void
 }
 
 const ArchivedChatsModal = ({ open, onOpenChange }: Props) => {
@@ -17,7 +17,7 @@ const ArchivedChatsModal = ({ open, onOpenChange }: Props) => {
     >
       <ArchivedChatList onOpenChange={onOpenChange} />
     </ResponsiveModal>
-  );
-};
+  )
+}
 
-export default ArchivedChatsModal;
+export default ArchivedChatsModal

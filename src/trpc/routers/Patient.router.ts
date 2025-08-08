@@ -1,75 +1,79 @@
-import { TRPCError } from '@trpc/server';
-import { z } from 'zod';
+import { TRPCError } from '@trpc/server'
+import { z } from 'zod'
 
-import { createNewPatient, updatePatient } from '@/actions/patient';
-import { PatientFormSchema } from '@/lib/schema';
+import { createNewPatient, updatePatient } from '@/actions/patient'
+import { PatientFormSchema } from '@/lib/schema'
 import {
   getAllPatients,
   getPatientById,
   getPatientDashboardStatistics,
-  getPatientFullDataById
-} from '@/utils/services/patient';
+  getPatientFullDataById,
+} from '@/utils/services/patient'
 
-import { createTRPCRouter, protectedProcedure } from '../init';
+import { createTRPCRouter, protectedProcedure } from '../init'
 
 export const patientRouter = createTRPCRouter({
   getPatientDashboardStatistics: protectedProcedure
     .input(z.string())
     .query(async ({ input: patientId }) => {
       try {
-        return await getPatientDashboardStatistics(patientId);
+        return await getPatientDashboardStatistics(patientId)
       } catch (error) {
-        console.error(error);
+        console.error(error)
         throw new TRPCError({
           code: 'INTERNAL_SERVER_ERROR',
-          message: 'Unable to fetch dashboard statistics'
-        });
+          message: 'Unable to fetch dashboard statistics',
+        })
       }
     }),
 
-  getPatientById: protectedProcedure.input(z.string()).query(async ({ input: id }) => {
-    try {
-      return (await getPatientById(id)).data;
-    } catch (error) {
-      console.error(error);
-      throw new TRPCError({
-        code: 'INTERNAL_SERVER_ERROR',
-        message: 'Unable to fetch patient by ID'
-      });
-    }
-  }),
+  getPatientById: protectedProcedure
+    .input(z.string())
+    .query(async ({ input: id }) => {
+      try {
+        return (await getPatientById(id)).data
+      } catch (error) {
+        console.error(error)
+        throw new TRPCError({
+          code: 'INTERNAL_SERVER_ERROR',
+          message: 'Unable to fetch patient by ID',
+        })
+      }
+    }),
 
   getPatientFullDataById: protectedProcedure
     .input(z.string())
     .query(async ({ input: idOrEmail }) => {
       try {
-        return await getPatientFullDataById(idOrEmail);
+        return await getPatientFullDataById(idOrEmail)
       } catch (error) {
-        console.error(error);
+        console.error(error)
         throw new TRPCError({
           code: 'INTERNAL_SERVER_ERROR',
-          message: 'Unable to fetch full patient data'
-        });
+          message: 'Unable to fetch full patient data',
+        })
       }
     }),
 
   getAllPatients: protectedProcedure
     .input(
       z.object({
-        page: z.union([z.string(), z.number()]).transform(v => Math.max(1, Number(v))),
+        page: z
+          .union([z.string(), z.number()])
+          .transform((v) => Math.max(1, Number(v))),
         limit: z.union([z.string(), z.number()]).transform(Number).optional(),
-        search: z.string().optional()
-      })
+        search: z.string().optional(),
+      }),
     )
     .query(async ({ input }) => {
       try {
-        return await getAllPatients(input);
+        return await getAllPatients(input)
       } catch (error) {
-        console.error(error);
+        console.error(error)
         throw new TRPCError({
           code: 'INTERNAL_SERVER_ERROR',
-          message: 'Unable to fetch patients'
-        });
+          message: 'Unable to fetch patients',
+        })
       }
     }),
 
@@ -77,29 +81,29 @@ export const patientRouter = createTRPCRouter({
     .input(
       z.object({
         pid: z.string(),
-        data: PatientFormSchema
-      })
+        data: PatientFormSchema,
+      }),
     )
     .mutation(async ({ input }) => {
-      const { pid, data } = input;
-      return await createNewPatient(data, pid); // ✅ data is correctly typed now
+      const { pid, data } = input
+      return await createNewPatient(data, pid) // ✅ data is correctly typed now
     }),
 
   updatePatient: protectedProcedure
     .input(
       z.object({
         pid: z.string(),
-        data: PatientFormSchema // same schema used on the server
-      })
+        data: PatientFormSchema, // same schema used on the server
+      }),
     )
     .mutation(async ({ input }) => {
-      const { pid, data } = input;
+      const { pid, data } = input
 
       const payload = {
         ...data,
-        dateOfBirth: new Date(data.dateOfBirth)
-      };
+        dateOfBirth: new Date(data.dateOfBirth),
+      }
 
-      return await updatePatient(payload, pid);
-    })
-});
+      return await updatePatient(payload, pid)
+    }),
+})

@@ -1,47 +1,56 @@
-'use client';
+'use client'
 
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { useCallback } from 'react';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation'
+import { useCallback } from 'react'
 
-import { Button } from './ui/button';
+import { Button } from './ui/button'
 
 interface PaginationProps {
-  totalRecords: number;
-  currentPage: number;
-  totalPages: number;
-  limit: number;
+  totalRecords: number
+  currentPage: number
+  totalPages: number
+  limit: number
 }
 
-export const Pagination = ({ totalPages, currentPage, totalRecords, limit }: PaginationProps) => {
-  const router = useRouter();
-  const searchParams = useSearchParams();
-  const pathname = usePathname();
+export const Pagination = ({
+  totalPages,
+  currentPage,
+  totalRecords,
+  limit,
+}: PaginationProps) => {
+  const router = useRouter()
+  const searchParams = useSearchParams()
+  const pathname = usePathname()
 
   const createQueryString = useCallback(
     (name: string, value: string) => {
-      const params = new URLSearchParams(searchParams.toString());
-      params.set(name, value);
+      const params = new URLSearchParams(searchParams.toString())
+      params.set(name, value)
 
-      return params.toString();
+      return params.toString()
     },
-    [searchParams]
-  );
+    [searchParams],
+  )
 
   const handlePrevious = () => {
     if (currentPage > 1) {
-      router.push(`${pathname}?${createQueryString('p', (currentPage - 1).toString())}`);
+      router.push(
+        `${pathname}?${createQueryString('p', (currentPage - 1).toString())}`,
+      )
       // router.push(`?p=${currentPage - 1}`);
     }
-  };
+  }
 
   const handleNext = () => {
     if (currentPage < totalPages) {
       // router.push(`?p=${currentPage + 1}`);
-      router.push(`${pathname}?${createQueryString('p', (currentPage + 1).toString())}`);
+      router.push(
+        `${pathname}?${createQueryString('p', (currentPage + 1).toString())}`,
+      )
     }
-  };
+  }
 
-  if (totalRecords === 0) return null;
+  if (totalRecords === 0) return null
 
   return (
     <div className='mt-5 flex items-center justify-between p-4 text-gray600'>
@@ -58,8 +67,10 @@ export const Pagination = ({ totalPages, currentPage, totalRecords, limit }: Pag
       <div className='flex items-center gap-2 text-sm'>
         <span className='text-xs lg:text-sm'>
           Showing {currentPage * limit - (limit - 1)} to{' '}
-          {currentPage * limit <= totalRecords ? currentPage * limit : totalRecords} of{' '}
-          {totalRecords}
+          {currentPage * limit <= totalRecords
+            ? currentPage * limit
+            : totalRecords}{' '}
+          of {totalRecords}
         </span>
       </div>
 
@@ -73,5 +84,5 @@ export const Pagination = ({ totalPages, currentPage, totalRecords, limit }: Pag
         Next
       </Button>
     </div>
-  );
-};
+  )
+}

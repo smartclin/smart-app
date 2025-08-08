@@ -1,48 +1,48 @@
-'use client';
+'use client'
 
-import { IconRestore } from '@tabler/icons-react';
-import { PanelLeft, Trash2Icon } from 'lucide-react';
-import { useRouter } from 'next/navigation';
-import { toast } from 'sonner';
+import { IconRestore } from '@tabler/icons-react'
+import { PanelLeft, Trash2Icon } from 'lucide-react'
+import { useRouter } from 'next/navigation'
+import { toast } from 'sonner'
 
-import { trpc } from '@/trpc/client';
+import { trpc } from '@/trpc/client'
 
-import { useSidebar } from '../ui/sidebar';
+import { useSidebar } from '../ui/sidebar'
 
 interface Props {
-  chatId: string;
+  chatId: string
 }
 
 const ArchivedBanner = ({ chatId }: Props) => {
-  const router = useRouter();
-  const utils = trpc.useUtils();
-  const { toggleSidebar } = useSidebar();
+  const router = useRouter()
+  const utils = trpc.useUtils()
+  const { toggleSidebar } = useSidebar()
 
   const deleteChat = trpc.chats.deleteOne.useMutation({
     onSuccess: () => {
-      toast.success('Chat Deleted');
-      utils.chats.getMany.invalidate();
-      router.push('/');
+      toast.success('Chat Deleted')
+      utils.chats.getMany.invalidate()
+      router.push('/')
     },
-    onError: error => {
+    onError: (error) => {
       toast.error('Failed to delete chat', {
-        description: error.message || 'Something went wrong. Please try again.'
-      });
-    }
-  });
+        description: error.message || 'Something went wrong. Please try again.',
+      })
+    },
+  })
 
   const restoreChat = trpc.chats.restore.useMutation({
-    onSuccess: data => {
-      toast.success('Chat Restored');
-      utils.chats.getMany.invalidate();
-      utils.chats.getOne.invalidate({ chatId: data.id });
+    onSuccess: (data) => {
+      toast.success('Chat Restored')
+      utils.chats.getMany.invalidate()
+      utils.chats.getOne.invalidate({ chatId: data.id })
     },
-    onError: error => {
+    onError: (error) => {
       toast.error('Failed to delete chat', {
-        description: error.message || 'Something went wrong. Please try again.'
-      });
-    }
-  });
+        description: error.message || 'Something went wrong. Please try again.',
+      })
+    },
+  })
 
   return (
     <div className='flex w-full items-center justify-between rounded-t-xl bg-destructive p-4'>
@@ -77,7 +77,7 @@ const ArchivedBanner = ({ chatId }: Props) => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default ArchivedBanner;
+export default ArchivedBanner

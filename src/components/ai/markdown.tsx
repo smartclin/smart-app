@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import Link from 'next/link';
-import { memo } from 'react';
-import ReactMarkdown, { type Components } from 'react-markdown';
-import remarkGfm from 'remark-gfm';
+import Link from 'next/link'
+import { memo } from 'react'
+import ReactMarkdown, { type Components } from 'react-markdown'
+import remarkGfm from 'remark-gfm'
 
 const components: Partial<Components> = {
   pre: ({ children }) => <>{children}</>,
@@ -14,7 +14,7 @@ const components: Partial<Components> = {
       >
         {children}
       </ol>
-    );
+    )
   },
   li: ({ node, children, ...props }) => {
     return (
@@ -24,7 +24,7 @@ const components: Partial<Components> = {
       >
         {children}
       </li>
-    );
+    )
   },
   ul: ({ node, children, ...props }) => {
     return (
@@ -34,7 +34,7 @@ const components: Partial<Components> = {
       >
         {children}
       </ul>
-    );
+    )
   },
   strong: ({ node, children, ...props }) => {
     return (
@@ -44,7 +44,7 @@ const components: Partial<Components> = {
       >
         {children}
       </span>
-    );
+    )
   },
   a: ({ node, children, ...props }) => {
     return (
@@ -57,7 +57,7 @@ const components: Partial<Components> = {
       >
         {children}
       </Link>
-    );
+    )
   },
   h1: ({ node, children, ...props }) => {
     return (
@@ -67,7 +67,7 @@ const components: Partial<Components> = {
       >
         {children}
       </h1>
-    );
+    )
   },
   h2: ({ node, children, ...props }) => {
     return (
@@ -77,7 +77,7 @@ const components: Partial<Components> = {
       >
         {children}
       </h2>
-    );
+    )
   },
   h3: ({ node, children, ...props }) => {
     return (
@@ -87,7 +87,7 @@ const components: Partial<Components> = {
       >
         {children}
       </h3>
-    );
+    )
   },
   h4: ({ node, children, ...props }) => {
     return (
@@ -97,7 +97,7 @@ const components: Partial<Components> = {
       >
         {children}
       </h4>
-    );
+    )
   },
   h5: ({ node, children, ...props }) => {
     return (
@@ -107,7 +107,7 @@ const components: Partial<Components> = {
       >
         {children}
       </h5>
-    );
+    )
   },
   h6: ({ node, children, ...props }) => {
     return (
@@ -117,11 +117,11 @@ const components: Partial<Components> = {
       >
         {children}
       </h6>
-    );
-  }
-};
+    )
+  },
+}
 
-const remarkPlugins = [remarkGfm];
+const remarkPlugins = [remarkGfm]
 
 const NonMemoizedMarkdown = ({ children }: { children: string }) => {
   return (
@@ -131,10 +131,10 @@ const NonMemoizedMarkdown = ({ children }: { children: string }) => {
     >
       {children}
     </ReactMarkdown>
-  );
-};
+  )
+}
 
 export const Markdown = memo(
   NonMemoizedMarkdown,
-  (prevProps, nextProps) => prevProps.children === nextProps.children
-);
+  (prevProps, nextProps) => prevProps.children === nextProps.children,
+)

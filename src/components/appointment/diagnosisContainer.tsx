@@ -1,41 +1,41 @@
-import { redirect } from 'next/navigation';
+import { redirect } from 'next/navigation'
 
-import db from '@/db';
-import { getSession } from '@/lib/auth';
-import { checkRole } from '@/utils/roles';
+import db from '@/db'
+import { getSession } from '@/lib/auth'
+import { checkRole } from '@/utils/roles'
 
-import { AddDiagnosis } from '../dialogs/add-diagnosis';
-import { NoDataFound } from '../no-data-found';
-import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
-import { MedicalHistoryCard } from './medical-history-card';
+import { AddDiagnosis } from '../dialogs/add-diagnosis'
+import { NoDataFound } from '../no-data-found'
+import { Card, CardContent, CardHeader, CardTitle } from '../ui/card'
+import { MedicalHistoryCard } from './medicalHistoryCard'
 
 export const DiagnosisContainer = async ({
   patientId,
   doctorId,
-  id
+  id,
 }: {
-  patientId: string;
-  doctorId: string;
-  id: string;
+  patientId: string
+  doctorId: string
+  id: string
 }) => {
-  const session = await getSession();
-  const userId = session?.user.id;
+  const session = await getSession()
+  const userId = session?.user.id
 
-  if (!userId) redirect('/signin');
+  if (!userId) redirect('/signin')
 
   const data = await db.medicalRecords.findFirst({
     where: { appointmentId: Number(id) },
     include: {
       diagnosis: {
         include: { doctor: true },
-        orderBy: { createdAt: 'desc' }
-      }
+        orderBy: { createdAt: 'desc' },
+      },
     },
-    orderBy: { createdAt: 'desc' }
-  });
+    orderBy: { createdAt: 'desc' },
+  })
 
-  const diagnosis = data?.diagnosis || null;
-  const isPatient = await checkRole(session, 'PATIENT');
+  const diagnosis = data?.diagnosis || null
+  const isPatient = await checkRole(session, 'PATIENT')
 
   return (
     <div>
@@ -81,5 +81,5 @@ export const DiagnosisContainer = async ({
         </section>
       )}
     </div>
-  );
-};
+  )
+}

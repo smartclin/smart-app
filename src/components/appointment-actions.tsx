@@ -1,31 +1,31 @@
-import type { AppointmentStatus } from '@prisma/client';
-import { EllipsisVertical, User } from 'lucide-react';
-import Link from 'next/link';
+import type { AppointmentStatus } from '@prisma/client'
+import { EllipsisVertical, User } from 'lucide-react'
+import Link from 'next/link'
 
-import { getSession } from '@/lib/auth';
-import { checkRole } from '@/utils/roles';
+import { getSession } from '@/lib/auth'
+import { checkRole } from '@/utils/roles'
 
-import { AppointmentActionDialog } from './appointment-action-dialog';
-import { Button } from './ui/button';
-import { Popover, PopoverContent, PopoverTrigger } from './ui/popover';
+import { AppointmentActionDialog } from './appointment-action-dialog'
+import { Button } from './ui/button'
+import { Popover, PopoverContent, PopoverTrigger } from './ui/popover'
 
 interface ActionsProps {
-  userId: string;
-  status: AppointmentStatus;
-  patientId: string;
-  doctorId: string;
-  appointmentId: number;
+  userId: string
+  status: AppointmentStatus
+  patientId: string
+  doctorId: string
+  appointmentId: number
 }
 
 export const AppointmentActionOptions = async ({
   patientId,
   doctorId,
   status,
-  appointmentId
+  appointmentId,
 }: ActionsProps) => {
-  const session = await getSession();
-  const user = session?.user;
-  const isAdmin = await checkRole(session, 'ADMIN');
+  const session = await getSession()
+  const user = session?.user
+  const isAdmin = await checkRole(session, 'ADMIN')
 
   return (
     <Popover>
@@ -64,7 +64,8 @@ export const AppointmentActionOptions = async ({
           )}
           <AppointmentActionDialog
             disabled={
-              status === 'PENDING' && (isAdmin || user?.id === doctorId || user?.id === patientId)
+              status === 'PENDING' &&
+              (isAdmin || user?.id === doctorId || user?.id === patientId)
             }
             id={appointmentId}
             type='cancel'
@@ -72,5 +73,5 @@ export const AppointmentActionOptions = async ({
         </div>
       </PopoverContent>
     </Popover>
-  );
-};
+  )
+}

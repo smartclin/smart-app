@@ -1,17 +1,17 @@
-import type { Diagnosis, Doctor } from '@prisma/client';
+import type { Diagnosis, Doctor } from '@prisma/client'
 
-import { Card } from '../ui/card';
-import { Separator } from '../ui/separator';
+import { Card } from '../ui/card'
+import { Separator } from '../ui/separator'
 
 interface ExtendedMedicalRecord extends Diagnosis {
-  doctor: Doctor;
+  doctor: Doctor
 }
 export const MedicalHistoryCard = ({
   record,
-  index
+  index,
 }: {
-  record: ExtendedMedicalRecord;
-  index: number;
+  record: ExtendedMedicalRecord
+  index: number
 }) => {
   return (
     <Card className='shadow-none'>
@@ -29,7 +29,9 @@ export const MedicalHistoryCard = ({
 
           <div>
             <span className='text-gray-500 text-sm'>Date</span>
-            <p className='font-medium text-xl'>{record.createdAt.toLocaleDateString()}</p>
+            <p className='font-medium text-xl'>
+              {record.createdAt.toLocaleDateString()}
+            </p>
           </div>
         </div>
 
@@ -58,11 +60,13 @@ export const MedicalHistoryCard = ({
         <div>
           <span className='text-gray-500 text-sm'>Doctor</span>
           <div>
-            <p className='text-lg text-muted-foreground'>{record.doctor.name}</p>
+            <p className='text-lg text-muted-foreground'>
+              {record.doctor.name}
+            </p>
             <span>{record.doctor.specialization}</span>
           </div>
         </div>
       </div>
     </Card>
-  );
-};
+  )
+}

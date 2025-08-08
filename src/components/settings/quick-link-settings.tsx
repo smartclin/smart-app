@@ -1,6 +1,6 @@
-import Link from 'next/link';
+import Link from 'next/link'
 
-import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '../ui/card'
 
 export const SettingsQuickLinks = () => {
   return (
@@ -31,5 +31,5 @@ export const SettingsQuickLinks = () => {
         </Link>
       </CardContent>
     </Card>
-  );
-};
+  )
+}

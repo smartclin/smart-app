@@ -1,18 +1,18 @@
-import { ArrowUp } from 'lucide-react';
+import { ArrowUp } from 'lucide-react'
 
-import type { modelID } from '@/ai/providers';
-import { Textarea as ShadcnTextarea } from '@/components/ui/textarea';
+import type { modelID } from '@/ai/providers'
+import { Textarea as ShadcnTextarea } from '@/components/ui/textarea'
 
-import { ModelPicker } from './model-picker';
+import { ModelPicker } from './modelPicker'
 
 interface InputProps {
-  input: string;
-  handleInputChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  isLoading: boolean;
-  status: string;
-  stop: () => void;
-  selectedModel: modelID;
-  setSelectedModel: (model: modelID) => void;
+  input: string
+  handleInputChange: (event: React.ChangeEvent<HTMLInputElement>) => void
+  isLoading: boolean
+  status: string
+  stop: () => void
+  selectedModel: modelID
+  setSelectedModel: (model: modelID) => void
 }
 
 export const Textarea = ({
@@ -21,20 +21,20 @@ export const Textarea = ({
   status,
   stop,
   selectedModel,
-  setSelectedModel
+  setSelectedModel,
 }: InputProps) => {
   return (
     <div className='relative w-full pt-4'>
       <ShadcnTextarea
         autoFocus
         className='w-full resize-none rounded-2xl bg-secondary pt-4 pr-12 pb-16'
-        onKeyDown={e => {
+        onKeyDown={(e) => {
           if (e.key === 'Enter' && !e.shiftKey) {
-            e.preventDefault();
+            e.preventDefault()
             if (input.trim() && !isLoading) {
               // @ts-expect-error err
-              const form = e.target.closest('form');
-              if (form) form.requestSubmit();
+              const form = e.target.closest('form')
+              if (form) form.requestSubmit()
             }
           }
         }}
@@ -85,5 +85,5 @@ export const Textarea = ({
         </button>
       )}
     </div>
-  );
-};
+  )
+}

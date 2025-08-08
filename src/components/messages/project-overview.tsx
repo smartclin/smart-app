@@ -1,4 +1,4 @@
-import NextLink from 'next/link';
+import NextLink from 'next/link'
 export const ProjectOverview = () => {
   return (
     <div className='flex flex-col items-center justify-end'>
@@ -8,13 +8,22 @@ export const ProjectOverview = () => {
       <p className='text-center'>
         This starter project uses <Link href='https://x.ai'>xAI</Link> with the{' '}
         <Link href='https://sdk.vercel.ai/docs'>AI SDK</Link> via the{' '}
-        <Link href='https://vercel.com/marketplace/xai'>Vercel Marketplace</Link>.
+        <Link href='https://vercel.com/marketplace/xai'>
+          Vercel Marketplace
+        </Link>
+        .
       </p>
     </div>
-  );
-};
+  )
+}
 
-const Link = ({ children, href }: { children: React.ReactNode; href: string }) => {
+const Link = ({
+  children,
+  href,
+}: {
+  children: React.ReactNode
+  href: string
+}) => {
   return (
     <NextLink
       className='text-blue-500 transition-colors duration-75 hover:text-blue-600'
@@ -23,5 +32,5 @@ const Link = ({ children, href }: { children: React.ReactNode; href: string }) =
     >
       {children}
     </NextLink>
-  );
-};
+  )
+}

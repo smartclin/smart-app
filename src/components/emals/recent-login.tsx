@@ -9,15 +9,15 @@ import {
   Preview,
   Row,
   Section,
-  Text
-} from '@react-email/components';
+  Text,
+} from '@react-email/components'
 
 interface RecentLoginEmailProps {
-  userFirstName?: string;
-  loginDate?: Date;
-  loginDevice?: string;
-  loginLocation?: string;
-  loginIp?: string;
+  userFirstName?: string
+  loginDate?: Date
+  loginDevice?: string
+  loginLocation?: string
+  loginIp?: string
 }
 
 export const RecentLoginEmail = ({
@@ -25,12 +25,12 @@ export const RecentLoginEmail = ({
   loginDate,
   loginDevice,
   loginLocation,
-  loginIp
+  loginIp,
 }: RecentLoginEmailProps) => {
   const formattedDate = new Intl.DateTimeFormat('en', {
     dateStyle: 'long',
-    timeStyle: 'short'
-  }).format(loginDate);
+    timeStyle: 'short',
+  }).format(loginDate)
 
   return (
     <Html>
@@ -57,7 +57,7 @@ export const RecentLoginEmail = ({
                   style={{
                     fontSize: 32,
                     fontWeight: 'bold',
-                    textAlign: 'center'
+                    textAlign: 'center',
                   }}
                 >
                   Hi {userFirstName},
@@ -67,7 +67,7 @@ export const RecentLoginEmail = ({
                   style={{
                     fontSize: 26,
                     fontWeight: 'bold',
-                    textAlign: 'center'
+                    textAlign: 'center',
                   }}
                 >
                   We noticed a recent login to your APP_NAME account.
@@ -89,10 +89,11 @@ export const RecentLoginEmail = ({
                   style={{
                     color: 'rgb(0,0,0, 0.5)',
                     fontSize: 14,
-                    marginTop: -5
+                    marginTop: -5,
                   }}
                 >
-                  *Approximate geographic location based on IP address: {loginIp}
+                  *Approximate geographic location based on IP address:{' '}
+                  {loginIp}
                 </Text>
 
                 <Text style={paragraph}>
@@ -117,7 +118,7 @@ export const RecentLoginEmail = ({
             style={{
               textAlign: 'center',
               fontSize: 12,
-              color: 'rgb(0,0,0, 0.7)'
+              color: 'rgb(0,0,0, 0.7)',
             }}
           >
             © 2025 | APP_NAME | APP_WEBSITE
@@ -125,39 +126,39 @@ export const RecentLoginEmail = ({
         </Container>
       </Body>
     </Html>
-  );
-};
+  )
+}
 
-export default RecentLoginEmail;
+export default RecentLoginEmail
 
 const main = {
   backgroundColor: '#fff',
   fontFamily:
-    '-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen-Sans,Ubuntu,Cantarell,"Helvetica Neue",sans-serif'
-};
+    '-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen-Sans,Ubuntu,Cantarell,"Helvetica Neue",sans-serif',
+}
 
 const paragraph = {
-  fontSize: 16
-};
+  fontSize: 16,
+}
 
 const _logo = {
-  padding: '30px 20px'
-};
+  padding: '30px 20px',
+}
 
 const content = {
   border: '1px solid rgb(0,0,0, 0.1)',
   borderRadius: '3px',
-  overflow: 'hidden'
-};
+  overflow: 'hidden',
+}
 
 const image = {
-  maxWidth: '100%'
-};
+  maxWidth: '100%',
+}
 
 const boxInfos = {
-  padding: '20px'
-};
+  padding: '20px',
+}
 
 const containerImageFooter = {
-  padding: '45px 0 0 0'
-};
+  padding: '45px 0 0 0',
+}

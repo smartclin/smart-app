@@ -1,27 +1,35 @@
-// src/app/api/trpc/[trpc]/route.ts
-import { fetchRequestHandler } from '@trpc/server/adapters/fetch';
-import { cookies as getCookies, headers as getHeaders } from 'next/headers';
+import { fetchRequestHandler } from '@trpc/server/adapters/fetch'
+import { cookies, headers } from 'next/headers'
+import type { NextRequest } from 'next/server'
 
-import { createTRPCContext } from '@/trpc/init';
-import { appRouter } from '@/trpc/routers/_app';
+import { env } from '@/env'
+import { createTRPCContext } from '@/trpc/init'
+import { appRouter } from '@/trpc/routers/_app'
 
-const handler = async (req: Request) => {
-  const rawHeaders = await getHeaders(); // ⛳️ required
-  const rawCookies = await getCookies(); // ⛳️ required
+const createContext = async (req: NextRequest) => {
+  return createTRPCContext({
+    req,
+    opts: {
+      headers: await headers(),
+      cookies: await cookies(), // next/headers returns ReadonlyRequestCookies
+    },
+  })
+}
 
-  return fetchRequestHandler({
+const handler = (req: NextRequest) =>
+  fetchRequestHandler({
     endpoint: '/api/trpc',
     req,
     router: appRouter,
-    createContext: () =>
-      createTRPCContext({
-        req,
-        opts: {
-          headers: rawHeaders,
-          cookies: rawCookies
-        }
-      })
-  });
-};
+    createContext: () => createContext(req),
+    onError:
+      env.NODE_ENV === 'development'
+        ? ({ path, error }) => {
+            console.error(
+              `❌ tRPC failed on ${path ?? '<no-path>'}: ${error.message}`,
+            )
+          }
+        : undefined,
+  })
 
-export { handler as GET, handler as POST };
+export { handler as GET, handler as POST }

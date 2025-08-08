@@ -1,43 +1,35 @@
-'use server';
+// src/server/trpc/server.tsx
+import 'server-only'
 
-import 'server-only';
+import { createHydrationHelpers } from '@trpc/react-query/rsc'
+import { cookies as getCookies, headers as getHeaders } from 'next/headers'
+import { cache } from 'react'
 
-import { createHydrationHelpers } from '@trpc/react-query/rsc';
-import { cache } from 'react';
+import { createTRPCContext } from './init'
+import { createQueryClient } from './query-client'
+import { type AppRouter, createCaller } from './routers/_app'
 
-import type { ReadonlyRequestCookies } from '@/types/globals';
+const createContext = cache(async () => {
+  const heads = new Headers(await getHeaders()) // ✅ await here
+  heads.set('x-trpc-source', 'rsc')
 
-import { createCallerFactory, createTRPCContext } from './init';
-import { makeQueryClient } from './query-client';
-import { appRouter } from './routers/_app';
+  const cookieStore = await getCookies() // ✅ await here
 
-// Cache query client per request
-export const getQueryClient = cache(makeQueryClient);
-
-// Cache server-side tRPC caller per request
-export const getServerCaller = cache(async () => {
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
-  const req = new Request(baseUrl, {
-    headers: new Headers()
-  });
-
-  // ✅ You must provide actual cookies of type ReadonlyRequestCookies, not just a type reference
-  const ctx = await createTRPCContext({
-    req,
+  return createTRPCContext({
+    req: new Request('http://localhost'),
     opts: {
-      headers: req.headers,
-      cookies: new Map() as unknown as ReadonlyRequestCookies // <- temporary stub, improve as needed
-    }
-  });
+      headers: heads,
+      cookies: cookieStore,
+    },
+  })
+})
 
-  return createCallerFactory(appRouter)(ctx);
-});
+const getQueryClient = cache(createQueryClient)
+const caller = createCaller(createContext)
 
-// ✅ You must `await getServerCaller()` since it's async
-const serverCaller = await getServerCaller();
+export const { trpc: api, HydrateClient } = createHydrationHelpers<AppRouter>(
+  caller,
+  getQueryClient,
+)
 
-// Create hydration helpers with awaited caller and cached query client
-export const { trpc, HydrateClient } = createHydrationHelpers<typeof appRouter>(
-  serverCaller,
-  getQueryClient
-);
+export const trpc = api

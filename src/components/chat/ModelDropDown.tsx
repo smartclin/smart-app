@@ -1,42 +1,46 @@
-'use client';
+'use client'
 
-import { ChevronUpIcon } from 'lucide-react';
-import Image from 'next/image';
-import { startTransition, useOptimistic } from 'react';
+import { ChevronUpIcon } from 'lucide-react'
+import Image from 'next/image'
+import { startTransition, useOptimistic } from 'react'
 
-import { saveChatModelAsCookie } from '@/lib/model';
-import { MODEL_REGISTRY, type ModelId } from '@/lib/model/model';
-import type { Tool } from '@/lib/tools/tool';
+import { saveChatModelAsCookie } from '@/lib/model'
+import { MODEL_REGISTRY, type ModelId } from '@/lib/model/model'
+import type { Tool } from '@/lib/tools/tool'
 
-import { Button } from '../ui/button';
+import { Button } from '../ui/button'
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuTrigger
-} from '../ui/dropdown-menu';
+  DropdownMenuTrigger,
+} from '../ui/dropdown-menu'
 
 interface ModelDropDownProps {
-  initialModel: ModelId;
-  currentTool: Tool;
-  disabled?: boolean;
+  initialModel: ModelId
+  currentTool: Tool
+  disabled?: boolean
 }
 
-const ModelDropDown = ({ initialModel, disabled = false, currentTool }: ModelDropDownProps) => {
+const ModelDropDown = ({
+  initialModel,
+  disabled = false,
+  currentTool,
+}: ModelDropDownProps) => {
   const [optimisticModel, setOptimisticModel] = useOptimistic(
-    initialModel || 'gemini-2.5-flash-lite-preview-06-17'
-  );
+    initialModel || 'gemini-2.5-flash-lite-preview-06-17',
+  )
 
   const handleModelChange = (modelId: ModelId) => {
-    if (disabled) return;
+    if (disabled) return
 
     startTransition(async () => {
-      setOptimisticModel(modelId);
-      await saveChatModelAsCookie(modelId);
-    });
-  };
+      setOptimisticModel(modelId)
+      await saveChatModelAsCookie(modelId)
+    })
+  }
 
-  const currentModel = MODEL_REGISTRY[optimisticModel];
+  const currentModel = MODEL_REGISTRY[optimisticModel]
 
   return (
     <DropdownMenu>
@@ -65,7 +69,10 @@ const ModelDropDown = ({ initialModel, disabled = false, currentTool }: ModelDro
             className={`mb-2 cursor-pointer max-md:text-xs ${
               modelId === optimisticModel ? 'bg-muted font-semibold' : ''
             } ${disabled ? 'cursor-not-allowed opacity-50' : ''}`}
-            disabled={disabled || (modelId === 'qwen/qwen3-32b' && currentTool !== 'reasoning')}
+            disabled={
+              disabled ||
+              (modelId === 'qwen/qwen3-32b' && currentTool !== 'reasoning')
+            }
             key={modelId}
             onClick={() => !disabled && handleModelChange(modelId as ModelId)}
           >
@@ -83,7 +90,7 @@ const ModelDropDown = ({ initialModel, disabled = false, currentTool }: ModelDro
         ))}
       </DropdownMenuContent>
     </DropdownMenu>
-  );
-};
+  )
+}
 
-export default ModelDropDown;
+export default ModelDropDown

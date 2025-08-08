@@ -1,64 +1,75 @@
-'use client';
+'use client'
 
-import { Trash2 } from 'lucide-react';
-import { useRouter } from 'next/navigation';
-import { useState } from 'react';
-import { FaQuestion } from 'react-icons/fa6';
-import { toast } from 'sonner';
+import { Trash2 } from 'lucide-react'
+import { useRouter } from 'next/navigation'
+import { useState } from 'react'
+import { FaQuestion } from 'react-icons/fa6'
+import { toast } from 'sonner'
 
 // import { deleteDataById } from '@/app/actions/general'
 
-import { trpc } from '@/trpc/server';
+import { trpc } from '@/trpc/server'
 
-import { ProfileImage } from './profile-image';
-import { SmallCard } from './small-card';
-import { Button } from './ui/button';
-import { Dialog, DialogClose, DialogContent, DialogTitle, DialogTrigger } from './ui/dialog';
+import { ProfileImage } from './profile-image'
+import { SmallCard } from './small-card'
+import { Button } from './ui/button'
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogTitle,
+  DialogTrigger,
+} from './ui/dialog'
 
 interface ActionDialogProps {
-  type: 'doctor' | 'staff' | 'delete';
-  id: string;
+  type: 'doctor' | 'staff' | 'delete'
+  id: string
   data?: {
-    img?: string | null; // Changed to allow null
-    name?: string | null; // Changed to allow null
-    colorCode?: string | null; // Changed to allow null
-    role?: string | null;
-    email?: string | null;
-    phone?: string | null;
-    address?: string | null;
-    department?: string | null;
-    licenseNumber?: string | null;
-  };
-  deleteType?: 'doctor' | 'staff' | 'patient' | 'payment' | 'bill';
+    img?: string | null // Changed to allow null
+    name?: string | null // Changed to allow null
+    colorCode?: string | null // Changed to allow null
+    role?: string | null
+    email?: string | null
+    phone?: string | null
+    address?: string | null
+    department?: string | null
+    licenseNumber?: string | null
+  }
+  deleteType?: 'doctor' | 'staff' | 'patient' | 'payment' | 'bill'
 }
-export const ActionDialog = ({ id, data, type, deleteType }: ActionDialogProps) => {
-  const router = useRouter();
-  const [loading, setLoading] = useState(false);
+export const ActionDialog = ({
+  id,
+  data,
+  type,
+  deleteType,
+}: ActionDialogProps) => {
+  const router = useRouter()
+  const [loading, setLoading] = useState(false)
 
   if (type === 'delete') {
     const handleDelete = async () => {
       try {
-        setLoading(true);
+        setLoading(true)
 
         if (!deleteType) {
-          toast.error('Delete type is not specified');
-          setLoading(false);
-          return;
+          toast.error('Delete type is not specified')
+          setLoading(false)
+          return
         }
-        const res = await trpc.admin.deleteData({ id, deleteType });
+        const res = await trpc.admin.deleteData({ id, deleteType })
 
         if (res.success) {
-          toast.success('Record deleted successfully');
-          router.refresh();
+          toast.success('Record deleted successfully')
+          router.refresh()
         } else {
-          toast.error('Failed to delete record');
+          toast.error('Failed to delete record')
         }
       } catch (_error) {
-        toast.error('Something went wrong');
+        toast.error('Something went wrong')
       } finally {
-        setLoading(false);
+        setLoading(false)
       }
-    };
+    }
 
     return (
       <Dialog>
@@ -87,7 +98,9 @@ export const ActionDialog = ({ id, data, type, deleteType }: ActionDialogProps) 
             </DialogTitle>
 
             <span className='text-black text-xl'>Delete Confirmation</span>
-            <p className='text-sm'>Are you sure you want to delete the selected record?</p>
+            <p className='text-sm'>
+              Are you sure you want to delete the selected record?
+            </p>
 
             <div className='mt-6 flex items-center justify-center gap-x-3'>
               <DialogClose asChild>
@@ -111,7 +124,7 @@ export const ActionDialog = ({ id, data, type, deleteType }: ActionDialogProps) 
           </div>
         </DialogContent>
       </Dialog>
-    );
+    )
   }
 
   if (type === 'staff') {
@@ -188,7 +201,7 @@ export const ActionDialog = ({ id, data, type, deleteType }: ActionDialogProps) 
           </div>
         </DialogContent>
       </Dialog>
-    );
+    )
   }
-  return null;
-};
+  return null
+}

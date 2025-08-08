@@ -1,4 +1,4 @@
-import { FaMagnifyingGlassChart } from 'react-icons/fa6';
+import { FaMagnifyingGlassChart } from 'react-icons/fa6'
 
 export const NoDataFound = ({ note }: { note?: string }) => {
   return (
@@ -7,7 +7,9 @@ export const NoDataFound = ({ note }: { note?: string }) => {
         className='text-gray-600'
         size={80}
       />
-      <span className='mt-2 font-medium text-gray-500 text-xl'>{note || 'No Record Found'}</span>
+      <span className='mt-2 font-medium text-gray-500 text-xl'>
+        {note || 'No Record Found'}
+      </span>
     </div>
-  );
-};
+  )
+}

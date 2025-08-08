@@ -1,13 +1,13 @@
-'use client';
+'use client'
 
-import { motion } from 'framer-motion';
+import { motion } from 'framer-motion'
 
-import { Skeleton } from '@/components/ui/skeleton';
+import { Skeleton } from '@/components/ui/skeleton'
 
-import { SpinnerIcon } from './SpinnerIcon';
+import { SpinnerIcon } from './SpinnerIcon'
 
 interface LoadingSkeletonProps {
-  type: 'image' | 'web-search' | 'weather';
+  type: 'image' | 'web-search' | 'weather'
 }
 
 const LoadingSkeleton = ({ type }: LoadingSkeletonProps) => {
@@ -17,11 +17,11 @@ const LoadingSkeleton = ({ type }: LoadingSkeletonProps) => {
         animate={{
           opacity: 1,
           transition: {
-            duration: 0.2
-          }
+            duration: 0.2,
+          },
         }}
         initial={{
-          opacity: 0
+          opacity: 0,
         }}
       >
         <div className='flex items-center gap-2 font-medium'>
@@ -31,7 +31,7 @@ const LoadingSkeleton = ({ type }: LoadingSkeletonProps) => {
           Getting the Weather
         </div>
       </motion.div>
-    );
+    )
   }
 
   if (type === 'image') {
@@ -45,7 +45,7 @@ const LoadingSkeleton = ({ type }: LoadingSkeletonProps) => {
         </div>
         <Skeleton className='aspect-square max-w-sm rounded-lg' />
       </div>
-    );
+    )
   }
 
   if (type === 'web-search') {
@@ -54,11 +54,11 @@ const LoadingSkeleton = ({ type }: LoadingSkeletonProps) => {
         animate={{
           opacity: 1,
           transition: {
-            duration: 0.2
-          }
+            duration: 0.2,
+          },
         }}
         initial={{
-          opacity: 0
+          opacity: 0,
         }}
       >
         <div className='flex items-center gap-2 font-medium'>
@@ -68,10 +68,10 @@ const LoadingSkeleton = ({ type }: LoadingSkeletonProps) => {
           Searching the web
         </div>
       </motion.div>
-    );
+    )
   }
 
-  return null;
-};
+  return null
+}
 
-export default LoadingSkeleton;
+export default LoadingSkeleton

@@ -1,4 +1,4 @@
-'use client';
+'use client'
 
 import {
   Bar,
@@ -8,13 +8,13 @@ import {
   ResponsiveContainer,
   Tooltip,
   XAxis,
-  YAxis
-} from 'recharts';
+  YAxis,
+} from 'recharts'
 
-import type { AppointmentsChartProps } from '@/types/data-types';
+import type { AppointmentsChartProps } from '@/types/data-types'
 
 interface DataProps {
-  data: AppointmentsChartProps;
+  data: AppointmentsChartProps
 }
 export const AppointmentChart = ({ data }: DataProps) => {
   return (
@@ -50,14 +50,16 @@ export const AppointmentChart = ({ data }: DataProps) => {
             tick={{ fill: '#9ca3af' }}
             tickLine={false}
           />
-          <Tooltip contentStyle={{ borderRadius: '10px', borderColor: '#fff' }} />
+          <Tooltip
+            contentStyle={{ borderRadius: '10px', borderColor: '#fff' }}
+          />
           <Legend
             align='left'
             verticalAlign='top'
             wrapperStyle={{
               paddingTop: '20px',
               paddingBottom: '40px',
-              textTransform: 'capitalize'
+              textTransform: 'capitalize',
             }}
           />
           <Bar
@@ -75,5 +77,5 @@ export const AppointmentChart = ({ data }: DataProps) => {
         </BarChart>
       </ResponsiveContainer>
     </div>
-  );
-};
+  )
+}

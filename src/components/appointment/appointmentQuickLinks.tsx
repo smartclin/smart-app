@@ -1,14 +1,14 @@
-import Link from 'next/link';
+import Link from 'next/link'
 
-import { getSession } from '@/lib/auth';
-import { checkRole } from '@/utils/roles';
+import { getSession } from '@/lib/auth'
+import { checkRole } from '@/utils/roles'
 
-import { ReviewForm } from '../dialogs/review-form';
-import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
+import { ReviewForm } from '../dialogs/review-form'
+import { Card, CardContent, CardHeader, CardTitle } from '../ui/card'
 
 const AppointmentQuickLinks = async ({ staffId }: { staffId: string }) => {
-  const session = await getSession();
-  const isPatient = await checkRole(session, 'PATIENT');
+  const session = await getSession()
+  const isPatient = await checkRole(session, 'PATIENT')
 
   return (
     <Card className='w-full rounded-xl bg-white shadow-none'>
@@ -74,7 +74,7 @@ const AppointmentQuickLinks = async ({ staffId }: { staffId: string }) => {
         {!isPatient && <ReviewForm staffId={staffId} />}
       </CardContent>
     </Card>
-  );
-};
+  )
+}
 
-export default AppointmentQuickLinks;
+export default AppointmentQuickLinks
